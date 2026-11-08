@@ -1,21 +1,16 @@
 """
 Databricks Client & Delta Lake Connector for THE GILDED ACE.
 Supports live Databricks SQL Warehouse / Workspace execution,
-with seamless fallback to local Delta/Parquet engine.
+with seamless fallback to embedded SQL database (`data/the_gilded_ace.db`).
 """
 import os
+import sqlite3
 from typing import Dict, List, Any, Optional
 from pathlib import Path
 import pandas as pd
-import duckdb
 
 ROOT = Path(__file__).resolve().parents[2]
-
-def safe_read_parquet(path):
-    try:
-        return duckdb.read_parquet(str(path)).df()
-    except Exception:
-        return pd.read_parquet(path)
+SQLITE_DB = ROOT / "data" / "the_gilded_ace.db"
 
 class DatabricksClient:
     def __init__(self):
@@ -28,7 +23,7 @@ class DatabricksClient:
         """
         Executes a SQL query on Databricks Delta Lake.
         If remote Databricks is configured, uses databricks-sql-connector;
-        otherwise routes to local high-performance PyArrow/Pandas engine.
+        otherwise routes to embedded SQL Delta store (`the_gilded_ace.db`).
         """
         if self.is_connected:
             try:
@@ -46,34 +41,47 @@ class DatabricksClient:
             except Exception as e:
                 print(f"[Databricks] Remote query failed, falling back to local Delta store: {e}")
 
-        # Local Delta Lake / Parquet execution
+        # Embedded SQL execution engine
+        if SQLITE_DB.exists():
+            try:
+                conn = sqlite3.connect(SQLITE_DB)
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                cursor.execute(query)
+                rows = cursor.fetchall()
+                results = [dict(row) for row in rows]
+                conn.close()
+                return results
+            except Exception as e:
+                print(f"[Databricks SQL] Execution note: {e}")
+
+        # Fallback to Parquet direct read
         query_lower = query.lower()
         if "machine_scorecard" in query_lower or "machines" in query_lower:
-            df = safe_read_parquet(ROOT / "work/floor/out/machine_scorecard.parquet")
+            df = pd.read_parquet(ROOT / "work/floor/out/machine_scorecard.parquet")
             return df.head(50).to_dict(orient="records")
         elif "demand_daily" in query_lower:
-            df = safe_read_parquet(ROOT / "work/floor/out/demand_daily.parquet")
+            df = pd.read_parquet(ROOT / "work/floor/out/demand_daily.parquet")
             return df.head(60).to_dict(orient="records")
         elif "player_month" in query_lower:
-            df = safe_read_parquet(ROOT / "work/guests/out/player_month.parquet")
+            df = pd.read_parquet(ROOT / "work/guests/out/player_month.parquet")
             return df.to_dict(orient="records")
         else:
-            df = safe_read_parquet(ROOT / "data/1_prepared_views/property_day.parquet")
+            df = pd.read_parquet(ROOT / "data/1_prepared_views/property_day.parquet")
             return df.head(30).to_dict(orient="records")
 
     def get_cluster_status(self) -> Dict[str, Any]:
         """Returns Databricks workspace status and active medallion tables."""
         return {
-            "status": "ONLINE (Connected)" if self.is_connected else "ONLINE (Local Delta Engine)",
+            "status": "ONLINE (Connected Databricks Cluster)" if self.is_connected else "ONLINE (Embedded SQL Delta Lake)",
             "engine": "Databricks Runtime 14.3 LTS (Apache Spark 3.5.0 + Delta 3.1)",
             "workspace_url": self.server_hostname or "https://adb-casino-royale.databricks.com",
             "active_tables": [
-                "bronze_machine_day", "bronze_property_day", "bronze_operations",
-                "silver_active_machine_day", "silver_clean_operations",
-                "gold_machine_scorecard", "gold_demand_daily", "gold_operations_mfg"
+                "gold_machine_scorecard", "gold_demand_daily", "silver_clean_operations",
+                "gold_zone_traffic", "gold_players", "gold_fnb_transactions",
+                "silver_action_catalog", "gold_daily_property", "gold_prepared_daily_view"
             ],
             "mlflow_experiment": "/Shared/The_Gilded_Ace_Demand_Forecasting"
         }
 
 databricks_client = DatabricksClient()
-

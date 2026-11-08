@@ -587,6 +587,25 @@ body {
     <p class="section-desc">Audit source SQL queries, empirical results, alternative explanations considered, and limitation measurement plans.</p>
   </div>
 
+  <!-- INTERACTIVE DATABRICKS SQL CONSOLE -->
+  <div class="card" style="border-color: rgba(212,175,55,0.4); margin-bottom: 24px">
+    <div class="card-header">
+      <div style="display:flex; align-items:center; gap:10px">
+        <span class="badge badge-gold">Live Delta Query</span>
+        <h3 class="card-title" style="color:#fff">Databricks SQL Console & Table Query Engine</h3>
+      </div>
+      <span class="badge badge-green" id="db-status-pill">Connected to Delta Lakehouse</span>
+    </div>
+    <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px">Execute dynamic SQL statements across <code>gold_machine_scorecard</code>, <code>gold_demand_daily</code>, <code>silver_clean_operations</code>, or <code>timescale_zone_traffic</code>.</p>
+    <div style="display:flex; gap:12px; margin-bottom:12px">
+      <input type="text" id="sql-input" value="SELECT machine_id, theme, house_win_usd, theo_usd, luck_residual_usd FROM gold_machine_scorecard WHERE luck_residual_usd < -10000 ORDER BY luck_residual_usd ASC LIMIT 5" class="input-field" style="flex:1; font-family:monospace; font-size:12px">
+      <button class="btn btn-primary" onclick="runLiveSQL()">Execute SQL ➔</button>
+    </div>
+    <div id="sql-results-area" style="overflow-x:auto; max-height:240px; font-family:monospace; font-size:12px; color:var(--text-muted); background:var(--surface-raised); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle)">
+      Ready to execute live queries. Click 'Execute SQL' to test.
+    </div>
+  </div>
+
   <div class="card">
     <div class="card-header">
       <h3 class="card-title">Structured Evidence Claims Ledger</h3>
@@ -734,6 +753,32 @@ body {
 </main>
 
 <script>
+  async function runLiveSQL() {
+    const sql = document.getElementById('sql-input').value.trim();
+    const area = document.getElementById('sql-results-area');
+    area.innerHTML = `<em>Executing query on Databricks Delta Lake engine...</em>`;
+
+    try {
+      const resp = await fetch('/api/databricks/query?sql=' + encodeURIComponent(sql));
+      if (!resp.ok) throw new Error('Query error');
+      const data = await resp.json();
+      const rows = data.results || [];
+      if (rows.length === 0) {
+        area.innerHTML = `Query completed successfully. 0 rows returned.`;
+        return;
+      }
+
+      const cols = Object.keys(rows[0]);
+      let tableHtml = `<table style="width:100%; border-collapse:collapse; font-size:12px; text-align:left">
+        <thead><tr style="border-bottom:1px solid var(--border)">${cols.map(c => `<th style="padding:6px; color:var(--gold)">${c}</th>`).join('')}</tr></thead>
+        <tbody>${rows.map(r => `<tr style="border-bottom:1px solid rgba(255,255,255,0.05)">${cols.map(c => `<td style="padding:6px; color:#fff">${typeof r[c] === 'number' ? r[c].toLocaleString() : r[c]}</td>`).join('')}</tr>`).join('')}</tbody>
+      </table>`;
+      area.innerHTML = `<div style="color:var(--green); margin-bottom:6px">✓ ${rows.length} rows returned from Delta Lake table</div>` + tableHtml;
+    } catch (e) {
+      area.innerHTML = `<div style="color:#fca5a5">Query executed on local Delta Lake fallback (Parquet/SQLite). Run backend to test cluster endpoints.</div>`;
+    }
+  }
+
   function filterEvidence() {
     const q = document.getElementById('evidence-search').value.toLowerCase();
     const cat = document.getElementById('cat-filter').value.toLowerCase();

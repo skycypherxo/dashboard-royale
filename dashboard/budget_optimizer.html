@@ -1008,7 +1008,52 @@ body {
     runSimulation();
   }
 
-  function runSimulation() {
+  async function runSimulation() {
+    const selectedActions = [];
+    optData.catalog_actions.forEach(a => {
+      const inp = document.getElementById(`qty-${a.action_id}`);
+      const qty = inp ? parseInt(inp.value) || 0 : 0;
+      if (qty > 0) {
+        selectedActions.push({ action_id: a.action_id, quantity: qty });
+      }
+    });
+
+    try {
+      const resp = await fetch('/api/optimizer/simulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ actions: selectedActions })
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        document.getElementById('stat-spend').innerText = `$${data.total_cost_usd.toLocaleString()}`;
+        document.getElementById('stat-retained').innerText = `$${Math.max(0, data.retained_budget_usd).toLocaleString()}`;
+        document.getElementById('stat-types').innerText = `${data.distinct_action_types_count} / 3 Max`;
+        document.getElementById('stat-net').innerText = `${data.net_annual_impact_usd >= 0 ? '+' : ''}$${data.net_annual_impact_usd.toLocaleString()}`;
+        document.getElementById('stat-payback').innerText = `${data.payback_months} months`;
+
+        if (data.sensitivity) {
+          document.getElementById('sens-pess').innerText = `+$${data.sensitivity.pessimistic_benefit_annual.toLocaleString()}`;
+          document.getElementById('sens-exp').innerText = `+$${data.sensitivity.expected_benefit_annual.toLocaleString()}`;
+          document.getElementById('sens-opt').innerText = `+$${data.sensitivity.optimistic_benefit_annual.toLocaleString()}`;
+        }
+
+        const vBox = document.getElementById('violation-box');
+        const badgeWrap = document.getElementById('stat-badge-wrap');
+        if (!data.is_valid && data.violations && data.violations.length > 0) {
+          vBox.style.display = 'block';
+          vBox.innerHTML = `<strong>Constraint Violations:</strong><br>${data.violations.join('<br>')}`;
+          badgeWrap.innerHTML = `<span class="badge badge-red" style="font-size:13px; padding:6px 14px">INVALID CONSTRAINTS</span>`;
+        } else {
+          vBox.style.display = 'none';
+          badgeWrap.innerHTML = `<span class="badge badge-green" style="font-size:13px; padding:6px 14px">COMPLIANT & FEASIBLE</span>`;
+        }
+        return;
+      }
+    } catch (e) {
+      console.log('Using local simulator fallback:', e);
+    }
+
     let totalCost = 0;
     let monthlyBenefit = 0;
     let actionTypes = [];

@@ -733,26 +733,26 @@ body {
     </div>
   </div>
 
-  <!-- TIGERDATA / TIMESCALEDB TIME-SERIES HYPERTABLE QUERY SIMULATOR -->
+  <!-- DATABRICKS DELTA LAKE SENSOR TELEMETRY QUERY CONSOLE -->
   <div class="card" style="margin-top:24px; border-color:rgba(56,189,248,0.3); background:linear-gradient(135deg, rgba(56,189,248,0.04) 0%, var(--surface) 100%);">
     <div class="card-header">
       <div style="display:flex; align-items:center; gap:10px">
-        <span class="badge badge-blue">TIGERDATA / TIMESCALEDB ENGINE</span>
-        <h3 class="card-title" style="color:#fff">High-Frequency Pedestrian Sensor Telemetry (30,401 Rows)</h3>
+        <span class="badge badge-blue">DATABRICKS DELTA LAKE</span>
+        <h3 class="card-title" style="color:#fff">Pedestrian Sensor Telemetry (30,401 Rows in gold_zone_traffic)</h3>
       </div>
-      <span class="badge badge-gold">time_bucket() Hypertable Aggregation</span>
+      <span class="badge badge-gold">Interactive SQL Aggregation</span>
     </div>
     <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px">
-      TigerData Timescale engine stores high-resolution hourly foot traffic sensor logs with ZSTD chunked compression. Run on-demand hypertable window queries directly against the telemetry store:
+      Databricks Delta Lake table <code>gold_zone_traffic</code> stores high-resolution hourly foot traffic sensor logs across all 7 casino zones. Run live SQL aggregations directly against the database:
     </p>
     <div class="sql-card" style="margin-bottom:14px">
-      SELECT time_bucket('<span id="sql-interval-text">24 hours</span>', hour_start_utc) AS bucket, zone_id, SUM(entries_count) AS entries<br>
-      FROM zone_traffic_hourly<br>
+      SELECT strftime('%Y-%m-%d', hour_start_local) AS gaming_date, zone_id, SUM(entries_count) AS total_entries, COUNT(*) AS active_hours<br>
+      FROM gold_zone_traffic<br>
       WHERE zone_id = '<span id="sql-zone-text">Z-B40</span>'<br>
       GROUP BY 1, 2 ORDER BY 1 DESC LIMIT 5;
     </div>
     <div style="display:flex; gap:12px; align-items:center; margin-bottom:14px">
-      <select id="tiger-zone-select" class="input-field" onchange="updateTigerSQL()">
+      <select id="db-zone-select" class="input-field" onchange="updateSensorSQL()">
         <option value="Z-B40">Back Forty (Z-B40)</option>
         <option value="Z-PIT">Center Pit (Z-PIT)</option>
         <option value="Z-BAR">Bar Row (Z-BAR)</option>
@@ -761,15 +761,9 @@ body {
         <option value="Z-HL">High-Limit Room (Z-HL)</option>
         <option value="Z-HTL">Hotel Corridor (Z-HTL)</option>
       </select>
-      <select id="tiger-interval-select" class="input-field" onchange="updateTigerSQL()">
-        <option value="24">24-Hour Windows</option>
-        <option value="12">12-Hour Windows</option>
-        <option value="6">6-Hour Windows</option>
-        <option value="1">1-Hour Windows</option>
-      </select>
-      <button class="btn btn-primary" onclick="runTigerQuery()">Execute TigerData Hypertable Query ➔</button>
+      <button class="btn btn-primary" onclick="runSensorQuery()">Execute Databricks SQL Query ➔</button>
     </div>
-    <div id="tiger-results-area" style="overflow-x:auto"></div>
+    <div id="sensor-results-area" style="overflow-x:auto"></div>
   </div>
 </main>
 
@@ -829,41 +823,39 @@ body {
     margin: { l: 60, r: 20, t: 20, b: 40 }
   }, { responsive: true });
 
-  function updateTigerSQL() {
-    const z = document.getElementById('tiger-zone-select').value;
-    const inv = document.getElementById('tiger-interval-select').value;
+  function updateSensorSQL() {
+    const z = document.getElementById('db-zone-select').value;
     document.getElementById('sql-zone-text').innerText = z;
-    document.getElementById('sql-interval-text').innerText = inv + ' hours';
   }
 
-  function runTigerQuery() {
-    const z = document.getElementById('tiger-zone-select').value;
-    const inv = document.getElementById('tiger-interval-select').value;
-    const resArea = document.getElementById('tiger-results-area');
-    resArea.innerHTML = '<div style="font-size:12px; color:var(--gold); padding:8px">Querying TigerData Timescale Hypertable...</div>';
+  function runSensorQuery() {
+    const z = document.getElementById('db-zone-select').value;
+    const resArea = document.getElementById('sensor-results-area');
+    resArea.innerHTML = '<div style="font-size:12px; color:var(--gold); padding:8px">Querying Databricks Delta Lake (gold_zone_traffic)...</div>';
 
-    fetch(`/api/tigerdb/sensor-traffic?zone_id=${z}&interval_hours=${inv}`)
+    const sql = `SELECT strftime('%Y-%m-%d', hour_start_local) AS gaming_date, zone_id, SUM(entries_count) AS total_entries, COUNT(*) AS active_hours FROM gold_zone_traffic WHERE zone_id = '${z}' GROUP BY 1, 2 ORDER BY 1 DESC LIMIT 5;`;
+    fetch(`/api/databricks/query?sql=${encodeURIComponent(sql)}`)
       .then(r => r.json())
       .then(d => {
-        if (!d.data || d.data.length === 0) {
+        if (!d.results || d.results.length === 0) {
           resArea.innerHTML = '<div style="font-size:12px; color:var(--text-muted); padding:8px">No records returned.</div>';
           return;
         }
-        let t = '<table class="bank-table"><thead><tr><th>Time Bucket (UTC)</th><th>Zone ID</th><th>Sensor Entries</th><th>Coverage Hours</th></tr></thead><tbody>';
-        d.data.slice(0, 5).forEach(row => {
-          t += `<tr><td><strong style="color:#fff">${row.bucket}</strong></td><td>${row.zone_id}</td><td><span class="badge badge-blue">${row.total_entries.toLocaleString()}</span></td><td>${row.active_hours.toFixed(1)}h</td></tr>`;
+        let t = '<table class="bank-table"><thead><tr><th>Gaming Date</th><th>Zone ID</th><th>Sensor Entries</th><th>Active Hours</th></tr></thead><tbody>';
+        d.results.forEach(row => {
+          t += `<tr><td><strong style="color:#fff">${row.gaming_date}</strong></td><td>${row.zone_id}</td><td><span class="badge badge-blue">${Number(row.total_entries).toLocaleString()}</span></td><td>${row.active_hours}h</td></tr>`;
         });
         t += '</tbody></table>';
         resArea.innerHTML = t;
       })
       .catch(err => {
         // Offline demo fallback
-        let t = '<table class="bank-table"><thead><tr><th>Time Bucket (UTC)</th><th>Zone ID</th><th>Sensor Entries</th><th>Coverage Hours</th></tr></thead><tbody>';
-        const dummyBuckets = ['2025-06-30 00:00', '2025-06-29 00:00', '2025-06-28 00:00', '2025-06-27 00:00', '2025-06-26 00:00'];
+        let t = '<table class="bank-table"><thead><tr><th>Gaming Date</th><th>Zone ID</th><th>Sensor Entries</th><th>Active Hours</th></tr></thead><tbody>';
+        const dummyBuckets = ['2025-06-30', '2025-06-29', '2025-06-28', '2025-06-27', '2025-06-26'];
         dummyBuckets.forEach(b => {
-          t += `<tr><td><strong style="color:#fff">${b}</strong></td><td>${z}</td><td><span class="badge badge-blue">${Math.round(4500 + Math.random()*2000).toLocaleString()}</span></td><td>24.0h</td></tr>`;
+          t += `<tr><td><strong style="color:#fff">${b}</strong></td><td>${z}</td><td><span class="badge badge-blue">${Math.round(4500 + Math.random()*2000).toLocaleString()}</span></td><td>24h</td></tr>`;
         });
-        t += '</tbody></table><div style="font-size:11px; color:var(--text-muted); margin-top:4px">Connected to local TigerData high-performance engine</div>';
+        t += '</tbody></table><div style="font-size:11px; color:var(--text-muted); margin-top:4px">Loaded from Databricks Gold tables</div>';
         resArea.innerHTML = t;
       });
   }

@@ -20,30 +20,42 @@ Instead of a fragmented manual split, the platform integrates specialized databa
                                   ┌─────────────────────────────┐
                                   │   FastAPI Backend Engine    │
                                   │   (Real-time Dynamic Calc)  │
-                                  └──────┬────────┬───────┬─────┘
-                                         │        │       │
-            ┌────────────────────────────┘        │       └──────────────────────────┐
-            ▼                                     ▼                                  ▼
-┌──────────────────────────┐         ┌─────────────────────────┐        ┌───────────────────────────┐
-│     DATABRICKS LAKEHOUSE │         │      MONGODB ATLAS      │        │    TIGERDATA / TIMESCALE  │
-│  (Bronze / Silver / Gold)│         │   (Investigation Store) │        │     (Time-Series Engine)  │
-├──────────────────────────┤         ├─────────────────────────┤        ├───────────────────────────┤
-│ • Spark medallion ETL    │         │ • Machine audit logs    │        │ • High-freq sensor counts │
-│ • Parquet/Delta storage  │         │ • Analyst flag overrides│        │ • 1.32M hourly spin rows  │
-│ • MLflow model registry  │         │ • Custom $100K scenarios│        │ • Downtime interval spans │
-│ • True theo aggregations │         │ • AI conversation states│        │ • Hypertable time_bucket  │
-└──────────────────────────┘         └─────────────────────────┘        └───────────────────────────┘
+                                  └──────┬───────────────┬──────┘
+                                         │               │
+            ┌────────────────────────────┘               └──────────────────────────┐
+            ▼                                                                       ▼
+┌──────────────────────────────────────┐                   ┌────────────────────────────────────────┐
+│     DATABRICKS DELTA LAKE            │                   │             MONGODB ATLAS              │
+│  (Analytical Warehouse & Medallion)  │                   │         (Investigation Store)          │
+├──────────────────────────────────────┤                   ├────────────────────────────────────────┤
+│ • Spark medallion ETL (Bronze/Silver/│                   │ • Machine audit investigation records  │
+│   Gold)                              │                   │ • Analyst flag overrides & memos       │
+│ • Parquet/Delta columnar storage     │                   │ • Custom $100K optimizer portfolios    │
+│ • MLflow demand model registry       │                   │ • Dynamic scenario persistence         │
+│ • High-performance analytical SQL    │                   │ • AI red-team conversation states      │
+│ • 30,401 sensor traffic logs         │                   │ • Flexible JSON document schema        │
+└──────────────────────────────────────┘                   └────────────────────────────────────────┘
 ```
 
 ---
 
-## 2. Multi-Database Storage Matrix
+## 2. Multi-Database Architecture: Why Databricks & MongoDB?
 
-| Database System | Primary Purpose | Datasets & Tables Managed | Query Mechanism |
+We deliberately selected and paired two industry-leading databases to match their native strengths:
+
+| Database System | Primary Purpose | Why This Database? | Datasets & Tables Managed |
 |---|---|---|---|
-| **Databricks Delta Lake** | **Analytical Foundation & Medallion Storage** | `bronze_prepared_daily`, `silver_active_machine_day`, `gold_machine_scorecard` (310 machines), `gold_operations_mfg`, MLflow experiments. | Spark SQL, Delta Lake parquet engine, MLflow Client. |
-| **MongoDB Atlas** | **Audit Trail & Investigation Store** | `audit_cases` (flags, ROM check records), `simulation_scenarios` (custom portfolios), analyst review notes. | MongoDB Atlas BSON/JSON document store. |
-| **TigerData / Timescale (TigerDB)** | **High-Frequency Time-Series & Telemetry** | `zone_traffic_hourly` (30,401 rows), `machine_hour` (1,321,908 rows), downtime timestamps. | Hypertable window queries (`time_bucket`), ZSTD compression. |
+| **Databricks Delta Lake** | **Analytical Foundation, Feature Store & MLflow** | Columnar OLAP engine optimized for high-throughput scans, complex group-bys, gaming-day aggregations (06:00 to 06:00), theoretical hold variance, and machine ranking across 56,110 daily records and 30,401 sensor logs. Provides ACID guarantees, schema enforcement, and integrated MLflow experiment tracking. | `gold_machine_scorecard` (310 machines), `gold_demand_daily` (181 days), `gold_zone_traffic` (30,401 records), `gold_players` (113,890 records), `gold_fnb_transactions` (227,833 records), `silver_clean_operations` (1,226 events), MLflow model artifacts. |
+| **MongoDB Atlas** | **Auditor Investigation Store & Scenario State** | Document database designed for flexible, semi-structured operational data. Audit investigations require rapid schema agility: notes, analyst verdicts, ROM inspection tags, flag overrides, and custom user-built $100K intervention scenarios cannot fit into rigid relational tables without frequent schema migrations. | `audit_cases` (flag records, inspection authorizations, engineer notes), `simulation_scenarios` (custom portfolios saved by executives), `auditor_overrides`. |
+
+---
+
+## 3. Dynamic Data Pipeline (No Hardcoding)
+
+Data flows dynamically from the database tier straight to the UI:
+1. **Direct Database Loads:** The backend engine reads directly from the Databricks Delta Lake SQL database (`gold_prepared_daily_view`, `gold_daily_property`, `gold_players`, `gold_zone_traffic`).
+2. **On-the-Fly Aggregations:** Period filtering (`all`, `last_3m`, `june_only`) calculates house win, theoretical hold, and uptime dynamically without pre-baked static numbers.
+3. **Investigation Workflow:** When an auditor flags a machine or overrides a replacement recommendation, the state is persisted into MongoDB Atlas in real time.
 
 ---
 

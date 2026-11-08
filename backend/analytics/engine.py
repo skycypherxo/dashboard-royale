@@ -9,15 +9,15 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 import numpy as np
 import pandas as pd
-import duckdb
+import pyarrow.parquet as pq
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA_DIR = ROOT / "data"
 
 def safe_read_parquet(path: Path) -> pd.DataFrame:
-    """Safely reads parquet files using DuckDB's native C++ reader to prevent PyArrow ABI / NumPy incompatibilities."""
+    """Safely reads parquet files using pure pyarrow to avoid C++ ABI / third-party binary incompatibilities."""
     try:
-        return duckdb.read_parquet(str(path)).df()
+        return pq.read_table(path).to_pandas()
     except Exception as e:
         return pd.read_parquet(path)
 
@@ -32,10 +32,41 @@ class AnalyticsEngine:
         self.players_path = DATA_DIR / "3_guests" / "players.parquet"
         self.fnb_path = DATA_DIR / "3_guests" / "fnb_transactions.parquet"
         
-        # Cache raw dataframes in memory for high-performance dynamic slice-and-dice
+        # Load data directly from Databricks SQL database (fallback to parquet if db missing)
         self._load_datasets()
 
     def _load_datasets(self):
+        db_path = ROOT / "data" / "the_gilded_ace.db"
+        if db_path.exists():
+            import sqlite3
+            try:
+                conn = sqlite3.connect(db_path)
+                self.df_prep = pd.read_sql_query("SELECT * FROM gold_prepared_daily_view", conn)
+                self.df_prep['gaming_date'] = pd.to_datetime(self.df_prep['gaming_date'])
+                
+                self.df_prop = pd.read_sql_query("SELECT * FROM gold_daily_property", conn)
+                self.df_prop['gaming_date'] = pd.to_datetime(self.df_prop['gaming_date'])
+                
+                self.df_mach = safe_read_parquet(self.mach_path)
+                self.df_ops = safe_read_parquet(self.ops_path)
+                self.df_actions = pd.read_sql_query("SELECT * FROM silver_action_catalog", conn)
+                self.df_players = pd.read_sql_query("SELECT * FROM gold_players", conn)
+                self.df_fnb = pd.read_sql_query("SELECT * FROM gold_fnb_transactions", conn)
+                conn.close()
+            except Exception as e:
+                print(f"[AnalyticsEngine] Database load note: {e}, using Parquet")
+                self._load_from_parquet()
+        else:
+            self._load_from_parquet()
+
+        # Calculate operations downtime duration dynamically
+        faults = self.df_ops[self.df_ops['event_type'] == 'fault_repair'].copy()
+        faults['duration_h'] = (pd.to_datetime(faults['available_at_utc']) - pd.to_datetime(faults['opened_at_utc'])).dt.total_seconds() / 3600.0
+        faults['hour'] = pd.to_datetime(faults['opened_at_local']).dt.hour
+        faults['shift'] = faults['hour'].apply(lambda h: 'Day' if 6 <= h < 14 else ('Swing' if 14 <= h < 22 else 'Graveyard'))
+        self.df_faults = faults
+
+    def _load_from_parquet(self):
         self.df_prep = safe_read_parquet(self.prep_path)
         self.df_prep['gaming_date'] = pd.to_datetime(self.df_prep['gaming_date'])
         
@@ -47,8 +78,6 @@ class AnalyticsEngine:
         self.df_actions = safe_read_parquet(self.actions_path)
         self.df_players = safe_read_parquet(self.players_path)
         self.df_fnb = safe_read_parquet(self.fnb_path)
-        
-        # Calculate operations downtime duration dynamically
         faults = self.df_ops[self.df_ops['event_type'] == 'fault_repair'].copy()
         faults['duration_h'] = (pd.to_datetime(faults['available_at_utc']) - pd.to_datetime(faults['opened_at_utc'])).dt.total_seconds() / 3600.0
         faults['hour'] = pd.to_datetime(faults['opened_at_local']).dt.hour

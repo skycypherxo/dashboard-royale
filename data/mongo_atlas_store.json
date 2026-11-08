@@ -7,6 +7,14 @@
       "status": "EXONERATED_RETAIN",
       "verdict": "Luck deficit of -$36,165 verified as binomial variance (Z=-20.21). Recommend A-INSPECT ($1,200).",
       "timestamp": "2026-11-08T10:02:42.877508"
+    },
+    {
+      "machine_id": "M-1158",
+      "analyst": "Floor Lead",
+      "status": "RETAIN",
+      "verdict": "Retain machine.",
+      "timestamp": "2026-11-08T11:00:35.895018",
+      "case_id": "AUDIT-M-1158-002"
     }
   ],
   "simulation_scenarios": [

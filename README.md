@@ -8,18 +8,78 @@ A production-grade, multi-page decision intelligence platform built for TAMU Dat
 
 ---
 
-## 1. Quick Start: Launch the Platform
+## 1. Quick Start & Environment Configuration
 
-Run the unified backend and launch the platform in your browser with a single command:
+### Step A: Configure Environment Variables (`.env`)
+The platform supports live credentials for **Google Gemini**, **xAI Grok**, **MongoDB Atlas**, and **Databricks SQL Warehouse**.
+
+A ready-to-use template is provided in [`.env.example`](.env.example). Copy it to `.env`:
+
+```powershell
+cp .env.example .env
+```
+
+Edit `.env` with your API keys or database connections:
+
+```ini
+# Server Port & Host
+PORT=8000
+HOST=127.0.0.1
+
+# AI Copilot APIs (Optional - falls back to pre-computed verified decision responses if not provided)
+GEMINI_API_KEY=your_gemini_api_key_here
+XAI_API_KEY=your_xai_api_key_here
+
+# MongoDB Atlas (Optional - falls back to persistent local store in data/mongo_atlas_store.json)
+# Purpose: Dynamic investigation records, auditor notes, and saved simulation portfolios
+MONGODB_URI=your_mongodb_connection_string
+MONGODB_DB=gilded_ace_intelligence
+
+# Databricks SQL Warehouse (Optional - falls back to embedded SQL Delta store in data/the_gilded_ace.db)
+# Purpose: Columnar OLAP engine for Gold feature tables, gaming day aggregations, and MLflow models
+DATABRICKS_SERVER_HOSTNAME=your_databricks_host
+DATABRICKS_HTTP_PATH=your_http_path
+DATABRICKS_TOKEN=your_token
+```
+
+> **Zero-Config Guarantee:** If no API keys or cloud database connections are configured, the backend automatically uses its embedded, zero-dependency engines:
+> - **Databricks SQL Engine:** Direct SQL execution on local Gold/Silver Delta store (`data/the_gilded_ace.db`) covering 56,110 gaming records, 30,401 sensor logs, and player telemetry.
+> - **MongoDB Atlas Engine:** Audit case tracking, analyst notes, and scenario persistence stored locally in `data/mongo_atlas_store.json`.
+> - **Gemini & Grok AI Engine:** Deterministic, contract-verified answers grounded in actual telemetry and analytical findings.
+
+### Step B: Launch the Platform
+
+Run the unified backend server:
 
 ```powershell
 python run_platform.py
 ```
 
 - **Interactive Decision Platform:** [http://localhost:8000/dashboard/index.html](http://localhost:8000/dashboard/index.html)
-- **FastAPI Interactive Docs:** [http://localhost:8000/docs](http://localhost:8000/docs)
+- **FastAPI Interactive Docs & Swagger:** [http://localhost:8000/docs](http://localhost:8000/docs)
 
-*Note: You can also open any of the HTML files in `dashboard/` directly in any web browser without running a server.*
+*Note: All HTML files in `dashboard/` can also be opened directly in any browser for static offline review.*
+
+---
+
+## 2. Dynamic Backend Data Architecture vs Hardcoding
+
+All 8 dashboard pages are dynamically wired to real REST and database endpoints:
+
+1. **Global Period Filtering (`GET /api/metrics/summary?period=all|last_3m|june_only`):**
+   - Switching the time-window selector in the header instantly re-computes Floor Win, Theoretical Win, Availability, and Hold % across 181 gaming days in real-time.
+2. **Dynamic Machine Drill-Down & 6-Question Audit (`GET /api/machines/{machine_id}/audit`):**
+   - Clicking any machine in `dashboard/machine_intelligence.html` triggers a dynamic backend calculation of coin-in rank, theoretical hold deficit, $Z$-score, $p$-value, availability, and alternative intervention savings.
+3. **MongoDB Atlas Audit Logging (`POST /api/audit/case` & `GET /api/audit/cases`):**
+   - Analysts can create, flag, and commit audit cases with custom notes and recommended actions directly into the MongoDB Atlas investigation collection.
+4. **Interactive Databricks SQL Console (`GET /api/databricks/query?sql=...`):**
+   - In `dashboard/evidence_explorer.html`, users can write and execute arbitrary SQL queries against the Gold and Silver tables, receiving live JSON datasets and row counts.
+5. **Interactive $100K Intervention Simulator (`POST /api/optimizer/simulate`):**
+   - Sending action combinations validates the 5 hard constraints ($100k cap, max 3 action types, stock limits, incompatible actions) and runs Monte Carlo sensitivity simulations (+35% optimistic, expected, -30% pessimistic).
+6. **Interactive SQL & Telemetry via Databricks Delta Lake (`GET /api/databricks/query?sql=...`):**
+   - Direct SQL querying over `gold_zone_traffic` (30,401 rows), `gold_players` (113,890 rows), and `gold_machine_scorecard` (310 machines).
+7. **Dual-AI Copilot (`POST /api/ai/chat`):**
+   - Switch between **Gemini 1.5 Flash** (decision intelligence copilot) and **xAI Grok** (adversarial fraud and red-teaming auditor).
 
 ---
 

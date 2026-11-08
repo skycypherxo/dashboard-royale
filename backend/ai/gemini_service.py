@@ -1,6 +1,6 @@
 """
 Gemini Decision Intelligence Service for THE GILDED ACE.
-Grounds responses in live Databricks, MongoDB, and TigerData database metrics.
+Grounds responses in live Databricks Delta Lake and MongoDB Atlas database metrics.
 Supports both live Google Gemini API calls (via user key or env) and high-fidelity offline mode.
 """
 import os
@@ -39,7 +39,7 @@ USER QUESTION: {prompt}
                     "ai_model": "Google Gemini 1.5 Flash (Live)",
                     "role": "Executive Decision Intelligence",
                     "response": resp.text,
-                    "grounding_source": "Databricks Gold Telemetry + TigerDB Time-Series"
+                    "grounding_source": "Databricks Delta Lake Gold Telemetry + MongoDB Investigation Audit Store"
                 }
             except Exception as e:
                 print(f"[Gemini API] Call error: {e}")

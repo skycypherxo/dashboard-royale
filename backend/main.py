@@ -1,9 +1,8 @@
 """
 The Gilded Ace - Casino Decision Intelligence Backend API
 Unified FastAPI Platform with Live DB Connectors & Dual AI Services:
-- Databricks Delta Lake & Spark SQL
-- MongoDB Atlas Investigation & Audit Case Store
-- TigerData / Timescale Sensor Time-Series Telemetry
+- Databricks Delta Lake & Spark SQL (Gold feature tables, analytical warehousing & forecasting)
+- MongoDB Atlas Investigation & Audit Case Store (Auditor notes, overrides, scenario states)
 - Google Gemini 1.5 Flash (Executive Decision Copilot)
 - xAI Grok (Adversarial Casino Auditor & Red Team)
 """
@@ -11,6 +10,11 @@ import os
 import json
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+from dotenv import load_dotenv
+
+# Load environment variables from .env
+load_dotenv()
+
 from fastapi import FastAPI, HTTPException, Query, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -20,7 +24,6 @@ import pydantic
 from backend.analytics.engine import engine
 from backend.db.databricks_client import databricks_client
 from backend.db.mongo_client import mongo_client
-from backend.db.tigerdb_client import tigerdb_client
 from backend.ai.gemini_service import gemini_service
 from backend.ai.grok_service import grok_service
 
@@ -29,7 +32,7 @@ DATA_DIR = ROOT / "dashboard" / "data"
 
 app = FastAPI(
     title="The Gilded Ace - Decision Intelligence Platform API",
-    description="Multi-engine analytical backend integrating Databricks, MongoDB Atlas, TigerData, Gemini Copilot, and Grok Adversarial Auditor.",
+    description="Multi-engine analytical backend integrating Databricks Delta Lake, MongoDB Atlas, Gemini Copilot, and Grok Adversarial Auditor.",
     version="2.0.0"
 )
 
@@ -46,13 +49,12 @@ app.add_middleware(
 # -----------------
 @app.get("/api/system/status")
 def get_system_status():
-    """Returns real-time connectivity and status of Databricks, MongoDB Atlas, and TigerData."""
+    """Returns real-time connectivity and status of Databricks and MongoDB Atlas."""
     return {
         "status": "HEALTHY",
         "databases": {
             "databricks": databricks_client.get_cluster_status(),
-            "mongodb_atlas": mongo_client.get_status(),
-            "tigerdata_timescale": tigerdb_client.get_status()
+            "mongodb_atlas": mongo_client.get_status()
         },
         "ai_engines": {
             "gemini_decision_copilot": "READY (Live API / Grounded Telemetry)",
@@ -111,26 +113,7 @@ def run_databricks_query(sql: str = Query(..., description="SQL statement to exe
     }
 
 # -----------------
-# 4. TIGERDATA / TIMESCALEDB TIME-SERIES QUERIES
-# -----------------
-@app.get("/api/tigerdb/sensor-traffic")
-def get_tigerdb_traffic(zone_id: Optional[str] = Query(None), interval_hours: int = Query(24)):
-    """Runs a time_bucket window query on sensor traffic from TigerData."""
-    return {
-        "engine": "TigerData Timescale Hypertable",
-        "data": tigerdb_client.query_time_bucket(zone_id=zone_id, interval_hours=interval_hours)
-    }
-
-@app.get("/api/tigerdb/machine-telemetry/{machine_id}")
-def get_tigerdb_machine_telemetry(machine_id: str):
-    """Queries high-frequency hourly telemetry from TigerData (1.32M rows)."""
-    return {
-        "machine_id": machine_id,
-        "hourly_telemetry": tigerdb_client.query_machine_hour_telemetry(machine_id)
-    }
-
-# -----------------
-# 5. MONGODB ATLAS INVESTIGATION & AUDIT STORE
+# 4. MONGODB ATLAS INVESTIGATION & AUDIT STORE
 # -----------------
 class AuditCaseRequest(pydantic.BaseModel):
     machine_id: str
