@@ -1,0 +1,23 @@
+{
+  "total_house_win": 23638155.1,
+  "total_house_win_formatted": "$23,638,155.10",
+  "total_house_win_millions": "$23.64M",
+  "total_coin_in": 248905219.25,
+  "total_payout": 225267064.15,
+  "total_theo_win": 23545364.4785,
+  "total_theo_win_formatted": "$23,545,364.48",
+  "total_theo_win_millions": "$23.55M",
+  "observed_hold_pct": 9.5,
+  "theo_hold_pct": 9.46,
+  "luck_residual_tot": 92790.62,
+  "luck_residual_formatted": "+$92,790.62",
+  "machine_availability_pct": 99.62,
+  "scheduled_machine_hours": 1321908.0,
+  "available_machine_hours": 1316886.9,
+  "downtime_hours": 5021.1,
+  "budget_allocated": 100000,
+  "budget_remaining": 100000,
+  "budget_period": "July 2025 Intervention Budget",
+  "active_machines_count": 310,
+  "operating_days_count": 181
+}

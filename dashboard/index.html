@@ -1,269 +1,461 @@
 <!doctype html>
 <html lang="en">
 <head>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dashboard Royale · Executive Intelligence Suite</title>
+<title>THE GILDED ACE · Casino Decision Intelligence Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
+
 <style>
-  :root {
-    --bg: #f4f5f0; --card: #ffffff; --ink: #1a2e24; --muted: #64756c; --line: #e2e6df;
-    --green: #1d4d38; --green-soft: #e8f2ec; --gold: #b38b46; --gold-soft: #fbf5e8;
-    --red: #a83232; --red-soft: #fbeeee; --blue: #2a5f8a; --blue-soft: #edf4f9;
-    --track: #ebefe9; --shadow: 0 4px 16px rgba(0,0,0,.05);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0f1612; --card: #16201a; --ink: #e8efe9; --muted: #95a59c; --line: #24322a;
-      --green: #3ea076; --green-soft: #182f24; --gold: #d8b26e; --gold-soft: #322b1c;
-      --red: #e06c6c; --red-soft: #341d1d; --blue: #5b9ed6; --blue-soft: #172836;
-      --track: #1f2c24; --shadow: 0 4px 16px rgba(0,0,0,.3);
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0f1612; --card: #16201a; --ink: #e8efe9; --muted: #95a59c; --line: #24322a;
-    --green: #3ea076; --green-soft: #182f24; --gold: #d8b26e; --gold-soft: #322b1c;
-    --red: #e06c6c; --red-soft: #341d1d; --blue: #5b9ed6; --blue-soft: #172836;
-    --track: #1f2c24; --shadow: 0 4px 16px rgba(0,0,0,.3);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--ink); font: 14px/1.55 Inter, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
-  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
-  
-  /* Header */
-  header { background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,.03); }
-  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
-  .brand { display: flex; align-items: center; gap: 12px; font: 22px "DM Serif Display", serif; text-decoration: none; color: inherit; }
-  .logo { width: 36px; height: 36px; border-radius: 8px; background: var(--green); color: var(--gold); display: grid; place-items: center; font-size: 20px; font-weight: bold; }
-  nav { display: flex; gap: 6px; align-items: center; }
-  nav a { text-decoration: none; color: var(--muted); padding: 8px 14px; border-radius: 8px; font-weight: 500; font-size: 13px; transition: all .15s; }
-  nav a:hover { color: var(--ink); background: var(--track); }
-  nav a.active { color: var(--green); background: var(--green-soft); font-weight: 600; }
-  .header-actions { display: flex; align-items: center; gap: 10px; }
-  .theme-btn { background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; cursor: pointer; color: var(--muted); font-size: 13px; }
+:root {
+  --bg: #090e0c;
+  --surface: #111815;
+  --surface-raised: #18221e;
+  --border: rgba(212, 175, 55, 0.22);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --gold: #d4af37;
+  --gold-glow: rgba(212, 175, 55, 0.35);
+  --gold-soft: rgba(212, 175, 55, 0.12);
+  --green: #10b981;
+  --green-soft: rgba(16, 185, 129, 0.12);
+  --red: #ef4444;
+  --red-soft: rgba(239, 68, 68, 0.12);
+  --blue: #38bdf8;
+  --blue-soft: rgba(56, 189, 248, 0.12);
+  --purple: #c084fc;
+  --purple-soft: rgba(192, 132, 252, 0.12);
+  --text: #f3f4f6;
+  --text-muted: #9ca3af;
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --font-serif: 'Cinzel', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
 
-  /* Hero */
-  .hero { padding: 44px 0 28px; text-align: center; }
-  .eyebrow { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 6px; }
-  h1 { font: 46px/1.12 "DM Serif Display", serif; margin: 0 0 12px; letter-spacing: -.02em; }
-  h1 em { color: var(--green); font-style: normal; }
-  .sub { color: var(--muted); font-size: 15px; max-width: 820px; margin: 0 auto 20px; line-height: 1.6; }
-  
-  /* Primary Banner */
-  .verdict-banner { background: var(--card); border: 2px solid var(--gold); border-radius: 12px; padding: 20px 24px; max-width: 980px; margin: 0 auto 36px; text-align: left; box-shadow: var(--shadow); display: flex; gap: 18px; align-items: flex-start; }
-  .verdict-icon { font-size: 32px; line-height: 1; }
-  .verdict-title { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
-  .verdict-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
 
-  /* KPIs */
-  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 36px; }
-  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); }
-  .kpi .k-label { color: var(--muted); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
-  .kpi .k-val { font-size: 30px; font-weight: 700; margin: 8px 0 4px; font-variant-numeric: tabular-nums; line-height: 1.1; }
-  .kpi .k-sub { color: var(--muted); font-size: 12px; }
-  .kpi.feature { background: linear-gradient(135deg, var(--green), #143727); border-color: transparent; color: #ffffff; }
-  .kpi.feature .k-label, .kpi.feature .k-sub { color: rgba(255,255,255,.8); }
+.platform-header {
+  background: linear-gradient(180deg, #131c18 0%, #0c1310 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 32px 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand-symbol {
+  font-size: 32px;
+  color: var(--gold);
+  line-height: 1;
+  filter: drop-shadow(0 0 8px var(--gold-glow));
+}
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.brand-subtitle {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.live-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--green);
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
 
-  /* Portal Gateway Cards */
-  .gateway-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
-  .portal-card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 26px; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: transform .2s, box-shadow .2s; text-decoration: none; color: inherit; position: relative; overflow: hidden; }
-  .portal-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.08); border-color: var(--green); }
-  .portal-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
-  .portal-card.card-floor::before { background: var(--gold); }
-  .portal-card.card-guests::before { background: var(--green); }
-  .portal-card.card-actions::before { background: var(--blue); }
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  transition: all 0.2s ease;
+}
+.kpi-card:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.kpi-card.highlight-card {
+  border-color: rgba(192, 132, 252, 0.4);
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.08) 0%, var(--surface) 100%);
+}
+.kpi-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.kpi-value.gold { color: var(--gold); }
+.kpi-value.green { color: var(--green); }
+.kpi-value.blue { color: var(--blue); }
+.kpi-value.purple { color: var(--purple); }
+.kpi-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.gold-text { color: var(--gold); }
 
-  .portal-tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 6px; }
-  .card-floor .portal-tag { color: var(--gold); }
-  .card-guests .portal-tag { color: var(--green); }
-  .card-actions .portal-tag { color: var(--blue); }
+.nav-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 1px;
+}
+.nav-item {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 18px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-item:hover {
+  color: #fff;
+  border-bottom-color: rgba(212, 175, 55, 0.5);
+}
+.nav-item.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.08) 100%);
+}
 
-  .portal-title { font: 24px "DM Serif Display", serif; margin-bottom: 10px; line-height: 1.2; }
-  .portal-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 20px; flex: 1; }
-  .portal-bullets { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: var(--ink); }
-  .portal-bullets li { display: flex; align-items: center; gap: 8px; }
-  .portal-bullets li::before { content: "✓"; color: var(--green); font-weight: bold; }
-  .portal-btn { background: var(--track); color: var(--ink); border-radius: 8px; padding: 10px 16px; font-size: 13px; font-weight: 600; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; transition: background .15s; }
-  .portal-card:hover .portal-btn { background: var(--green); color: #fff; }
+.main-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 32px;
+}
+.section-header {
+  margin-bottom: 24px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.section-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
 
-  /* Key Takeaways Grid */
-  .takeaways-section { margin-bottom: 40px; }
-  .section-head { margin-bottom: 20px; text-align: center; }
-  .section-head h2 { font: 28px "DM Serif Display", serif; margin-bottom: 6px; }
-  .section-head p { font-size: 13px; color: var(--muted); }
-  
-  .takeaways-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .takeaway-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
-  .takeaway-num { font-size: 12px; font-weight: 700; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
-  .takeaway-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
-  .takeaway-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 12px;
+}
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
 
-  footer { padding: 40px 0 60px; color: var(--muted); font-size: 12px; text-align: center; border-top: 1px solid var(--line); margin-top: 40px; }
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+.data-table th {
+  background: var(--surface-raised);
+  color: var(--gold);
+  padding: 12px 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+.data-table tr:hover td {
+  background: rgba(212, 175, 55, 0.05);
+  cursor: pointer;
+}
 
-  @media (max-width: 900px) {
-    .gateway-grid, .takeaways-grid { grid-template-columns: 1fr; }
-    .kpis { grid-template-columns: repeat(2, 1fr); }
-    h1 { font-size: 34px; }
-  }
-  @media (max-width: 600px) {
-    .kpis { grid-template-columns: 1fr; }
-  }
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-gold { background: var(--gold-soft); color: var(--gold); border: 1px solid rgba(212,175,55,0.4); }
+.badge-green { background: var(--green-soft); color: var(--green); border: 1px solid rgba(16,185,129,0.4); }
+.badge-red { background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.4); }
+.badge-blue { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(56,189,248,0.4); }
+.badge-purple { background: var(--purple-soft); color: var(--purple); border: 1px solid rgba(192,132,252,0.4); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8214 100%);
+  color: #0c1310;
+}
+.btn-primary:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-secondary:hover {
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+.input-field {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  outline: none;
+}
+.input-field:focus {
+  border-color: var(--gold);
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px);
+}
+.modal-overlay.active { display: flex; }
+.modal-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  max-width: 900px;
+  width: 92%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+}
+.modal-close:hover { color: #fff; border-color: var(--gold); }
+
+.audit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+.audit-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.audit-card.full-width {
+  grid-column: 1 / -1;
+}
+.audit-q-num {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.audit-q-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.audit-q-body {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.iframe-container {
+  width: 100%;
+  height: calc(100vh - 200px);
+  border: none;
+}
 </style>
 </head>
-<body>
+<body style="overflow:hidden">
 
-<header>
-  <div class="wrap">
-    <a href="index.html" class="brand">
-      <div class="logo">♠</div>
-      <span>Dashboard Royale</span>
-    </a>
-    <nav>
-      <a href="index.html" class="active">Overview</a>
-      <a href="floor.html">Floor & ML</a>
-      <a href="guests.html">Guests & Loyalty</a>
-      <a href="actions.html">Operations ($100k)</a>
-    </nav>
-    <div class="header-actions">
-      <button class="theme-btn" id="theme-toggle">🌓 Theme</button>
-    </div>
-  </div>
-</header>
-
-<main class="wrap">
-  <section class="hero">
-    <div class="eyebrow"><span>●</span> Executive Intelligence Portal · The Gilded Ace</div>
-    <h1>Luck, Location, <em>or a Leak?</em></h1>
-    <p class="sub">Six months of gaming, player, downtime, and operational telemetry synthesized into a decision-grade command center. Uncovering the mathematical truth behind floor earnings and deploying $100,000 with disciplined precision.</p>
-  </section>
-
-  <!-- Executive Verdict -->
-  <div class="verdict-banner">
-    <div class="verdict-icon">⚖️</div>
-    <div>
-      <div class="verdict-title">Executive Determination: Stop Management's Machine Replacement Plan</div>
-      <div class="verdict-desc">
-        Management’s proposal to replace the 10 lowest-earning machines by nominal house win is an expensive mistake. Machines like <code>M-1158</code> generated <strong>$519.6k in coin-in</strong> and <strong>$52.0k in theoretical win</strong>, but ran -$36.2k behind expectation due to pure negative player luck (3.04% hold vs 10% expected). Eight of the ten bottom machines suffer from foot-traffic starvation in Back Forty, not bad math. Instead of wasting capital on replacements, we deploy <strong>$28,600 to $38,600</strong> on root-cause maintenance, machine inspections, and a loyalty comp pilot, while <strong>preserving $61,400+ in treasury cash</strong>.
-      </div>
-    </div>
-  </div>
-
-  <!-- Primary Casino KPIs -->
-  <section class="kpis">
-    <div class="card kpi">
-      <div class="k-label">Property Coin-In (6 Months)</div>
-      <div class="k-val">$248.91M</div>
-      <div class="k-sub">181 gaming days · 300–308 machines</div>
-    </div>
-    <div class="card kpi feature">
-      <div class="k-label">Total House Gaming Win</div>
-      <div class="k-val">$23.64M</div>
-      <div class="k-sub">Floor Observed Hold: 9.50%</div>
-    </div>
-    <div class="card kpi">
-      <div class="k-label">Tracked Player Share</div>
-      <div class="k-val">65.81%</div>
-      <div class="k-sub">$163.80M coin-in · 113,890 members</div>
-    </div>
-    <div class="card kpi">
-      <div class="k-label">Available Budget Preserved</div>
-      <div class="k-val">$61,400</div>
-      <div class="k-sub">Committed: $38,600 of $100,000</div>
-    </div>
-  </section>
-
-  <!-- Navigation Gateways -->
-  <div class="gateway-grid">
-
-    <!-- Card 1: Floor -->
-    <a href="floor.html" class="portal-card card-floor">
-      <div class="portal-tag">Floor Analytics & Forecasting</div>
-      <h3 class="portal-title">Floor Performance & Machine Scorecard</h3>
-      <p class="portal-desc">Investigate all 300 machines across exposure, availability, manufacturer downtime, and the daily coin-in forecasting ML model.</p>
-      <ul class="portal-bullets">
-        <li>Machine scorecard per available hour</li>
-        <li>Ridgeline downtime concentration (56.3%)</li>
-        <li>Daily coin-in time-series ML forecast</li>
-      </ul>
-      <div class="portal-btn">Launch Floor Dashboard →</div>
-    </a>
-
-    <!-- Card 2: Guests -->
-    <a href="guests.html" class="portal-card card-guests">
-      <div class="portal-tag">Player Analytics & Loyalty</div>
-      <h3 class="portal-title">Guest Intelligence & Comp Economics</h3>
-      <p class="portal-desc">Explore carded player outcomes, extreme player wealth concentration (Gini: 0.754), and the 1.23% complimentary reinvestment program.</p>
-      <ul class="portal-bullets">
-        <li>Top 1% generates 22.85% of coin-in</li>
-        <li>Locals drive 58.6% of tracked volume</li>
-        <li>Comp economic cost is only 27.9% of face value</li>
-      </ul>
-      <div class="portal-btn">Launch Guest Dashboard →</div>
-    </a>
-
-    <!-- Card 3: Actions -->
-    <a href="actions.html" class="portal-card card-actions">
-      <div class="portal-tag">Operational Budget ($100k)</div>
-      <h3 class="portal-title">Priced Recommendations & Allocation</h3>
-      <p class="portal-desc">Priced 30-day action portfolio for July 1–30. All 9 required criteria, uncertainty, abandonment triggers, and $61.4k preserved budget.</p>
-      <ul class="portal-bullets">
-        <li>Comp Policy Pilot with Control Group ($14k)</li>
-        <li>Ridgeline Preventive Maintenance ($9k)</li>
-        <li>Targeted Paytable Inspections ($6k)</li>
-      </ul>
-      <div class="portal-btn">Launch Actions Dashboard →</div>
-    </a>
-
-  </div>
-
-  <!-- Key Analytical Takeaways -->
-  <section class="takeaways-section">
-    <div class="section-head">
-      <h2>Four Foundational Insights from the Telemetry</h2>
-      <p>Why conventional casino wisdom fails without multi-layered data verification</p>
-    </div>
-
-    <div class="takeaways-grid">
-      <div class="takeaway-card">
-        <div class="takeaway-num">Finding 01</div>
-        <div class="takeaway-title">The Fallacy of House Win Ranking</div>
-        <div class="takeaway-text">
-          Evaluating slot machines by nominal win ignores statistical variance. High-volatility titles with substantial coin-in can experience temporary unlucky runs. Ranking by theoretical win per available hour reveals true game health.
+    <header class="platform-header">
+      <div class="header-top">
+        <div class="brand-group">
+          <div class="brand-symbol">♠</div>
+          <div>
+            <h1 class="brand-title">THE GILDED ACE</h1>
+            <div class="brand-subtitle">CASINO DECISION INTELLIGENCE PLATFORM · JAN–JUN 2025</div>
+          </div>
+        </div>
+        <div class="live-status-pill">
+          <span class="status-dot"></span>
+          <span>GROUNDED TELEMETRY · 181 GAMING DAYS</span>
         </div>
       </div>
-      <div class="takeaway-card">
-        <div class="takeaway-num">Finding 02</div>
-        <div class="takeaway-title">Severe Loyalty Under-Comping</div>
-        <div class="takeaway-text">
-          At 1.23% reinvestment and a 4.38% point burn rate, the casino is under-rewarding its core local patrons. Food & beverage items cost only 28 cents per $1 menu price, offering enormous margin room to drive repeat visitation.
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total house win</div>
+          <div class="kpi-value gold">$23,638,155.10</div>
+          <div class="kpi-sub">Observed hold: <strong>9.5%</strong> (Coin-in: $248.9M)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Machine availability</div>
+          <div class="kpi-value green">99.62%</div>
+          <div class="kpi-sub">5,021.1h offline / 1,321,908h scheduled</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Theoretical house win</div>
+          <div class="kpi-value blue">$23,545,364.48</div>
+          <div class="kpi-sub">Luck residual: <strong class="gold-text">+$92,790.62</strong> (Theo hold: 9.46%)</div>
+        </div>
+        <div class="kpi-card highlight-card">
+          <div class="kpi-label">Budget remaining</div>
+          <div class="kpi-value purple">$100,000</div>
+          <div class="kpi-sub">July intervention budget · <strong>Max 3 action types</strong></div>
         </div>
       </div>
-      <div class="takeaway-card">
-        <div class="takeaway-num">Finding 03</div>
-        <div class="takeaway-title">Single-Manufacturer Fault Cluster</div>
-        <div class="takeaway-text">
-          Ridgeline Gaming units generate 56.3% of all floor breakdowns and 2,780 hours of downtime. A single preventive maintenance sweep ($9,000) eliminates the primary operational failure point without buying new machines.
-        </div>
-      </div>
-    </div>
-  </section>
 
-</main>
+      <nav class="nav-bar">
+        <a href="floor_overview.html" class="nav-item active">Floor overview</a>
+<a href="machine_intelligence.html" class="nav-item">Machine intelligence</a>
+<a href="demand_analytics.html" class="nav-item">Demand analytics</a>
+<a href="operations.html" class="nav-item">Operations</a>
+<a href="guest_intelligence.html" class="nav-item">Guest intelligence</a>
+<a href="budget_optimizer.html" class="nav-item">Budget optimizer</a>
+<a href="gemini_copilot.html" class="nav-item">Gemini copilot</a>
+<a href="evidence_explorer.html" class="nav-item">Evidence explorer</a>
 
-<footer>
-  <div class="wrap">
-    Dashboard Royale · TAMU Datathon 2026 Submission · Built by Vaishnavi (Guest & BI Lead) & Akshaya (Floor & ML Lead)
-  </div>
-</footer>
+      </nav>
+    </header>
+    
+
+<iframe id="content-frame" src="floor_overview.html" class="iframe-container"></iframe>
 
 <script>
-// Theme Toggle
-document.getElementById('theme-toggle').addEventListener('click', () => {
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-});
+  // Tab routing inside iframe to allow seamless 1-click switching
+  document.querySelectorAll('.nav-item').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.nav-item').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+      const href = this.getAttribute('href');
+      document.getElementById('content-frame').src = href;
+    });
+  });
 </script>
 </body>
 </html>

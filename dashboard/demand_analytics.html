@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE GILDED ACE · Casino Decision Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
+
+<style>
+:root {
+  --bg: #090e0c;
+  --surface: #111815;
+  --surface-raised: #18221e;
+  --border: rgba(212, 175, 55, 0.22);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --gold: #d4af37;
+  --gold-glow: rgba(212, 175, 55, 0.35);
+  --gold-soft: rgba(212, 175, 55, 0.12);
+  --green: #10b981;
+  --green-soft: rgba(16, 185, 129, 0.12);
+  --red: #ef4444;
+  --red-soft: rgba(239, 68, 68, 0.12);
+  --blue: #38bdf8;
+  --blue-soft: rgba(56, 189, 248, 0.12);
+  --purple: #c084fc;
+  --purple-soft: rgba(192, 132, 252, 0.12);
+  --text: #f3f4f6;
+  --text-muted: #9ca3af;
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --font-serif: 'Cinzel', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.platform-header {
+  background: linear-gradient(180deg, #131c18 0%, #0c1310 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 32px 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand-symbol {
+  font-size: 32px;
+  color: var(--gold);
+  line-height: 1;
+  filter: drop-shadow(0 0 8px var(--gold-glow));
+}
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.brand-subtitle {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.live-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--green);
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  transition: all 0.2s ease;
+}
+.kpi-card:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.kpi-card.highlight-card {
+  border-color: rgba(192, 132, 252, 0.4);
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.08) 0%, var(--surface) 100%);
+}
+.kpi-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.kpi-value.gold { color: var(--gold); }
+.kpi-value.green { color: var(--green); }
+.kpi-value.blue { color: var(--blue); }
+.kpi-value.purple { color: var(--purple); }
+.kpi-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.gold-text { color: var(--gold); }
+
+.nav-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 1px;
+}
+.nav-item {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 18px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-item:hover {
+  color: #fff;
+  border-bottom-color: rgba(212, 175, 55, 0.5);
+}
+.nav-item.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.08) 100%);
+}
+
+.main-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 32px;
+}
+.section-header {
+  margin-bottom: 24px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.section-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 12px;
+}
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+.data-table th {
+  background: var(--surface-raised);
+  color: var(--gold);
+  padding: 12px 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+.data-table tr:hover td {
+  background: rgba(212, 175, 55, 0.05);
+  cursor: pointer;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-gold { background: var(--gold-soft); color: var(--gold); border: 1px solid rgba(212,175,55,0.4); }
+.badge-green { background: var(--green-soft); color: var(--green); border: 1px solid rgba(16,185,129,0.4); }
+.badge-red { background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.4); }
+.badge-blue { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(56,189,248,0.4); }
+.badge-purple { background: var(--purple-soft); color: var(--purple); border: 1px solid rgba(192,132,252,0.4); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8214 100%);
+  color: #0c1310;
+}
+.btn-primary:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-secondary:hover {
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+.input-field {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  outline: none;
+}
+.input-field:focus {
+  border-color: var(--gold);
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px);
+}
+.modal-overlay.active { display: flex; }
+.modal-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  max-width: 900px;
+  width: 92%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+}
+.modal-close:hover { color: #fff; border-color: var(--gold); }
+
+.audit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+.audit-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.audit-card.full-width {
+  grid-column: 1 / -1;
+}
+.audit-q-num {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.audit-q-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.audit-q-body {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+</style>
+</head>
+<body>
+
+    <header class="platform-header">
+      <div class="header-top">
+        <div class="brand-group">
+          <div class="brand-symbol">♠</div>
+          <div>
+            <h1 class="brand-title">THE GILDED ACE</h1>
+            <div class="brand-subtitle">CASINO DECISION INTELLIGENCE PLATFORM · JAN–JUN 2025</div>
+          </div>
+        </div>
+        <div class="live-status-pill">
+          <span class="status-dot"></span>
+          <span>GROUNDED TELEMETRY · 181 GAMING DAYS</span>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total house win</div>
+          <div class="kpi-value gold">$23,638,155.10</div>
+          <div class="kpi-sub">Observed hold: <strong>9.5%</strong> (Coin-in: $248.9M)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Machine availability</div>
+          <div class="kpi-value green">99.62%</div>
+          <div class="kpi-sub">5,021.1h offline / 1,321,908h scheduled</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Theoretical house win</div>
+          <div class="kpi-value blue">$23,545,364.48</div>
+          <div class="kpi-sub">Luck residual: <strong class="gold-text">+$92,790.62</strong> (Theo hold: 9.46%)</div>
+        </div>
+        <div class="kpi-card highlight-card">
+          <div class="kpi-label">Budget remaining</div>
+          <div class="kpi-value purple">$100,000</div>
+          <div class="kpi-sub">July intervention budget · <strong>Max 3 action types</strong></div>
+        </div>
+      </div>
+
+      <nav class="nav-bar">
+        <a href="floor_overview.html" class="nav-item">Floor overview</a>
+<a href="machine_intelligence.html" class="nav-item">Machine intelligence</a>
+<a href="demand_analytics.html" class="nav-item active">Demand analytics</a>
+<a href="operations.html" class="nav-item">Operations</a>
+<a href="guest_intelligence.html" class="nav-item">Guest intelligence</a>
+<a href="budget_optimizer.html" class="nav-item">Budget optimizer</a>
+<a href="gemini_copilot.html" class="nav-item">Gemini copilot</a>
+<a href="evidence_explorer.html" class="nav-item">Evidence explorer</a>
+
+      </nav>
+    </header>
+    
+
+<main class="main-container">
+  <div class="section-header">
+    <h2 class="section-title">Demand Analytics & Machine Learning Forecasting</h2>
+    <p class="section-desc">Predict forward July wagering demand to schedule slot attendants, security, and technicians without weekend understaffing or mid-week waste.</p>
+  </div>
+
+  <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-bottom:24px">
+    <div class="card" style="margin-bottom:0">
+      <div class="kpi-label">Baseline Constant Model MAE</div>
+      <div class="kpi-value red">$218,258.10</div>
+      <div class="kpi-sub">Mean error per day on out-of-sample holdout</div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="kpi-label">Weekday Stratified ML Model MAE</div>
+      <div class="kpi-value green">$68,698.55</div>
+      <div class="kpi-sub">Out-of-sample holdout (May 1 – June 30, 2025)</div>
+    </div>
+    <div class="card highlight-card" style="margin-bottom:0">
+      <div class="kpi-label">Model Error Reduction</div>
+      <div class="kpi-value gold">68.52%</div>
+      <div class="kpi-sub">Proven accuracy lift over unstratified benchmark</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Daily Coin-In: Actual vs Baseline vs Weekday ML Forecast</h3>
+      <span class="badge badge-green">Out-of-Sample Validation</span>
+    </div>
+    <div id="demand-forecast-chart" style="height: 400px;"></div>
+  </div>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Day-of-Week Demand Profile (Jan–Apr Training Window)</h3>
+        <span class="badge badge-gold">Staffing Index</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Day of Week</th>
+            <th>Mean Daily Coin-In</th>
+            <th>Staffing Benchmark</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td><strong style="color:#fff">Monday</strong></td>
+          <td><strong style="color:var(--gold)">$1,212,138.32</strong></td>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px">
+              <div style="background:rgba(255,255,255,0.1); width:80px; height:6px; border-radius:3px; overflow:hidden">
+                <div style="background:var(--purple); width:66.6%; height:100%"></div>
+              </div>
+              <span>66.6%</span>
+            </div>
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong style="color:#fff">Tuesday</strong></td>
+          <td><strong style="color:var(--gold)">$1,112,941.95</strong></td>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px">
+              <div style="background:rgba(255,255,255,0.1); width:80px; height:6px; border-radius:3px; overflow:hidden">
+                <div style="background:var(--purple); width:61.1%; height:100%"></div>
+              </div>
+              <span>61.1%</span>
+            </div>
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong style="color:#fff">Wednesday</strong></td>
+          <td><strong style="color:var(--gold)">$1,149,981.04</strong></td>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px">
+              <div style="background:rgba(255,255,255,0.1); width:80px; height:6px; border-radius:3px; overflow:hidden">
+                <div style="background:var(--purple); width:63.2%; height:100%"></div>
+              </div>
+              <span>63.2%</span>
+            </div>
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong style="color:#fff">Thursday</strong></td>
+          <td><strong style="color:var(--gold)">$1,290,980.45</strong></td>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px">
+              <div style="background:rgba(255,255,255,0.1); width:80px; height:6px; border-radius:3px; overflow:hidden">
+                <div style="background:var(--purple); width:70.9%; height:100%"></div>
+              </div>
+              <span>70.9%</span>
+            </div>
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong style="color:#fff">Friday</strong></td>
+          <td><strong style="color:var(--gold)">$1,655,737.20</strong></td>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px">
+              <div style="background:rgba(255,255,255,0.1); width:80px; height:6px; border-radius:3px; overflow:hidden">
+                <div style="background:var(--purple); width:90.9%; height:100%"></div>
+              </div>
+              <span>90.9%</span>
+            </div>
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong style="color:#fff">Saturday</strong></td>
+          <td><strong style="color:var(--gold)">$1,820,595.19</strong></td>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px">
+              <div style="background:rgba(255,255,255,0.1); width:80px; height:6px; border-radius:3px; overflow:hidden">
+                <div style="background:var(--purple); width:100.0%; height:100%"></div>
+              </div>
+              <span>100.0%</span>
+            </div>
+          </td>
+        </tr>
+        
+        <tr>
+          <td><strong style="color:#fff">Sunday</strong></td>
+          <td><strong style="color:var(--gold)">$1,465,879.08</strong></td>
+          <td>
+            <div style="display:flex; align-items:center; gap:8px">
+              <div style="background:rgba(255,255,255,0.1); width:80px; height:6px; border-radius:3px; overflow:hidden">
+                <div style="background:var(--purple); width:80.5%; height:100%"></div>
+              </div>
+              <span>80.5%</span>
+            </div>
+          </td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Day-of-Week Volume Progression</h3>
+        <span class="badge badge-blue">Weekend Surge</span>
+      </div>
+      <div id="dow-bar-chart" style="height:280px"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const demandData = [{"date": "2025-01-01", "local_weekday": "Wed", "coin_in": 1033753.05, "house_win": 96348.7, "theo_win": 97022.94, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-01-02", "local_weekday": "Thu", "coin_in": 1232932.35, "house_win": 115486.45, "theo_win": 116241.09, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-01-03", "local_weekday": "Fri", "coin_in": 1574061.3, "house_win": 155333.4, "theo_win": 148976.95, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-01-04", "local_weekday": "Sat", "coin_in": 1789880.5, "house_win": 173431.0, "theo_win": 169348.82, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-01-05", "local_weekday": "Sun", "coin_in": 1395755.05, "house_win": 121580.15, "theo_win": 132227.13, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-01-06", "local_weekday": "Mon", "coin_in": 1183591.1, "house_win": 110786.25, "theo_win": 111733.53, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-01-07", "local_weekday": "Tue", "coin_in": 1134379.05, "house_win": 105967.0, "theo_win": 108041.32, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": "CES"}, {"date": "2025-01-08", "local_weekday": "Wed", "coin_in": 1189128.2, "house_win": 112999.4, "theo_win": 112622.98, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": "CES"}, {"date": "2025-01-09", "local_weekday": "Thu", "coin_in": 1276893.65, "house_win": 114703.2, "theo_win": 120481.43, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": "CES"}, {"date": "2025-01-10", "local_weekday": "Fri", "coin_in": 1566483.5, "house_win": 170747.65, "theo_win": 148353.23, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": "CES"}, {"date": "2025-01-11", "local_weekday": "Sat", "coin_in": 1740853.95, "house_win": 181824.9, "theo_win": 165585.76, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-01-12", "local_weekday": "Sun", "coin_in": 1389301.8, "house_win": 121305.3, "theo_win": 131541.33, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-01-13", "local_weekday": "Mon", "coin_in": 1221742.15, "house_win": 82606.15, "theo_win": 114582.24, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-01-14", "local_weekday": "Tue", "coin_in": 1151741.3, "house_win": 107939.85, "theo_win": 108069.92, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-01-15", "local_weekday": "Wed", "coin_in": 1123858.7, "house_win": 105847.05, "theo_win": 106570.26, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-01-16", "local_weekday": "Thu", "coin_in": 1335299.6, "house_win": 108480.4, "theo_win": 126072.83, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-01-17", "local_weekday": "Fri", "coin_in": 1583315.6, "house_win": 166309.9, "theo_win": 149844.21, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-01-18", "local_weekday": "Sat", "coin_in": 1794904.85, "house_win": 170769.25, "theo_win": 170746.91, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-01-19", "local_weekday": "Sun", "coin_in": 1435912.5, "house_win": 152215.35, "theo_win": 135593.91, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-01-20", "local_weekday": "Mon", "coin_in": 1236082.25, "house_win": 121801.45, "theo_win": 116886.22, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-01-21", "local_weekday": "Tue", "coin_in": 1099481.6, "house_win": 109137.95, "theo_win": 104268.72, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-01-22", "local_weekday": "Wed", "coin_in": 1149497.85, "house_win": 104211.6, "theo_win": 109266.0, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-01-23", "local_weekday": "Thu", "coin_in": 1241716.55, "house_win": 112671.35, "theo_win": 118158.58, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-01-24", "local_weekday": "Fri", "coin_in": 1598025.6, "house_win": 137234.9, "theo_win": 151086.08, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-01-25", "local_weekday": "Sat", "coin_in": 1622968.55, "house_win": 128244.8, "theo_win": 155095.08, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-01-26", "local_weekday": "Sun", "coin_in": 1348788.6, "house_win": 149693.1, "theo_win": 127539.54, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-01-27", "local_weekday": "Mon", "coin_in": 1177038.55, "house_win": 121911.85, "theo_win": 111397.28, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-01-28", "local_weekday": "Tue", "coin_in": 1066350.2, "house_win": 99595.0, "theo_win": 100249.35, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-01-29", "local_weekday": "Wed", "coin_in": 1148213.5, "house_win": 104357.2, "theo_win": 108296.42, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-01-30", "local_weekday": "Thu", "coin_in": 1282336.45, "house_win": 119410.4, "theo_win": 121679.57, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-01-31", "local_weekday": "Fri", "coin_in": 1552630.25, "house_win": 153242.8, "theo_win": 148614.36, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-02-01", "local_weekday": "Sat", "coin_in": 1740756.45, "house_win": 152813.0, "theo_win": 165488.01, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-02-02", "local_weekday": "Sun", "coin_in": 1408159.2, "house_win": 122465.55, "theo_win": 134369.39, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-02-03", "local_weekday": "Mon", "coin_in": 1177335.8, "house_win": 127300.45, "theo_win": 111181.24, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-02-04", "local_weekday": "Tue", "coin_in": 1100054.0, "house_win": 104883.3, "theo_win": 103897.56, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-02-05", "local_weekday": "Wed", "coin_in": 1103169.05, "house_win": 110555.75, "theo_win": 104516.23, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-02-06", "local_weekday": "Thu", "coin_in": 1306199.1, "house_win": 142085.05, "theo_win": 124231.37, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-02-07", "local_weekday": "Fri", "coin_in": 1906781.2, "house_win": 184451.15, "theo_win": 180983.4, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": "Super Bowl LIX weekend"}, {"date": "2025-02-08", "local_weekday": "Sat", "coin_in": 2170909.05, "house_win": 221204.65, "theo_win": 206690.18, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": "Super Bowl LIX weekend"}, {"date": "2025-02-09", "local_weekday": "Sun", "coin_in": 1753638.8, "house_win": 171295.15, "theo_win": 166259.9, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": "Super Bowl LIX weekend"}, {"date": "2025-02-10", "local_weekday": "Mon", "coin_in": 1183831.4, "house_win": 114371.9, "theo_win": 112431.16, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-02-11", "local_weekday": "Tue", "coin_in": 1077553.2, "house_win": 112873.8, "theo_win": 102173.0, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-02-12", "local_weekday": "Wed", "coin_in": 1135605.2, "house_win": 98422.25, "theo_win": 107190.48, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-02-13", "local_weekday": "Thu", "coin_in": 1111487.0, "house_win": 105500.15, "theo_win": 104948.85, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-02-14", "local_weekday": "Fri", "coin_in": 1654260.05, "house_win": 163447.15, "theo_win": 156778.34, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-02-15", "local_weekday": "Sat", "coin_in": 1776005.05, "house_win": 180449.75, "theo_win": 168707.96, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-02-16", "local_weekday": "Sun", "coin_in": 1349578.1, "house_win": 143094.1, "theo_win": 128443.16, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-02-17", "local_weekday": "Mon", "coin_in": 1191885.0, "house_win": 135444.6, "theo_win": 113093.78, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-02-18", "local_weekday": "Tue", "coin_in": 1095368.05, "house_win": 87897.1, "theo_win": 104181.74, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-02-19", "local_weekday": "Wed", "coin_in": 1139665.15, "house_win": 111692.9, "theo_win": 108586.5, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-02-20", "local_weekday": "Thu", "coin_in": 1315670.75, "house_win": 118773.6, "theo_win": 124363.51, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-02-21", "local_weekday": "Fri", "coin_in": 1862730.55, "house_win": 182919.15, "theo_win": 177611.02, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": "Gilded Ace Winter Slot Tournament"}, {"date": "2025-02-22", "local_weekday": "Sat", "coin_in": 2039692.0, "house_win": 194419.3, "theo_win": 194398.43, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": "Gilded Ace Winter Slot Tournament"}, {"date": "2025-02-23", "local_weekday": "Sun", "coin_in": 1681518.6, "house_win": 169670.95, "theo_win": 159693.34, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": "Gilded Ace Winter Slot Tournament"}, {"date": "2025-02-24", "local_weekday": "Mon", "coin_in": 1191937.1, "house_win": 119658.35, "theo_win": 112614.96, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-02-25", "local_weekday": "Tue", "coin_in": 1080929.8, "house_win": 108719.05, "theo_win": 102574.24, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-02-26", "local_weekday": "Wed", "coin_in": 1167598.2, "house_win": 129721.05, "theo_win": 110271.84, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-02-27", "local_weekday": "Thu", "coin_in": 1261825.75, "house_win": 122032.8, "theo_win": 118774.33, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-02-28", "local_weekday": "Fri", "coin_in": 1593228.35, "house_win": 153316.3, "theo_win": 151495.92, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-03-01", "local_weekday": "Sat", "coin_in": 1738048.3, "house_win": 164783.55, "theo_win": 164506.03, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-03-02", "local_weekday": "Sun", "coin_in": 1396682.9, "house_win": 122104.7, "theo_win": 131898.89, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-03-03", "local_weekday": "Mon", "coin_in": 1192509.6, "house_win": 108395.65, "theo_win": 111719.66, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-03-04", "local_weekday": "Tue", "coin_in": 1088090.9, "house_win": 108505.0, "theo_win": 102756.61, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-03-05", "local_weekday": "Wed", "coin_in": 1115719.15, "house_win": 102837.3, "theo_win": 105272.47, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-03-06", "local_weekday": "Thu", "coin_in": 1325910.75, "house_win": 104735.3, "theo_win": 125429.49, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-03-07", "local_weekday": "Fri", "coin_in": 1646376.0, "house_win": 159524.8, "theo_win": 156197.41, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-03-08", "local_weekday": "Sat", "coin_in": 1805102.85, "house_win": 195326.65, "theo_win": 172229.38, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-03-09", "local_weekday": "Sun", "coin_in": 1438699.1, "house_win": 133541.65, "theo_win": 136822.71, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-03-10", "local_weekday": "Mon", "coin_in": 1213382.75, "house_win": 137931.0, "theo_win": 114580.26, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-03-11", "local_weekday": "Tue", "coin_in": 1144756.95, "house_win": 115466.7, "theo_win": 107961.79, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-03-12", "local_weekday": "Wed", "coin_in": 1145213.3, "house_win": 102938.05, "theo_win": 107992.41, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-03-13", "local_weekday": "Thu", "coin_in": 1243200.45, "house_win": 113712.1, "theo_win": 117813.32, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-03-14", "local_weekday": "Fri", "coin_in": 1563341.2, "house_win": 144073.45, "theo_win": 147842.14, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-03-15", "local_weekday": "Sat", "coin_in": 1744572.6, "house_win": 161366.9, "theo_win": 165736.06, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-03-16", "local_weekday": "Sun", "coin_in": 1410704.5, "house_win": 142871.95, "theo_win": 133118.5, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-03-17", "local_weekday": "Mon", "coin_in": 1146211.3, "house_win": 116271.95, "theo_win": 108083.4, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-03-18", "local_weekday": "Tue", "coin_in": 1121164.4, "house_win": 94316.8, "theo_win": 106610.46, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-03-19", "local_weekday": "Wed", "coin_in": 1141554.55, "house_win": 91173.95, "theo_win": 107532.55, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-03-20", "local_weekday": "Thu", "coin_in": 1446508.0, "house_win": 122916.05, "theo_win": 137699.85, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": "College basketball tournament opening rounds"}, {"date": "2025-03-21", "local_weekday": "Fri", "coin_in": 1857923.7, "house_win": 183074.8, "theo_win": 176975.03, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": "College basketball tournament opening rounds"}, {"date": "2025-03-22", "local_weekday": "Sat", "coin_in": 2134266.3, "house_win": 204560.2, "theo_win": 203224.57, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": "College basketball tournament opening rounds"}, {"date": "2025-03-23", "local_weekday": "Sun", "coin_in": 1725010.05, "house_win": 166806.0, "theo_win": 163683.58, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": "College basketball tournament opening rounds"}, {"date": "2025-03-24", "local_weekday": "Mon", "coin_in": 1305467.4, "house_win": 118587.85, "theo_win": 123649.51, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-03-25", "local_weekday": "Tue", "coin_in": 1104141.15, "house_win": 119174.35, "theo_win": 103929.67, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-03-26", "local_weekday": "Wed", "coin_in": 1217599.75, "house_win": 107370.65, "theo_win": 115311.73, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-03-27", "local_weekday": "Thu", "coin_in": 1340114.85, "house_win": 142979.5, "theo_win": 125550.8, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-03-28", "local_weekday": "Fri", "coin_in": 1607999.15, "house_win": 130585.0, "theo_win": 152519.07, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-03-29", "local_weekday": "Sat", "coin_in": 1697004.85, "house_win": 161369.3, "theo_win": 160635.85, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-03-30", "local_weekday": "Sun", "coin_in": 1389364.1, "house_win": 145854.2, "theo_win": 131818.63, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-03-31", "local_weekday": "Mon", "coin_in": 1200784.6, "house_win": 85058.9, "theo_win": 112917.61, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": "CinemaCon"}, {"date": "2025-04-01", "local_weekday": "Tue", "coin_in": 1160509.75, "house_win": 118630.6, "theo_win": 110312.6, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": "CinemaCon"}, {"date": "2025-04-02", "local_weekday": "Wed", "coin_in": 1136139.3, "house_win": 107585.35, "theo_win": 106941.68, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": "CinemaCon"}, {"date": "2025-04-03", "local_weekday": "Thu", "coin_in": 1320097.35, "house_win": 115813.85, "theo_win": 125029.85, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": "CinemaCon"}, {"date": "2025-04-04", "local_weekday": "Fri", "coin_in": 1587631.35, "house_win": 140189.95, "theo_win": 150530.23, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-04-05", "local_weekday": "Sat", "coin_in": 1733053.7, "house_win": 169474.35, "theo_win": 164296.44, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": "NAB Show"}, {"date": "2025-04-06", "local_weekday": "Sun", "coin_in": 1433429.8, "house_win": 151868.65, "theo_win": 135672.98, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": "NAB Show"}, {"date": "2025-04-07", "local_weekday": "Mon", "coin_in": 1268814.45, "house_win": 95054.7, "theo_win": 120237.95, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": "NAB Show"}, {"date": "2025-04-08", "local_weekday": "Tue", "coin_in": 1172244.85, "house_win": 109933.85, "theo_win": 110623.89, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": "NAB Show"}, {"date": "2025-04-09", "local_weekday": "Wed", "coin_in": 1321453.2, "house_win": 121104.55, "theo_win": 124643.2, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": "NAB Show"}, {"date": "2025-04-10", "local_weekday": "Thu", "coin_in": 1325022.75, "house_win": 121488.6, "theo_win": 124745.87, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-04-11", "local_weekday": "Fri", "coin_in": 1627189.5, "house_win": 151879.15, "theo_win": 153554.13, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-04-12", "local_weekday": "Sat", "coin_in": 1783104.6, "house_win": 153677.75, "theo_win": 168935.12, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-04-13", "local_weekday": "Sun", "coin_in": 1406837.55, "house_win": 140962.1, "theo_win": 132924.68, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-04-14", "local_weekday": "Mon", "coin_in": 1275084.55, "house_win": 118332.25, "theo_win": 119979.56, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-04-15", "local_weekday": "Tue", "coin_in": 1177339.0, "house_win": 113011.85, "theo_win": 111591.86, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-04-16", "local_weekday": "Wed", "coin_in": 1141682.5, "house_win": 113496.5, "theo_win": 107281.1, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-04-17", "local_weekday": "Thu", "coin_in": 1298764.95, "house_win": 136788.05, "theo_win": 122480.16, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-04-18", "local_weekday": "Fri", "coin_in": 1670039.5, "house_win": 157915.2, "theo_win": 157528.7, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-04-19", "local_weekday": "Sat", "coin_in": 1849828.5, "house_win": 156724.3, "theo_win": 175257.74, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-04-20", "local_weekday": "Sun", "coin_in": 1473519.75, "house_win": 152374.6, "theo_win": 139473.29, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-04-21", "local_weekday": "Mon", "coin_in": 1231227.2, "house_win": 118511.2, "theo_win": 115113.67, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-04-22", "local_weekday": "Tue", "coin_in": 1028273.7, "house_win": 100144.4, "theo_win": 96509.79, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-04-23", "local_weekday": "Wed", "coin_in": 1148859.25, "house_win": 96137.9, "theo_win": 108539.84, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-04-24", "local_weekday": "Thu", "coin_in": 1282687.4, "house_win": 114373.65, "theo_win": 120539.98, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-04-25", "local_weekday": "Fri", "coin_in": 1695515.65, "house_win": 147583.0, "theo_win": 160789.73, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-04-26", "local_weekday": "Sat", "coin_in": 1789166.05, "house_win": 173238.5, "theo_win": 169102.29, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-04-27", "local_weekday": "Sun", "coin_in": 1483044.0, "house_win": 143314.5, "theo_win": 139963.56, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-04-28", "local_weekday": "Mon", "coin_in": 1209426.25, "house_win": 112183.2, "theo_win": 114188.65, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-04-29", "local_weekday": "Tue", "coin_in": 1117635.25, "house_win": 106103.3, "theo_win": 104766.29, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-04-30", "local_weekday": "Wed", "coin_in": 1140948.9, "house_win": 106640.8, "theo_win": 107451.51, "is_train": true, "is_test_period": false, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-05-01", "local_weekday": "Thu", "coin_in": 1291815.85, "house_win": 137417.65, "theo_win": 121667.32, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-05-02", "local_weekday": "Fri", "coin_in": 1631269.55, "house_win": 172780.6, "theo_win": 154185.52, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-05-03", "local_weekday": "Sat", "coin_in": 1743901.5, "house_win": 172452.6, "theo_win": 165102.8, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-05-04", "local_weekday": "Sun", "coin_in": 1343811.5, "house_win": 140639.55, "theo_win": 127039.53, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-05-05", "local_weekday": "Mon", "coin_in": 1070007.9, "house_win": 101605.9, "theo_win": 100713.29, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-05-06", "local_weekday": "Tue", "coin_in": 991699.2, "house_win": 92217.95, "theo_win": 93918.69, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-05-07", "local_weekday": "Wed", "coin_in": 1106454.35, "house_win": 109539.55, "theo_win": 104651.89, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-05-08", "local_weekday": "Thu", "coin_in": 1203856.6, "house_win": 106812.2, "theo_win": 113286.81, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-05-09", "local_weekday": "Fri", "coin_in": 1567783.0, "house_win": 147112.45, "theo_win": 147857.01, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-05-10", "local_weekday": "Sat", "coin_in": 1755586.95, "house_win": 171658.5, "theo_win": 165413.46, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-05-11", "local_weekday": "Sun", "coin_in": 1431857.75, "house_win": 126302.0, "theo_win": 135180.26, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-05-12", "local_weekday": "Mon", "coin_in": 1221449.3, "house_win": 120493.5, "theo_win": 115428.11, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-05-13", "local_weekday": "Tue", "coin_in": 1069979.25, "house_win": 112680.7, "theo_win": 101225.59, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-05-14", "local_weekday": "Wed", "coin_in": 1140824.55, "house_win": 107229.25, "theo_win": 107711.0, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-05-15", "local_weekday": "Thu", "coin_in": 1290797.8, "house_win": 111263.35, "theo_win": 122134.56, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-05-16", "local_weekday": "Fri", "coin_in": 1744575.8, "house_win": 162947.6, "theo_win": 165398.7, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": "EDC Las Vegas festival weekend"}, {"date": "2025-05-17", "local_weekday": "Sat", "coin_in": 2073091.55, "house_win": 184663.8, "theo_win": 195800.3, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": "EDC Las Vegas festival weekend"}, {"date": "2025-05-18", "local_weekday": "Sun", "coin_in": 1661795.4, "house_win": 156035.5, "theo_win": 157163.71, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": "EDC Las Vegas festival weekend"}, {"date": "2025-05-19", "local_weekday": "Mon", "coin_in": 1228961.75, "house_win": 108483.45, "theo_win": 115374.82, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-05-20", "local_weekday": "Tue", "coin_in": 1116186.25, "house_win": 89012.3, "theo_win": 106144.74, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-05-21", "local_weekday": "Wed", "coin_in": 1183952.15, "house_win": 100848.0, "theo_win": 111872.42, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-05-22", "local_weekday": "Thu", "coin_in": 1305669.45, "house_win": 122384.5, "theo_win": 123406.09, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-05-23", "local_weekday": "Fri", "coin_in": 1582260.85, "house_win": 144396.6, "theo_win": 149568.8, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-05-24", "local_weekday": "Sat", "coin_in": 1808468.0, "house_win": 165331.6, "theo_win": 170337.67, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-05-25", "local_weekday": "Sun", "coin_in": 1387073.1, "house_win": 133243.85, "theo_win": 131280.06, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-05-26", "local_weekday": "Mon", "coin_in": 1196838.2, "house_win": 113922.8, "theo_win": 112645.43, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-05-27", "local_weekday": "Tue", "coin_in": 1108861.95, "house_win": 93601.6, "theo_win": 104564.73, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-05-28", "local_weekday": "Wed", "coin_in": 1176974.6, "house_win": 99623.05, "theo_win": 111039.56, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-05-29", "local_weekday": "Thu", "coin_in": 1279443.2, "house_win": 122672.5, "theo_win": 120800.49, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-05-30", "local_weekday": "Fri", "coin_in": 1560965.95, "house_win": 140540.45, "theo_win": 147447.7, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-05-31", "local_weekday": "Sat", "coin_in": 1708170.05, "house_win": 155622.5, "theo_win": 161717.56, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-06-01", "local_weekday": "Sun", "coin_in": 1394639.55, "house_win": 130261.2, "theo_win": 131308.28, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-06-02", "local_weekday": "Mon", "coin_in": 1187695.7, "house_win": 115327.65, "theo_win": 112323.48, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-06-03", "local_weekday": "Tue", "coin_in": 1064891.45, "house_win": 97798.05, "theo_win": 100014.48, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-06-04", "local_weekday": "Wed", "coin_in": 1111422.4, "house_win": 109043.65, "theo_win": 104776.4, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-06-05", "local_weekday": "Thu", "coin_in": 1227154.6, "house_win": 116573.65, "theo_win": 116321.49, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-06-06", "local_weekday": "Fri", "coin_in": 1571962.25, "house_win": 151746.7, "theo_win": 148935.19, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-06-07", "local_weekday": "Sat", "coin_in": 1722647.25, "house_win": 164195.1, "theo_win": 163468.56, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-06-08", "local_weekday": "Sun", "coin_in": 1300608.3, "house_win": 96367.8, "theo_win": 122180.64, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-06-09", "local_weekday": "Mon", "coin_in": 1240886.05, "house_win": 108232.45, "theo_win": 116936.87, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": "Gilded Ace Locals Appreciation Week"}, {"date": "2025-06-10", "local_weekday": "Tue", "coin_in": 1187963.45, "house_win": 127976.3, "theo_win": 111492.2, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": "Gilded Ace Locals Appreciation Week"}, {"date": "2025-06-11", "local_weekday": "Wed", "coin_in": 1244896.95, "house_win": 119733.05, "theo_win": 117136.93, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": "Gilded Ace Locals Appreciation Week"}, {"date": "2025-06-12", "local_weekday": "Thu", "coin_in": 1346270.6, "house_win": 108663.9, "theo_win": 126437.42, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": "Gilded Ace Locals Appreciation Week"}, {"date": "2025-06-13", "local_weekday": "Fri", "coin_in": 1586472.9, "house_win": 159807.55, "theo_win": 150571.64, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": "Gilded Ace Locals Appreciation Week"}, {"date": "2025-06-14", "local_weekday": "Sat", "coin_in": 1799689.3, "house_win": 165959.5, "theo_win": 170888.43, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": "Gilded Ace Locals Appreciation Week"}, {"date": "2025-06-15", "local_weekday": "Sun", "coin_in": 1414084.85, "house_win": 146868.55, "theo_win": 132775.25, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": "Gilded Ace Locals Appreciation Week"}, {"date": "2025-06-16", "local_weekday": "Mon", "coin_in": 1135901.05, "house_win": 103962.25, "theo_win": 107892.72, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-06-17", "local_weekday": "Tue", "coin_in": 1004140.85, "house_win": 99884.6, "theo_win": 94915.72, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-06-18", "local_weekday": "Wed", "coin_in": 1076348.25, "house_win": 105045.6, "theo_win": 100751.06, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-06-19", "local_weekday": "Thu", "coin_in": 1183952.0, "house_win": 128514.6, "theo_win": 112031.82, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-06-20", "local_weekday": "Fri", "coin_in": 1599667.0, "house_win": 170724.5, "theo_win": 151072.16, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-06-21", "local_weekday": "Sat", "coin_in": 1729846.7, "house_win": 166780.8, "theo_win": 163872.06, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-06-22", "local_weekday": "Sun", "coin_in": 1375155.3, "house_win": 125227.15, "theo_win": 130003.38, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-06-23", "local_weekday": "Mon", "coin_in": 1162013.95, "house_win": 104540.9, "theo_win": 109653.89, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}, {"date": "2025-06-24", "local_weekday": "Tue", "coin_in": 1055434.8, "house_win": 102998.15, "theo_win": 99214.93, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1112941.95, "event_name": ""}, {"date": "2025-06-25", "local_weekday": "Wed", "coin_in": 1105788.65, "house_win": 124045.85, "theo_win": 104003.8, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1149981.04, "event_name": ""}, {"date": "2025-06-26", "local_weekday": "Thu", "coin_in": 1276182.15, "house_win": 134748.3, "theo_win": 120306.29, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1290980.45, "event_name": ""}, {"date": "2025-06-27", "local_weekday": "Fri", "coin_in": 1549921.4, "house_win": 145192.75, "theo_win": 146847.3, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1655737.2, "event_name": ""}, {"date": "2025-06-28", "local_weekday": "Sat", "coin_in": 1601715.0, "house_win": 145991.2, "theo_win": 152599.1, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1820595.19, "event_name": ""}, {"date": "2025-06-29", "local_weekday": "Sun", "coin_in": 1328909.25, "house_win": 119453.15, "theo_win": 125300.02, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1465879.08, "event_name": ""}, {"date": "2025-06-30", "local_weekday": "Mon", "coin_in": 1144287.9, "house_win": 120531.4, "theo_win": 108084.83, "is_train": false, "is_test_period": true, "baseline_forecast": 1384919.05, "ml_forecast": 1212138.32, "event_name": ""}];
+  const dowProfile = [{"day": "Monday", "short": "Mon", "train_mean": 1212138.32, "staff_ratio": 66.6}, {"day": "Tuesday", "short": "Tue", "train_mean": 1112941.95, "staff_ratio": 61.1}, {"day": "Wednesday", "short": "Wed", "train_mean": 1149981.04, "staff_ratio": 63.2}, {"day": "Thursday", "short": "Thu", "train_mean": 1290980.45, "staff_ratio": 70.9}, {"day": "Friday", "short": "Fri", "train_mean": 1655737.2, "staff_ratio": 90.9}, {"day": "Saturday", "short": "Sat", "train_mean": 1820595.19, "staff_ratio": 100.0}, {"day": "Sunday", "short": "Sun", "train_mean": 1465879.08, "staff_ratio": 80.5}];
+
+  const dates = demandData.map(d => d.date);
+  const actualCoin = demandData.map(d => d.coin_in);
+  const mlPred = demandData.map(d => d.ml_forecast);
+  const basePred = demandData.map(d => d.baseline_forecast);
+
+  Plotly.newPlot('demand-forecast-chart', [
+    {
+      x: dates, y: actualCoin, type: 'scatter', mode: 'lines',
+      name: 'Actual Daily Coin-In ($)', line: { color: '#fff', width: 2 }
+    },
+    {
+      x: dates, y: mlPred, type: 'scatter', mode: 'lines',
+      name: 'Stratified Weekday ML Forecast', line: { color: '#10b981', width: 2 }
+    },
+    {
+      x: dates, y: basePred, type: 'scatter', mode: 'lines',
+      name: 'Constant Baseline Benchmark', line: { color: '#ef4444', width: 1.5, dash: 'dash' }
+    }
+  ], {
+    paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
+    font: { color: '#9ca3af', family: 'Inter' },
+    xaxis: { gridcolor: 'rgba(255,255,255,0.05)', title: 'Gaming Date' },
+    yaxis: { gridcolor: 'rgba(255,255,255,0.05)', title: 'Total Paid Wagers ($)' },
+    legend: { orientation: 'h', y: 1.15, x: 0 },
+    shapes: [{
+      type: 'line', x0: '2025-05-01', x1: '2025-05-01', y0: 0, y1: 2500000,
+      line: { color: '#d4af37', width: 2, dash: 'dot' }
+    }],
+    annotations: [{
+      x: '2025-05-01', y: 2300000, xref: 'x', yref: 'y',
+      text: 'Start Out-of-Sample Test Window (May 1)',
+      showarrow: true, arrowhead: 2, ax: 80, ay: 0,
+      font: { color: '#d4af37', size: 11 }
+    }],
+    margin: { l: 60, r: 20, t: 30, b: 40 }
+  }, { responsive: true });
+
+  Plotly.newPlot('dow-bar-chart', [{
+    x: dowProfile.map(d => d.short),
+    y: dowProfile.map(d => d.train_mean),
+    type: 'bar',
+    marker: {
+      color: ['#38bdf8', '#38bdf8', '#38bdf8', '#38bdf8', '#d4af37', '#10b981', '#c084fc']
+    }
+  }], {
+    paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
+    font: { color: '#9ca3af', family: 'Inter' },
+    xaxis: { gridcolor: 'rgba(255,255,255,0.05)' },
+    yaxis: { gridcolor: 'rgba(255,255,255,0.05)', title: 'Mean Coin-In ($)' },
+    margin: { l: 60, r: 20, t: 20, b: 40 }
+  }, { responsive: true });
+</script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+{
+  "total_carded_players": 113890,
+  "tracked_coin_in_usd": 163804524.0,
+  "tracked_coin_in_share_pct": 65.81,
+  "uncarded_coin_in_share_pct": 34.19,
+  "top_1pct_coin_in_share_pct": 21.68,
+  "top_5pct_coin_in_share_pct": 55.33,
+  "top_10pct_coin_in_share_pct": 71.42,
+  "gini_coefficient": 0.754,
+  "lorenz_curve": [
+    {
+      "pop_pct": 0,
+      "cum_coin_pct": 0
+    },
+    {
+      "pop_pct": 20,
+      "cum_coin_pct": 1.2
+    },
+    {
+      "pop_pct": 40,
+      "cum_coin_pct": 5.4
+    },
+    {
+      "pop_pct": 60,
+      "cum_coin_pct": 14.1
+    },
+    {
+      "pop_pct": 80,
+      "cum_coin_pct": 32.8
+    },
+    {
+      "pop_pct": 90,
+      "cum_coin_pct": 48.6
+    },
+    {
+      "pop_pct": 95,
+      "cum_coin_pct": 64.7
+    },
+    {
+      "pop_pct": 99,
+      "cum_coin_pct": 85.3
+    },
+    {
+      "pop_pct": 100,
+      "cum_coin_pct": 100.0
+    }
+  ],
+  "comp_economics": {
+    "comp_reinvestment_rate_pct": 1.23,
+    "industry_standard_min_pct": 8.0,
+    "industry_standard_max_pct": 15.0,
+    "comp_face_value_usd": 682749.5,
+    "comp_cogs_usd": 190669.3,
+    "fnb_cogs_ratio_pct": 27.93,
+    "point_burn_rate_pct": 4.38
+  },
+  "geographic_segments": [
+    {
+      "segment": "Locals",
+      "share_tracked_coin_pct": 58.6,
+      "coin_in_millions": 96.0,
+      "visits_per_month": 4.8
+    },
+    {
+      "segment": "Drive-in",
+      "share_tracked_coin_pct": 29.98,
+      "coin_in_millions": 49.1,
+      "visits_per_month": 1.4
+    },
+    {
+      "segment": "Fly-in",
+      "share_tracked_coin_pct": 11.42,
+      "coin_in_millions": 18.7,
+      "visits_per_month": 0.4
+    }
+  ],
+  "monthly_player_table": [
+    {
+      "period_month": "2025-01",
+      "players": 24687,
+      "tracked_coin_in_usd": 27260837.2,
+      "tracked_payout_usd": 24663556.4,
+      "tracked_net_usd": -2597280.8,
+      "theo_usd": 2580580.75,
+      "comp_cost_usd": 28750.3,
+      "comp_face_value_usd": 103499.5,
+      "linked_pos_cash_usd": 232487.0,
+      "tracked_contribution_usd": 2731176.0,
+      "share_of_coin_in_top_1pct_players": 0.0852,
+      "share_of_net_top_1pct_players": 0.0817
+    },
+    {
+      "period_month": "2025-02",
+      "players": 24031,
+      "tracked_coin_in_usd": 26143705.4,
+      "tracked_payout_usd": 23557908.45,
+      "tracked_net_usd": -2585796.95,
+      "theo_usd": 2480599.81,
+      "comp_cost_usd": 29854.3,
+      "comp_face_value_usd": 106853.5,
+      "linked_pos_cash_usd": 214962.0,
+      "tracked_contribution_usd": 2706469.85,
+      "share_of_coin_in_top_1pct_players": 0.0844,
+      "share_of_net_top_1pct_players": 0.0767
+    },
+    {
+      "period_month": "2025-03",
+      "players": 26346,
+      "tracked_coin_in_usd": 28892699.5,
+      "tracked_payout_usd": 26159442.15,
+      "tracked_net_usd": -2733257.35,
+      "theo_usd": 2733322.9,
+      "comp_cost_usd": 33255.5,
+      "comp_face_value_usd": 119167.5,
+      "linked_pos_cash_usd": 239994.0,
+      "tracked_contribution_usd": 2867967.15,
+      "share_of_coin_in_top_1pct_players": 0.0854,
+      "share_of_net_top_1pct_players": 0.0881
+    },
+    {
+      "period_month": "2025-04",
+      "players": 24555,
+      "tracked_coin_in_usd": 26775173.15,
+      "tracked_payout_usd": 24292634.15,
+      "tracked_net_usd": -2482539.0,
+      "theo_usd": 2528175.56,
+      "comp_cost_usd": 31390.3,
+      "comp_face_value_usd": 112214.0,
+      "linked_pos_cash_usd": 217453.0,
+      "tracked_contribution_usd": 2603255.3,
+      "share_of_coin_in_top_1pct_players": 0.0865,
+      "share_of_net_top_1pct_players": 0.0903
+    },
+    {
+      "period_month": "2025-05",
+      "players": 25970,
+      "tracked_coin_in_usd": 28179263.55,
+      "tracked_payout_usd": 25535976.25,
+      "tracked_net_usd": -2643287.3,
+      "theo_usd": 2658428.76,
+      "comp_cost_usd": 34446.1,
+      "comp_face_value_usd": 123048.5,
+      "linked_pos_cash_usd": 226946.5,
+      "tracked_contribution_usd": 2767611.1,
+      "share_of_coin_in_top_1pct_players": 0.0848,
+      "share_of_net_top_1pct_players": 0.0868
+    },
+    {
+      "period_month": "2025-06",
+      "players": 23304,
+      "tracked_coin_in_usd": 26553190.85,
+      "tracked_payout_usd": 24009891.65,
+      "tracked_net_usd": -2543299.2,
+      "theo_usd": 2503913.2,
+      "comp_cost_usd": 32972.8,
+      "comp_face_value_usd": 117966.5,
+      "linked_pos_cash_usd": 203240.5,
+      "tracked_contribution_usd": 2652717.5,
+      "share_of_coin_in_top_1pct_players": 0.082,
+      "share_of_net_top_1pct_players": 0.0747
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "total_faults": 1207,
+  "total_downtime_hours": 4934.1,
+  "total_direct_repair_cost": 212945.21,
+  "manufacturers": [
+    {
+      "manufacturer": "Halcyon",
+      "faults": 222,
+      "total_downtime_h": 899.2016666666667,
+      "mean_downtime_h": 4.050457957957958,
+      "direct_cost": 40000.36,
+      "fault_share_pct": 18.39
+    },
+    {
+      "manufacturer": "Northwind",
+      "faults": 305,
+      "total_downtime_h": 1287.911111111111,
+      "mean_downtime_h": 4.222659380692168,
+      "direct_cost": 54558.13,
+      "fault_share_pct": 25.27
+    },
+    {
+      "manufacturer": "Ridgeline",
+      "faults": 680,
+      "total_downtime_h": 2746.966111111111,
+      "mean_downtime_h": 4.0396560457516335,
+      "direct_cost": 118386.72,
+      "fault_share_pct": 56.34
+    }
+  ],
+  "shifts": [
+    {
+      "shift": "Day",
+      "faults": 327,
+      "total_downtime_h": 1269.0894444444446,
+      "mean_duration_h": 3.8810074753652737,
+      "direct_cost": 58313.23,
+      "fault_share_pct": 27.09
+    },
+    {
+      "shift": "Graveyard",
+      "faults": 303,
+      "total_downtime_h": 1460.4319444444445,
+      "mean_duration_h": 4.819907407407408,
+      "direct_cost": 52160.26,
+      "fault_share_pct": 25.1
+    },
+    {
+      "shift": "Swing",
+      "faults": 577,
+      "total_downtime_h": 2204.5575,
+      "mean_duration_h": 3.820723570190641,
+      "direct_cost": 102471.72,
+      "fault_share_pct": 47.8
+    }
+  ],
+  "labor_rate_per_hour": 48.0,
+  "ridgeline_fault_share_pct": 56.34,
+  "swing_shift_fault_share_pct": 47.8,
+  "swing_shift_tech_count": 1,
+  "lost_theo_per_hour_floor_avg": 17.88
+}

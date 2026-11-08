@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE GILDED ACE · Casino Decision Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
+
+<style>
+:root {
+  --bg: #090e0c;
+  --surface: #111815;
+  --surface-raised: #18221e;
+  --border: rgba(212, 175, 55, 0.22);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --gold: #d4af37;
+  --gold-glow: rgba(212, 175, 55, 0.35);
+  --gold-soft: rgba(212, 175, 55, 0.12);
+  --green: #10b981;
+  --green-soft: rgba(16, 185, 129, 0.12);
+  --red: #ef4444;
+  --red-soft: rgba(239, 68, 68, 0.12);
+  --blue: #38bdf8;
+  --blue-soft: rgba(56, 189, 248, 0.12);
+  --purple: #c084fc;
+  --purple-soft: rgba(192, 132, 252, 0.12);
+  --text: #f3f4f6;
+  --text-muted: #9ca3af;
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --font-serif: 'Cinzel', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.platform-header {
+  background: linear-gradient(180deg, #131c18 0%, #0c1310 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 32px 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand-symbol {
+  font-size: 32px;
+  color: var(--gold);
+  line-height: 1;
+  filter: drop-shadow(0 0 8px var(--gold-glow));
+}
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.brand-subtitle {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.live-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--green);
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  transition: all 0.2s ease;
+}
+.kpi-card:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.kpi-card.highlight-card {
+  border-color: rgba(192, 132, 252, 0.4);
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.08) 0%, var(--surface) 100%);
+}
+.kpi-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.kpi-value.gold { color: var(--gold); }
+.kpi-value.green { color: var(--green); }
+.kpi-value.blue { color: var(--blue); }
+.kpi-value.purple { color: var(--purple); }
+.kpi-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.gold-text { color: var(--gold); }
+
+.nav-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 1px;
+}
+.nav-item {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 18px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-item:hover {
+  color: #fff;
+  border-bottom-color: rgba(212, 175, 55, 0.5);
+}
+.nav-item.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.08) 100%);
+}
+
+.main-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 32px;
+}
+.section-header {
+  margin-bottom: 24px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.section-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 12px;
+}
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+.data-table th {
+  background: var(--surface-raised);
+  color: var(--gold);
+  padding: 12px 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+.data-table tr:hover td {
+  background: rgba(212, 175, 55, 0.05);
+  cursor: pointer;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-gold { background: var(--gold-soft); color: var(--gold); border: 1px solid rgba(212,175,55,0.4); }
+.badge-green { background: var(--green-soft); color: var(--green); border: 1px solid rgba(16,185,129,0.4); }
+.badge-red { background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.4); }
+.badge-blue { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(56,189,248,0.4); }
+.badge-purple { background: var(--purple-soft); color: var(--purple); border: 1px solid rgba(192,132,252,0.4); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8214 100%);
+  color: #0c1310;
+}
+.btn-primary:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-secondary:hover {
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+.input-field {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  outline: none;
+}
+.input-field:focus {
+  border-color: var(--gold);
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px);
+}
+.modal-overlay.active { display: flex; }
+.modal-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  max-width: 900px;
+  width: 92%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+}
+.modal-close:hover { color: #fff; border-color: var(--gold); }
+
+.audit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+.audit-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.audit-card.full-width {
+  grid-column: 1 / -1;
+}
+.audit-q-num {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.audit-q-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.audit-q-body {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+</style>
+</head>
+<body>
+
+    <header class="platform-header">
+      <div class="header-top">
+        <div class="brand-group">
+          <div class="brand-symbol">♠</div>
+          <div>
+            <h1 class="brand-title">THE GILDED ACE</h1>
+            <div class="brand-subtitle">CASINO DECISION INTELLIGENCE PLATFORM · JAN–JUN 2025</div>
+          </div>
+        </div>
+        <div class="live-status-pill">
+          <span class="status-dot"></span>
+          <span>GROUNDED TELEMETRY · 181 GAMING DAYS</span>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total house win</div>
+          <div class="kpi-value gold">$23,638,155.10</div>
+          <div class="kpi-sub">Observed hold: <strong>9.5%</strong> (Coin-in: $248.9M)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Machine availability</div>
+          <div class="kpi-value green">99.62%</div>
+          <div class="kpi-sub">5,021.1h offline / 1,321,908h scheduled</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Theoretical house win</div>
+          <div class="kpi-value blue">$23,545,364.48</div>
+          <div class="kpi-sub">Luck residual: <strong class="gold-text">+$92,790.62</strong> (Theo hold: 9.46%)</div>
+        </div>
+        <div class="kpi-card highlight-card">
+          <div class="kpi-label">Budget remaining</div>
+          <div class="kpi-value purple">$100,000</div>
+          <div class="kpi-sub">July intervention budget · <strong>Max 3 action types</strong></div>
+        </div>
+      </div>
+
+      <nav class="nav-bar">
+        <a href="floor_overview.html" class="nav-item">Floor overview</a>
+<a href="machine_intelligence.html" class="nav-item">Machine intelligence</a>
+<a href="demand_analytics.html" class="nav-item">Demand analytics</a>
+<a href="operations.html" class="nav-item active">Operations</a>
+<a href="guest_intelligence.html" class="nav-item">Guest intelligence</a>
+<a href="budget_optimizer.html" class="nav-item">Budget optimizer</a>
+<a href="gemini_copilot.html" class="nav-item">Gemini copilot</a>
+<a href="evidence_explorer.html" class="nav-item">Evidence explorer</a>
+
+      </nav>
+    </header>
+    
+
+<main class="main-container">
+  <div class="section-header">
+    <h2 class="section-title">Floor Operations & Maintenance Intelligence</h2>
+    <p class="section-desc">Investigate machine breakdowns, OEM failure concentration, and shift staffing bottlenecks.</p>
+  </div>
+
+  <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-bottom:24px">
+    <div class="card" style="margin-bottom:0">
+      <div class="kpi-label">Total Fault Events</div>
+      <div class="kpi-value gold">1,207</div>
+      <div class="kpi-sub">Total downtime: <strong>4,934.1 hours</strong></div>
+    </div>
+    <div class="card" style="margin-bottom:0; border-color:rgba(239,68,68,0.4)">
+      <div class="kpi-label">Ridgeline Fault Share</div>
+      <div class="kpi-value red">56.34%</div>
+      <div class="kpi-sub">OEM accounts for over half of all mechanical failures</div>
+    </div>
+    <div class="card" style="margin-bottom:0; border-color:rgba(192,132,252,0.4)">
+      <div class="kpi-label">Swing Shift Bottleneck</div>
+      <div class="kpi-value purple">47.8%</div>
+      <div class="kpi-sub">47.8% of faults hit swing shift (only 1 technician)</div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Breakdowns by Manufacturer</h3>
+        <span class="badge badge-red">56.34% Ridgeline</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Manufacturer</th>
+            <th>Faults</th>
+            <th>Share</th>
+            <th>Total Downtime</th>
+            <th>Avg Turnaround</th>
+            <th>Direct Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td><strong style="color:#fff">Halcyon</strong></td>
+          <td>222</td>
+          <td><strong style="color:var(--text)">18.39%</strong></td>
+          <td>899.2h</td>
+          <td>4.05h</td>
+          <td>$40,000.36</td>
+        </tr>
+        
+        <tr>
+          <td><strong style="color:#fff">Northwind</strong></td>
+          <td>305</td>
+          <td><strong style="color:var(--text)">25.27%</strong></td>
+          <td>1,287.9h</td>
+          <td>4.22h</td>
+          <td>$54,558.13</td>
+        </tr>
+        
+        <tr>
+          <td><strong style="color:#fff">Ridgeline</strong></td>
+          <td>680</td>
+          <td><strong style="color:var(--red)">56.34%</strong></td>
+          <td>2,747.0h</td>
+          <td>4.04h</td>
+          <td>$118,386.72</td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Breakdowns by Operating Shift</h3>
+        <span class="badge badge-purple">Staffing Bottleneck</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Shift</th>
+            <th>Faults</th>
+            <th>Share</th>
+            <th>Total Downtime</th>
+            <th>Avg Turnaround</th>
+            <th>Direct Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr>
+          <td><strong style="color:#fff">Day</strong></td>
+          <td>327</td>
+          <td><strong style="color:var(--text)">27.09%</strong></td>
+          <td>1,269.1h</td>
+          <td>3.88h</td>
+          <td>$58,313.23</td>
+        </tr>
+        
+        <tr>
+          <td><strong style="color:#fff">Graveyard</strong></td>
+          <td>303</td>
+          <td><strong style="color:var(--text)">25.10%</strong></td>
+          <td>1,460.4h</td>
+          <td>4.82h</td>
+          <td>$52,160.26</td>
+        </tr>
+        
+        <tr>
+          <td><strong style="color:#fff">Swing</strong></td>
+          <td>577</td>
+          <td><strong style="color:var(--red)">47.80%</strong></td>
+          <td>2,204.6h</td>
+          <td>3.82h</td>
+          <td>$102,471.72</td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Manufacturer Failure Distribution</h3>
+        <span class="badge badge-gold">Fault Shares</span>
+      </div>
+      <div id="mfg-pie" style="height:300px"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Mean Turnaround Time by Shift (Hours)</h3>
+        <span class="badge badge-blue">Queuing Delay</span>
+      </div>
+      <div id="shift-bar" style="height:300px"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const opsData = {"total_faults": 1207, "total_downtime_hours": 4934.1, "total_direct_repair_cost": 212945.21, "manufacturers": [{"manufacturer": "Halcyon", "faults": 222, "total_downtime_h": 899.2016666666667, "mean_downtime_h": 4.050457957957958, "direct_cost": 40000.36, "fault_share_pct": 18.39}, {"manufacturer": "Northwind", "faults": 305, "total_downtime_h": 1287.911111111111, "mean_downtime_h": 4.222659380692168, "direct_cost": 54558.13, "fault_share_pct": 25.27}, {"manufacturer": "Ridgeline", "faults": 680, "total_downtime_h": 2746.966111111111, "mean_downtime_h": 4.0396560457516335, "direct_cost": 118386.72, "fault_share_pct": 56.34}], "shifts": [{"shift": "Day", "faults": 327, "total_downtime_h": 1269.0894444444446, "mean_duration_h": 3.8810074753652737, "direct_cost": 58313.23, "fault_share_pct": 27.09}, {"shift": "Graveyard", "faults": 303, "total_downtime_h": 1460.4319444444445, "mean_duration_h": 4.819907407407408, "direct_cost": 52160.26, "fault_share_pct": 25.1}, {"shift": "Swing", "faults": 577, "total_downtime_h": 2204.5575, "mean_duration_h": 3.820723570190641, "direct_cost": 102471.72, "fault_share_pct": 47.8}], "labor_rate_per_hour": 48.0, "ridgeline_fault_share_pct": 56.34, "swing_shift_fault_share_pct": 47.8, "swing_shift_tech_count": 1, "lost_theo_per_hour_floor_avg": 17.88};
+
+  Plotly.newPlot('mfg-pie', [{
+    labels: opsData.manufacturers.map(m => m.manufacturer),
+    values: opsData.manufacturers.map(m => m.faults),
+    type: 'pie', hole: 0.55,
+    marker: { colors: ['#ef4444', '#38bdf8', '#10b981'] }
+  }], {
+    paper_bgcolor: 'transparent', font: { color: '#9ca3af', family: 'Inter' },
+    showlegend: true, margin: { l: 20, r: 20, t: 20, b: 20 }
+  }, { responsive: true });
+
+  Plotly.newPlot('shift-bar', [{
+    x: opsData.shifts.map(s => s.shift),
+    y: opsData.shifts.map(s => s.mean_duration_h),
+    type: 'bar',
+    marker: { color: ['#38bdf8', '#c084fc', '#64756c'] }
+  }], {
+    paper_bgcolor: 'transparent', plot_bgcolor: 'transparent',
+    font: { color: '#9ca3af', family: 'Inter' },
+    xaxis: { gridcolor: 'rgba(255,255,255,0.05)' },
+    yaxis: { gridcolor: 'rgba(255,255,255,0.05)', title: 'Turnaround Time (Hours)' },
+    margin: { l: 60, r: 20, t: 20, b: 40 }
+  }, { responsive: true });
+</script>
+</body>
+</html>

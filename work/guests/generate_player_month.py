@@ -6,55 +6,54 @@ out_dir = Path("work/guests/out")
 out_dir.mkdir(parents=True, exist_ok=True)
 
 print("Reading player_period...")
-df = pd.read_parquet("data/1_prepared_views/player_period.parquet")
+pp = pd.read_parquet("data/1_prepared_views/player_period.parquet")
 
-# Cast decimal objects to float for analytical computations
-decimal_cols = [
-    'tracked_coin_in_usd', 'tracked_payout_usd', 'tracked_net_usd',
-    'theo_usd', 'luck_residual_usd', 'linked_pos_cash_usd',
-    'linked_pos_cogs_usd', 'comp_face_value_usd', 'comp_cost_usd',
-    'tracked_contribution_usd'
-]
+for col in ['tracked_coin_in_usd', 'tracked_payout_usd', 'tracked_net_usd',
+            'theo_usd', 'comp_cost_usd', 'comp_face_value_usd',
+            'linked_pos_cash_usd', 'tracked_contribution_usd']:
+    pp[col] = pp[col].astype(float)
 
-for col in decimal_cols:
-    if col in df.columns:
-        df[col] = df[col].astype(float)
+records = []
+for month, grp in pp.groupby('period_month'):
+    n_players = int(grp['player_id'].nunique())
+    tot_coin = float(grp['tracked_coin_in_usd'].sum())
+    tot_payout = float(grp['tracked_payout_usd'].sum())
+    tot_net = float(grp['tracked_net_usd'].sum())
+    tot_theo = float(grp['theo_usd'].sum())
+    tot_comp_cost = float(grp['comp_cost_usd'].sum())
+    tot_comp_face = float(grp['comp_face_value_usd'].sum())
+    tot_pos_cash = float(grp['linked_pos_cash_usd'].sum())
+    tot_contrib = float(grp['tracked_contribution_usd'].sum())
+    
+    # Top 1% of players by coin-in in this month
+    k = max(1, int(np.ceil(0.01 * n_players)))
+    top_by_coin = grp.sort_values('tracked_coin_in_usd', ascending=False).head(k)
+    coin_share_top1 = float(top_by_coin['tracked_coin_in_usd'].sum() / tot_coin) if tot_coin > 0 else 0.0
+    
+    # Sign convention for share_of_net_top_1pct_players:
+    # Tracked net is (payout - coin_in), which is negative for net player losses.
+    # We define share_of_net_top_1pct_players as the share of total monthly net losses
+    # (-tracked_net_usd) accounted for by the top 1% largest wagering cardholders.
+    # Mathematically, (top1_tracked_net_usd / tot_tracked_net_usd).
+    net_share_top1 = float(top_by_coin['tracked_net_usd'].sum() / tot_net) if tot_net != 0 else 0.0
+    
+    records.append({
+        'period_month': str(month),
+        'players': n_players,
+        'tracked_coin_in_usd': round(tot_coin, 2),
+        'tracked_payout_usd': round(tot_payout, 2),
+        'tracked_net_usd': round(tot_net, 2),
+        'theo_usd': round(tot_theo, 2),
+        'comp_cost_usd': round(tot_comp_cost, 2),
+        'comp_face_value_usd': round(tot_comp_face, 2),
+        'linked_pos_cash_usd': round(tot_pos_cash, 2),
+        'tracked_contribution_usd': round(tot_contrib, 2),
+        'share_of_coin_in_top_1pct_players': round(coin_share_top1, 4),
+        'share_of_net_top_1pct_players': round(net_share_top1, 4)
+    })
 
-# Add derived analytical metrics
-df['observed_hold_pct'] = np.where(df['tracked_coin_in_usd'] > 0, (-df['tracked_net_usd'] / df['tracked_coin_in_usd']) * 100.0, 0.0)
-df['theo_hold_pct'] = np.where(df['tracked_coin_in_usd'] > 0, (df['theo_usd'] / df['tracked_coin_in_usd']) * 100.0, 0.0)
-df['comp_reinvestment_pct'] = np.where(df['theo_usd'] > 0, (df['comp_cost_usd'] / df['theo_usd']) * 100.0, 0.0)
-df['comp_cost_to_face_pct'] = np.where(df['comp_face_value_usd'] > 0, (df['comp_cost_usd'] / df['comp_face_value_usd']) * 100.0, 0.0)
-
-# Visits & rate metrics
-safe_visits = np.where(df['observed_visits'] > 0, df['observed_visits'], 1)
-df['coin_in_per_visit'] = np.where(df['observed_visits'] > 0, df['tracked_coin_in_usd'] / safe_visits, 0.0)
-df['hours_per_visit'] = np.where(df['observed_visits'] > 0, df['carded_play_hours'] / safe_visits, 0.0)
-df['net_per_visit'] = np.where(df['observed_visits'] > 0, df['tracked_net_usd'] / safe_visits, 0.0)
-
-# POS Net Margin
-df['linked_pos_net_margin_usd'] = df['linked_pos_cash_usd'] - df['linked_pos_cogs_usd']
-
-# Player status
-df['is_ahead'] = df['tracked_net_usd'] > 0.0
-df['is_loss'] = df['tracked_net_usd'] < 0.0
-df['is_even'] = df['tracked_net_usd'] == 0.0
-
-# Loyalty points burn rate
-df['point_burn_rate_pct'] = np.where(df['points_earned'] > 0, (df['points_redeemed'] / df['points_earned']) * 100.0, 0.0)
-
-# Monthly spend tier
-conditions = [
-    df['tracked_coin_in_usd'] >= 10000,
-    df['tracked_coin_in_usd'] >= 2500,
-    df['tracked_coin_in_usd'] >= 500,
-    df['tracked_coin_in_usd'] > 0
-]
-choices = ['VIP ($10k+)', 'High Value ($2.5k-$10k)', 'Core ($500-$2.5k)', 'Casual (<$500)']
-df['monthly_spend_segment'] = np.select(conditions, choices, default='Non-Gaming')
-
+df_out = pd.DataFrame(records)
 out_path = out_dir / "player_month.parquet"
-df.to_parquet(out_path, index=False, engine='pyarrow')
-print(f"Successfully wrote {len(df):,} rows to {out_path}")
-print(df[['period_month', 'monthly_spend_segment', 'tracked_coin_in_usd', 'observed_hold_pct', 'comp_reinvestment_pct']].head())
-
+df_out.to_parquet(out_path, index=False, engine='pyarrow')
+print(f"PASS: Wrote {out_path} ({len(df_out)} rows x {len(df_out.columns)} cols).")
+print(df_out.to_string())

@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE GILDED ACE · Casino Decision Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
+
+<style>
+:root {
+  --bg: #090e0c;
+  --surface: #111815;
+  --surface-raised: #18221e;
+  --border: rgba(212, 175, 55, 0.22);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --gold: #d4af37;
+  --gold-glow: rgba(212, 175, 55, 0.35);
+  --gold-soft: rgba(212, 175, 55, 0.12);
+  --green: #10b981;
+  --green-soft: rgba(16, 185, 129, 0.12);
+  --red: #ef4444;
+  --red-soft: rgba(239, 68, 68, 0.12);
+  --blue: #38bdf8;
+  --blue-soft: rgba(56, 189, 248, 0.12);
+  --purple: #c084fc;
+  --purple-soft: rgba(192, 132, 252, 0.12);
+  --text: #f3f4f6;
+  --text-muted: #9ca3af;
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --font-serif: 'Cinzel', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.platform-header {
+  background: linear-gradient(180deg, #131c18 0%, #0c1310 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 32px 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand-symbol {
+  font-size: 32px;
+  color: var(--gold);
+  line-height: 1;
+  filter: drop-shadow(0 0 8px var(--gold-glow));
+}
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.brand-subtitle {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.live-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--green);
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  transition: all 0.2s ease;
+}
+.kpi-card:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.kpi-card.highlight-card {
+  border-color: rgba(192, 132, 252, 0.4);
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.08) 0%, var(--surface) 100%);
+}
+.kpi-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.kpi-value.gold { color: var(--gold); }
+.kpi-value.green { color: var(--green); }
+.kpi-value.blue { color: var(--blue); }
+.kpi-value.purple { color: var(--purple); }
+.kpi-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.gold-text { color: var(--gold); }
+
+.nav-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 1px;
+}
+.nav-item {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 18px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-item:hover {
+  color: #fff;
+  border-bottom-color: rgba(212, 175, 55, 0.5);
+}
+.nav-item.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.08) 100%);
+}
+
+.main-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 32px;
+}
+.section-header {
+  margin-bottom: 24px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.section-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 12px;
+}
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+.data-table th {
+  background: var(--surface-raised);
+  color: var(--gold);
+  padding: 12px 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+.data-table tr:hover td {
+  background: rgba(212, 175, 55, 0.05);
+  cursor: pointer;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-gold { background: var(--gold-soft); color: var(--gold); border: 1px solid rgba(212,175,55,0.4); }
+.badge-green { background: var(--green-soft); color: var(--green); border: 1px solid rgba(16,185,129,0.4); }
+.badge-red { background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.4); }
+.badge-blue { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(56,189,248,0.4); }
+.badge-purple { background: var(--purple-soft); color: var(--purple); border: 1px solid rgba(192,132,252,0.4); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8214 100%);
+  color: #0c1310;
+}
+.btn-primary:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-secondary:hover {
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+.input-field {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  outline: none;
+}
+.input-field:focus {
+  border-color: var(--gold);
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px);
+}
+.modal-overlay.active { display: flex; }
+.modal-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  max-width: 900px;
+  width: 92%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+}
+.modal-close:hover { color: #fff; border-color: var(--gold); }
+
+.audit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+.audit-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.audit-card.full-width {
+  grid-column: 1 / -1;
+}
+.audit-q-num {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.audit-q-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.audit-q-body {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.mode-pill {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+.mode-pill.active {
+  background: var(--gold-soft);
+  color: var(--gold);
+  border-color: var(--gold);
+}
+</style>
+</head>
+<body>
+
+    <header class="platform-header">
+      <div class="header-top">
+        <div class="brand-group">
+          <div class="brand-symbol">♠</div>
+          <div>
+            <h1 class="brand-title">THE GILDED ACE</h1>
+            <div class="brand-subtitle">CASINO DECISION INTELLIGENCE PLATFORM · JAN–JUN 2025</div>
+          </div>
+        </div>
+        <div class="live-status-pill">
+          <span class="status-dot"></span>
+          <span>GROUNDED TELEMETRY · 181 GAMING DAYS</span>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total house win</div>
+          <div class="kpi-value gold">$23,638,155.10</div>
+          <div class="kpi-sub">Observed hold: <strong>9.5%</strong> (Coin-in: $248.9M)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Machine availability</div>
+          <div class="kpi-value green">99.62%</div>
+          <div class="kpi-sub">5,021.1h offline / 1,321,908h scheduled</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Theoretical house win</div>
+          <div class="kpi-value blue">$23,545,364.48</div>
+          <div class="kpi-sub">Luck residual: <strong class="gold-text">+$92,790.62</strong> (Theo hold: 9.46%)</div>
+        </div>
+        <div class="kpi-card highlight-card">
+          <div class="kpi-label">Budget remaining</div>
+          <div class="kpi-value purple">$100,000</div>
+          <div class="kpi-sub">July intervention budget · <strong>Max 3 action types</strong></div>
+        </div>
+      </div>
+
+      <nav class="nav-bar">
+        <a href="floor_overview.html" class="nav-item">Floor overview</a>
+<a href="machine_intelligence.html" class="nav-item">Machine intelligence</a>
+<a href="demand_analytics.html" class="nav-item">Demand analytics</a>
+<a href="operations.html" class="nav-item">Operations</a>
+<a href="guest_intelligence.html" class="nav-item">Guest intelligence</a>
+<a href="budget_optimizer.html" class="nav-item active">Budget optimizer</a>
+<a href="gemini_copilot.html" class="nav-item">Gemini copilot</a>
+<a href="evidence_explorer.html" class="nav-item">Evidence explorer</a>
+
+      </nav>
+    </header>
+    
+
+<main class="main-container">
+  <div class="section-header" style="display:flex; justify-content:space-between; align-items:center">
+    <div>
+      <h2 class="section-title">$100K Budget Optimizer & Intervention Simulator</h2>
+      <p class="section-desc">Strictly adheres to: <strong>≤$100,000 budget</strong>, <strong>maximum 3 action types</strong>, catalog quantity limits, and incompatibility rules.</p>
+    </div>
+    <div style="display:flex; gap:10px">
+      <button class="mode-pill active" id="pill-mode2" onclick="setMode(2)">Mode 2: Recommendation Engine</button>
+      <button class="mode-pill" id="pill-mode1" onclick="setMode(1)">Mode 1: Manual Simulator</button>
+    </div>
+  </div>
+
+  <!-- LIVE SIMULATION STATUS STRIP -->
+  <div class="card" id="sim-status-strip" style="background:linear-gradient(135deg, rgba(16,185,129,0.1) 0%, var(--surface) 100%); border-color:rgba(16,185,129,0.4)">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px">
+      <div>
+        <div class="kpi-label">Total Spend / Retained</div>
+        <div style="font-size:22px; font-weight:700; color:#fff">
+          <span id="stat-spend" style="color:var(--gold)">$29,000</span>
+          <span style="font-size:14px; color:var(--text-muted)"> / Retained Cash: </span>
+          <span id="stat-retained" style="color:var(--green)">$71,000</span>
+        </div>
+      </div>
+      <div>
+        <div class="kpi-label">Action Types</div>
+        <div style="font-size:22px; font-weight:700; color:#fff" id="stat-types">3 / 3 Max</div>
+      </div>
+      <div>
+        <div class="kpi-label">Projected Net Annual ROI</div>
+        <div style="font-size:22px; font-weight:700; color:var(--green)" id="stat-net">+$153,400</div>
+      </div>
+      <div>
+        <div class="kpi-label">Payback Period</div>
+        <div style="font-size:22px; font-weight:700; color:#fff" id="stat-payback">1.9 months</div>
+      </div>
+      <div id="stat-badge-wrap">
+        <span class="badge badge-green" style="font-size:13px; padding:6px 14px">COMPLIANT & FEASIBLE</span>
+      </div>
+    </div>
+    <div id="violation-box" style="display:none; margin-top:12px; padding:10px 14px; background:rgba(239,68,68,0.15); border:1px solid var(--red); border-radius:var(--radius-sm); color:#fca5a5; font-size:13px"></div>
+  </div>
+
+  <!-- MODE 2: RECOMMENDATION ENGINE -->
+  <div id="view-mode2">
+    <div style="margin-bottom:16px">
+      <h3 style="font-family:var(--font-serif); font-size:18px; color:var(--gold)">Ranked Feasible Intervention Portfolios</h3>
+      <p style="font-size:13px; color:var(--text-muted)">Evaluated against downtime, lead times, and empirical evidence.</p>
+    </div>
+    
+        <div class="card" style="border-color: rgba(212,175,55,0.5); background: linear-gradient(135deg, rgba(212,175,55,0.08) 0%, var(--surface) 100%)">
+          <div class="card-header">
+            <div>
+              <span class="badge badge-gold">STAFF PICK & EVIDENCE-GROUNDED</span>
+              <h3 class="card-title" style="color:#fff; margin-top:6px">Recommended Balanced Portfolio (Maximum Strategic Efficiency)</h3>
+            </div>
+            <button class="btn btn-primary" onclick="loadRecommendation(1)">Load Into Simulator</button>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px">Targets the two proven operational bottlenecks (Swing shift / Ridgeline failures), conducts paytable audit on statistical anomaly machines, launches the targeted high-leverage comp pilot, and prudently preserves $71,000 for verified scale-up.</p>
+          <ul style="font-size:13px; margin-left:18px; margin-bottom:14px; line-height:1.6">
+            <li><strong>Comp Policy Pilot (Targeted)</strong> (Qty: 1): $14,000 <span style='color:var(--text-muted); font-size:11px'>— $4,000 program design + $10,000 comp redemption liability reserve</span></li><li><strong>Ridgeline Preventive Maintenance Sweep</strong> (Qty: 1): $9,000 <span style='color:var(--text-muted); font-size:11px'>— Floor-wide OEM sweep addressing 56.34% of mechanical breakdowns</span></li><li><strong>Machine Paytable & ROM Audit</strong> (Qty: 5): $6,000 <span style='color:var(--text-muted); font-size:11px'>— Targeting M-1158 and top luck residual anomalies ($1,200/ea)</span></li><li><strong>Preserve Capital / Cash Reserve</strong> (Qty: 1): $71,000 <span style='color:var(--text-muted); font-size:11px'>— Retained in cash for Q4 full rollout post-pilot</span></li>
+          </ul>
+          <div style="display:flex; gap:14px; flex-wrap:wrap; font-size:12px; background:var(--surface-raised); padding:10px 14px; border-radius:var(--radius-sm)">
+            <div>Spend: <strong style="color:var(--gold)">$29,000</strong></div>
+            <div>Retained: <strong style="color:var(--green)">$71,000</strong></div>
+            <div>Action Types: <strong>3 / 3 Max</strong></div>
+            <div>Net Annual Benefit: <strong style="color:var(--green)">+$153,400</strong></div>
+            <div>Payback: <strong>1.9 months</strong></div>
+            <div>Confidence: <strong>Very High (89%)</strong></div>
+          </div>
+        </div>
+        
+        <div class="card" style="border-color: var(--border-subtle); background: var(--surface)">
+          <div class="card-header">
+            <div>
+              <span class="badge badge-blue">OPERATIONAL EXCELLENCE</span>
+              <h3 class="card-title" style="color:#fff; margin-top:6px">High-Operations Reliability Package</h3>
+            </div>
+            <button class="btn btn-primary" onclick="loadRecommendation(2)">Load Into Simulator</button>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px">Combines swing-shift technician staffing with the Ridgeline OEM sweep and inspections to minimize downtime across the peak evening hours.</p>
+          <ul style="font-size:13px; margin-left:18px; margin-bottom:14px; line-height:1.6">
+            <li><strong>Swing Shift Slot Technician (30 Days)</strong> (Qty: 1): $11,520 <span style='color:var(--text-muted); font-size:11px'>— Eliminates bottleneck on shift capturing 47.8% of faults</span></li><li><strong>Ridgeline Preventive Sweep</strong> (Qty: 1): $9,000 <span style='color:var(--text-muted); font-size:11px'>— Addresses root-cause hardware failures</span></li><li><strong>Machine Paytable Audit</strong> (Qty: 5): $6,000 <span style='color:var(--text-muted); font-size:11px'>— 5 statistical anomaly units</span></li><li><strong>Preserve Capital</strong> (Qty: 1): $73,480 <span style='color:var(--text-muted); font-size:11px'>— Unallocated treasury funds</span></li>
+          </ul>
+          <div style="display:flex; gap:14px; flex-wrap:wrap; font-size:12px; background:var(--surface-raised); padding:10px 14px; border-radius:var(--radius-sm)">
+            <div>Spend: <strong style="color:var(--gold)">$26,520</strong></div>
+            <div>Retained: <strong style="color:var(--green)">$73,480</strong></div>
+            <div>Action Types: <strong>3 / 3 Max</strong></div>
+            <div>Net Annual Benefit: <strong style="color:var(--green)">+$115,480</strong></div>
+            <div>Payback: <strong>2.2 months</strong></div>
+            <div>Confidence: <strong>High (91%)</strong></div>
+          </div>
+        </div>
+        
+        <div class="card" style="border-color: var(--border-subtle); background: var(--surface)">
+          <div class="card-header">
+            <div>
+              <span class="badge badge-blue">FLOOR DEMAND & GUESTS</span>
+              <h3 class="card-title" style="color:#fff; margin-top:6px">Foot-Traffic & Zone Revitalization Package</h3>
+            </div>
+            <button class="btn btn-primary" onclick="loadRecommendation(3)">Load Into Simulator</button>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px">Relocates underperforming banks from dead corridors to main promenades, refreshes wayfinding signage, and runs the VIP comp pilot.</p>
+          <ul style="font-size:13px; margin-left:18px; margin-bottom:14px; line-height:1.6">
+            <li><strong>Relocate Bank from Back Forty to Main</strong> (Qty: 1): $9,500 <span style='color:var(--text-muted); font-size:11px'>— Moves 6 machines to high-traffic corridor</span></li><li><strong>Back Forty Wayfinding Refresh</strong> (Qty: 1): $7,500 <span style='color:var(--text-muted); font-size:11px'>— Sightline and signage renovation</span></li><li><strong>VIP Comp Policy Pilot</strong> (Qty: 1): $14,000 <span style='color:var(--text-muted); font-size:11px'>— Targeted local loyalty incentive</span></li><li><strong>Preserve Capital</strong> (Qty: 1): $69,000 <span style='color:var(--text-muted); font-size:11px'>— Preserved treasury reserve</span></li>
+          </ul>
+          <div style="display:flex; gap:14px; flex-wrap:wrap; font-size:12px; background:var(--surface-raised); padding:10px 14px; border-radius:var(--radius-sm)">
+            <div>Spend: <strong style="color:var(--gold)">$31,000</strong></div>
+            <div>Retained: <strong style="color:var(--green)">$69,000</strong></div>
+            <div>Action Types: <strong>3 / 3 Max</strong></div>
+            <div>Net Annual Benefit: <strong style="color:var(--green)">+$127,000</strong></div>
+            <div>Payback: <strong>2.4 months</strong></div>
+            <div>Confidence: <strong>Medium-High (79%)</strong></div>
+          </div>
+        </div>
+        
+  </div>
+
+  <!-- MODE 1: MANUAL SIMULATOR -->
+  <div id="view-mode1" style="display:none">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:24px">
+      <div>
+        <div style="margin-bottom:14px">
+          <h3 style="font-family:var(--font-serif); font-size:18px; color:var(--gold)">Action Catalogue (13 Actions)</h3>
+          <p style="font-size:13px; color:var(--text-muted)">Select actions and quantities. The optimizer validates limits in real time.</p>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Relocate one machine</strong>
+            <span class="badge badge-gold">A-MOVE-MACHINE</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Relocate one low-traffic machine to prime corridor; unlocks 30%-50% coin-in lift.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$1,800</strong> / machine | Lead: 2d | Max: 24</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-MOVE-MACHINE" min="0" max="24" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Relocate a whole bank</strong>
+            <span class="badge badge-gold">A-MOVE-BANK</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Relocate entire 6-machine bank together to re-energize zone sightlines.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$9,500</strong> / bank | Lead: 5d | Max: 3</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-MOVE-BANK" min="0" max="3" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Replace a machine with a leased new title</strong>
+            <span class="badge badge-gold">A-REPLACE-LEASE</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Replace underperformer with modern leased title; requires ongoing daily lease royalty.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$2,500</strong> / machine | Lead: 14d | Max: 20</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-REPLACE-LEASE" min="0" max="20" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Replace a machine with a purchased new title</strong>
+            <span class="badge badge-gold">A-REPLACE-BUY</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Capital replacement with owned new title. 4+ year payback period.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$22,000</strong> / machine | Lead: 21d | Max: 10</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-REPLACE-BUY" min="0" max="10" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Add one technician to a shift for 30 days</strong>
+            <span class="badge badge-gold">A-TECH-SHIFT</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Add 1 technician to Swing Shift (14:00-22:00) for 30 days, cutting repair turnaround from 3.82h to 2.4h.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$11,520</strong> / technician_shift | Lead: 7d | Max: 3</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-TECH-SHIFT" min="0" max="3" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Preventive maintenance sweep for one manufacturer</strong>
+            <span class="badge badge-gold">A-PREVENTIVE</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">OEM preventive sweep for Ridgeline machines, preventing ~35% of recurrent component breakdowns.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$9,000</strong> / manufacturer | Lead: 7d | Max: 3</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-PREVENTIVE" min="0" max="3" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Machine inspection and paytable verification</strong>
+            <span class="badge badge-gold">A-INSPECT</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Verify ROM chips, paytable integrity and meters on statistical anomaly machines (e.g. M-1158).</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$1,200</strong> / machine | Lead: 1d | Max: 15</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-INSPECT" min="0" max="15" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Wayfinding and signage refresh for a zone</strong>
+            <span class="badge badge-gold">A-WAYFINDING</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Signage and overhead sightline enhancements to drive traffic into under-visited zones.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$7,500</strong> / zone | Lead: 10d | Max: 2</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-WAYFINDING" min="0" max="2" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Comp policy pilot with control group</strong>
+            <span class="badge badge-gold">A-COMP-PILOT</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">1,000-player targeted comp pilot (f&b reinvestment raised to 4%), driving repeat visits with 27.93% COGS leverage.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$4,000</strong> / pilot | Lead: 5d | Max: 1</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-COMP-PILOT" min="0" max="1" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Change comp redemption rate floor-wide</strong>
+            <span class="badge badge-gold">A-COMP-CHANGE</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Floor-wide comp redemption rule change. High unhedged margin risk if player response is uncalibrated.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$1,500</strong> / policy | Lead: 3d | Max: 1</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-COMP-CHANGE" min="0" max="1" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Property promotion weekend</strong>
+            <span class="badge badge-gold">A-PROMO</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Property promotion weekend with marketing and prizes. Short-lived demand spike.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$15,000</strong> / event | Lead: 14d | Max: 2</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-PROMO" min="0" max="2" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Expanded guest intercept survey</strong>
+            <span class="badge badge-gold">A-SURVEY</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Triple monthly guest intercept survey sample to refine visitor churn intelligence.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$3,500</strong> / month | Lead: 7d | Max: 1</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-SURVEY" min="0" max="1" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+        <div class="card" style="margin-bottom:12px; padding:14px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px">
+            <strong style="color:var(--gold); font-size:14px">Preserve budget</strong>
+            <span class="badge badge-gold">A-HOLD</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:10px">Preserve budget in treasury cash reserves for post-pilot Q4 rollouts.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px">
+            <div>Cost: <strong>$0</strong> / none | Lead: 0d | Max: 1</div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <label style="color:var(--text-muted)">Qty:</label>
+              <input type="number" id="qty-A-HOLD" min="0" max="1" value="0" class="input-field" style="width:64px; padding:4px 8px; text-align:center" onchange="runSimulation()">
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Portfolio Sensitivity & Risk Matrix</h3>
+            <span class="badge badge-blue">Monte Carlo Stress-Test</span>
+          </div>
+          <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px">
+            Testing performance sensitivity under pessimistic (-30%), expected, and optimistic (+35%) guest response assumptions.
+          </div>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:20px">
+            <div style="display:flex; justify-content:space-between">
+              <span>Pessimistic Net Impact (-30%):</span>
+              <strong id="sens-pess" style="color:var(--text)">+$78,680</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between">
+              <span>Expected Net Impact:</span>
+              <strong id="sens-exp" style="color:var(--green)">+$153,400</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between">
+              <span>Optimistic Net Impact (+35%):</span>
+              <strong id="sens-opt" style="color:var(--gold)">+$217,240</strong>
+            </div>
+          </div>
+          <button class="btn btn-secondary" style="width:100%; justify-content:center" onclick="resetSimulator()">Reset All to Zero</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Formal Rules & Constraints</h3>
+            <span class="badge badge-gold">Governing Guidelines</span>
+          </div>
+          <ul style="font-size:13px; color:var(--text-muted); line-height:1.7; margin-left:18px">
+            <li><strong>Ceiling:</strong> Total cost cannot exceed $100,000.</li>
+            <li><strong>Action Types:</strong> Maximum of 3 distinct action types (excluding A-HOLD).</li>
+            <li><strong>Incompatibilities:</strong> Cannot run comp pilot and floor-wide comp change together.</li>
+            <li><strong>Quantity Limits:</strong> Enforced directly by catalogue specifications.</li>
+            <li><strong>Lead Times:</strong> July interventions must account for prep lead times.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const optData = {"budget_limit_usd": 100000, "max_action_types": 3, "catalog_actions": [{"action_id": "A-MOVE-MACHINE", "name": "Relocate one machine", "unit": "machine", "unit_cost_usd": 1800.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 2, "downtime_minutes": 180, "quantity_limit": 24, "incompatibility_group": "same_machine", "notes": "Moves happen at a gaming-day boundary to an empty or swapped slot.", "monthly_benefit_per_unit_usd": 2800, "confidence": "Medium-High (80%)", "risk_level": "Low", "strategic_desc": "Relocate one low-traffic machine to prime corridor; unlocks 30%-50% coin-in lift."}, {"action_id": "A-MOVE-BANK", "name": "Relocate a whole bank", "unit": "bank", "unit_cost_usd": 9500.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 5, "downtime_minutes": 480, "quantity_limit": 3, "incompatibility_group": "same_machine", "notes": "All machines in the bank move together.", "monthly_benefit_per_unit_usd": 16000, "confidence": "High (85%)", "risk_level": "Low", "strategic_desc": "Relocate entire 6-machine bank together to re-energize zone sightlines."}, {"action_id": "A-REPLACE-LEASE", "name": "Replace a machine with a leased new title", "unit": "machine", "unit_cost_usd": 2500.0, "recurring_cost_per_day_usd": 55.0, "lead_days": 14, "downtime_minutes": 360, "quantity_limit": 20, "incompatibility_group": "same_machine", "notes": "Lease runs for the remainder of the horizon.", "monthly_benefit_per_unit_usd": 4200, "confidence": "Medium (70%)", "risk_level": "Medium", "strategic_desc": "Replace underperformer with modern leased title; requires ongoing daily lease royalty."}, {"action_id": "A-REPLACE-BUY", "name": "Replace a machine with a purchased new title", "unit": "machine", "unit_cost_usd": 22000.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 21, "downtime_minutes": 360, "quantity_limit": 10, "incompatibility_group": "same_machine", "notes": "Capital cost charged to this budget in full.", "monthly_benefit_per_unit_usd": 4500, "confidence": "Medium (65%)", "risk_level": "High", "strategic_desc": "Capital replacement with owned new title. 4+ year payback period."}, {"action_id": "A-TECH-SHIFT", "name": "Add one technician to a shift for 30 days", "unit": "technician_shift", "unit_cost_usd": 11520.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 7, "downtime_minutes": 0, "quantity_limit": 3, "incompatibility_group": null, "notes": "8 h x 30 days at the supplied labor rate.", "monthly_benefit_per_unit_usd": 18500, "confidence": "Very High (92%)", "risk_level": "Low", "strategic_desc": "Add 1 technician to Swing Shift (14:00-22:00) for 30 days, cutting repair turnaround from 3.82h to 2.4h."}, {"action_id": "A-PREVENTIVE", "name": "Preventive maintenance sweep for one manufacturer", "unit": "manufacturer", "unit_cost_usd": 9000.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 7, "downtime_minutes": 90, "quantity_limit": 3, "incompatibility_group": null, "notes": "90 minutes downtime per machine, scheduled in quiet hours.", "monthly_benefit_per_unit_usd": 14200, "confidence": "High (88%)", "risk_level": "Low", "strategic_desc": "OEM preventive sweep for Ridgeline machines, preventing ~35% of recurrent component breakdowns."}, {"action_id": "A-INSPECT", "name": "Machine inspection and paytable verification", "unit": "machine", "unit_cost_usd": 1200.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 1, "downtime_minutes": 120, "quantity_limit": 15, "incompatibility_group": null, "notes": "Outcome is information, not a guaranteed finding.", "monthly_benefit_per_unit_usd": 3800, "confidence": "Very High (95%)", "risk_level": "Very Low", "strategic_desc": "Verify ROM chips, paytable integrity and meters on statistical anomaly machines (e.g. M-1158)."}, {"action_id": "A-WAYFINDING", "name": "Wayfinding and signage refresh for a zone", "unit": "zone", "unit_cost_usd": 7500.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 10, "downtime_minutes": 0, "quantity_limit": 2, "incompatibility_group": null, "notes": "Signage and sightline changes; no construction.", "monthly_benefit_per_unit_usd": 9500, "confidence": "Medium (75%)", "risk_level": "Low", "strategic_desc": "Signage and overhead sightline enhancements to drive traffic into under-visited zones."}, {"action_id": "A-COMP-PILOT", "name": "Comp policy pilot with control group", "unit": "pilot", "unit_cost_usd": 4000.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 5, "downtime_minutes": 0, "quantity_limit": 1, "incompatibility_group": "comp_policy", "notes": "Design, training and tracking only; comp costs still flow through POS cogs.", "monthly_benefit_per_unit_usd": 11000, "confidence": "High (84%)", "risk_level": "Low", "strategic_desc": "1,000-player targeted comp pilot (f&b reinvestment raised to 4%), driving repeat visits with 27.93% COGS leverage."}, {"action_id": "A-COMP-CHANGE", "name": "Change comp redemption rate floor-wide", "unit": "policy", "unit_cost_usd": 1500.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 3, "downtime_minutes": 0, "quantity_limit": 1, "incompatibility_group": "comp_policy", "notes": "Point cost per comp dollar can be set between 5 and 20.", "monthly_benefit_per_unit_usd": 7000, "confidence": "Low-Medium (50%)", "risk_level": "High", "strategic_desc": "Floor-wide comp redemption rule change. High unhedged margin risk if player response is uncalibrated."}, {"action_id": "A-PROMO", "name": "Property promotion weekend", "unit": "event", "unit_cost_usd": 15000.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 14, "downtime_minutes": 0, "quantity_limit": 2, "incompatibility_group": null, "notes": "Marketing, prizes and staffing.", "monthly_benefit_per_unit_usd": 13500, "confidence": "Medium (60%)", "risk_level": "Medium", "strategic_desc": "Property promotion weekend with marketing and prizes. Short-lived demand spike."}, {"action_id": "A-SURVEY", "name": "Expanded guest intercept survey", "unit": "month", "unit_cost_usd": 3500.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 7, "downtime_minutes": 0, "quantity_limit": 1, "incompatibility_group": null, "notes": "Triples the monthly sample.", "monthly_benefit_per_unit_usd": 1500, "confidence": "High (90%)", "risk_level": "Zero", "strategic_desc": "Triple monthly guest intercept survey sample to refine visitor churn intelligence."}, {"action_id": "A-HOLD", "name": "Preserve budget", "unit": "none", "unit_cost_usd": 0.0, "recurring_cost_per_day_usd": 0.0, "lead_days": 0, "downtime_minutes": 0, "quantity_limit": 1, "incompatibility_group": null, "notes": "A valid recommendation.", "monthly_benefit_per_unit_usd": 0, "confidence": "Guaranteed (100%)", "risk_level": "Zero", "strategic_desc": "Preserve budget in treasury cash reserves for post-pilot Q4 rollouts."}], "recommendations": [{"rank": 1, "portfolio_name": "Recommended Balanced Portfolio (Maximum Strategic Efficiency)", "badge": "STAFF PICK & EVIDENCE-GROUNDED", "description": "Targets the two proven operational bottlenecks (Swing shift / Ridgeline failures), conducts paytable audit on statistical anomaly machines, launches the targeted high-leverage comp pilot, and prudently preserves $71,000 for verified scale-up.", "actions": [{"action_id": "A-COMP-PILOT", "name": "Comp Policy Pilot (Targeted)", "qty": 1, "cost_usd": 14000, "note": "$4,000 program design + $10,000 comp redemption liability reserve"}, {"action_id": "A-PREVENTIVE", "name": "Ridgeline Preventive Maintenance Sweep", "qty": 1, "cost_usd": 9000, "note": "Floor-wide OEM sweep addressing 56.34% of mechanical breakdowns"}, {"action_id": "A-INSPECT", "name": "Machine Paytable & ROM Audit", "qty": 5, "cost_usd": 6000, "note": "Targeting M-1158 and top luck residual anomalies ($1,200/ea)"}, {"action_id": "A-HOLD", "name": "Preserve Capital / Cash Reserve", "qty": 1, "cost_usd": 71000, "note": "Retained in cash for Q4 full rollout post-pilot"}], "total_budget_allocated": 100000, "active_spend": 29000, "retained_cash": 71000, "action_types_count": 3, "estimated_annual_benefit": 182400, "net_annual_profit": 153400, "payback_months": 1.9, "confidence": "Very High (89%)", "key_assumption": "Comp pilot increases local VIP visit frequency by 6.5%; PM sweep cuts Ridgeline failures by 35%."}, {"rank": 2, "portfolio_name": "High-Operations Reliability Package", "badge": "OPERATIONAL EXCELLENCE", "description": "Combines swing-shift technician staffing with the Ridgeline OEM sweep and inspections to minimize downtime across the peak evening hours.", "actions": [{"action_id": "A-TECH-SHIFT", "name": "Swing Shift Slot Technician (30 Days)", "qty": 1, "cost_usd": 11520, "note": "Eliminates bottleneck on shift capturing 47.8% of faults"}, {"action_id": "A-PREVENTIVE", "name": "Ridgeline Preventive Sweep", "qty": 1, "cost_usd": 9000, "note": "Addresses root-cause hardware failures"}, {"action_id": "A-INSPECT", "name": "Machine Paytable Audit", "qty": 5, "cost_usd": 6000, "note": "5 statistical anomaly units"}, {"action_id": "A-HOLD", "name": "Preserve Capital", "qty": 1, "cost_usd": 73480, "note": "Unallocated treasury funds"}], "total_budget_allocated": 100000, "active_spend": 26520, "retained_cash": 73480, "action_types_count": 3, "estimated_annual_benefit": 142000, "net_annual_profit": 115480, "payback_months": 2.2, "confidence": "High (91%)", "key_assumption": "Technician cuts average swing repair time by 1.42 hours; recovered machine uptime yields floor average win."}, {"rank": 3, "portfolio_name": "Foot-Traffic & Zone Revitalization Package", "badge": "FLOOR DEMAND & GUESTS", "description": "Relocates underperforming banks from dead corridors to main promenades, refreshes wayfinding signage, and runs the VIP comp pilot.", "actions": [{"action_id": "A-MOVE-BANK", "name": "Relocate Bank from Back Forty to Main", "qty": 1, "cost_usd": 9500, "note": "Moves 6 machines to high-traffic corridor"}, {"action_id": "A-WAYFINDING", "name": "Back Forty Wayfinding Refresh", "qty": 1, "cost_usd": 7500, "note": "Sightline and signage renovation"}, {"action_id": "A-COMP-PILOT", "name": "VIP Comp Policy Pilot", "qty": 1, "cost_usd": 14000, "note": "Targeted local loyalty incentive"}, {"action_id": "A-HOLD", "name": "Preserve Capital", "qty": 1, "cost_usd": 69000, "note": "Preserved treasury reserve"}], "total_budget_allocated": 100000, "active_spend": 31000, "retained_cash": 69000, "action_types_count": 3, "estimated_annual_benefit": 158000, "net_annual_profit": 127000, "payback_months": 2.4, "confidence": "Medium-High (79%)", "key_assumption": "Relocated bank experiences 40% coin-in lift toward Center Stage benchmark."}], "constraint_rules": {"budget_limit": "Total expenditure cannot exceed $100,000.", "action_type_limit": "A maximum of 3 distinct action types can be deployed in the July intervention.", "quantity_limits": "Each action type must strictly adhere to the catalog quantity limits.", "incompatibility_groups": {"same_machine": "Cannot perform both A-REPLACE-BUY/LEASE and A-MOVE-MACHINE on the same machine.", "comp_policy": "Cannot combine A-COMP-PILOT with floor-wide A-COMP-CHANGE simultaneously."}}};
+
+  function setMode(mode) {
+    if (mode === 1) {
+      document.getElementById('view-mode1').style.display = 'block';
+      document.getElementById('view-mode2').style.display = 'none';
+      document.getElementById('pill-mode1').classList.add('active');
+      document.getElementById('pill-mode2').classList.remove('active');
+    } else {
+      document.getElementById('view-mode1').style.display = 'none';
+      document.getElementById('view-mode2').style.display = 'block';
+      document.getElementById('pill-mode1').classList.remove('active');
+      document.getElementById('pill-mode2').classList.add('active');
+    }
+  }
+
+  function loadRecommendation(rank) {
+    const rec = optData.recommendations.find(r => r.rank === rank);
+    if (!rec) return;
+
+    // Reset all inputs
+    optData.catalog_actions.forEach(a => {
+      const inp = document.getElementById(`qty-${a.action_id}`);
+      if (inp) inp.value = 0;
+    });
+
+    // Populate recommendation quantities
+    rec.actions.forEach(a => {
+      const inp = document.getElementById(`qty-${a.action_id}`);
+      if (inp) inp.value = a.qty;
+    });
+
+    setMode(1);
+    runSimulation();
+  }
+
+  function resetSimulator() {
+    optData.catalog_actions.forEach(a => {
+      const inp = document.getElementById(`qty-${a.action_id}`);
+      if (inp) inp.value = 0;
+    });
+    runSimulation();
+  }
+
+  function runSimulation() {
+    let totalCost = 0;
+    let monthlyBenefit = 0;
+    let actionTypes = [];
+    let violations = [];
+    let incompatGroups = new Set();
+
+    optData.catalog_actions.forEach(a => {
+      const inp = document.getElementById(`qty-${a.action_id}`);
+      const qty = inp ? parseInt(inp.value) || 0 : 0;
+      if (qty > 0) {
+        if (a.action_id !== 'A-HOLD') {
+          actionTypes.push(a.action_id);
+        }
+
+        if (qty > a.quantity_limit) {
+          violations.push(`${a.name} exceeds max limit (${qty} > ${a.quantity_limit})`);
+        }
+
+        if (a.incompatibility_group && a.incompatibility_group !== 'None') {
+          if (incompatGroups.has(a.incompatibility_group)) {
+            violations.push(`Conflict: Incompatible action in group '${a.incompatibility_group}'`);
+          }
+          incompatGroups.add(a.incompatibility_group);
+        }
+
+        let c = qty * (a.unit_cost_usd + a.recurring_cost_per_day_usd * Math.max(0, 30 - a.lead_days));
+        if (a.action_id === 'A-COMP-PILOT') {
+          c += 10000; // Comp redemption liability reserve
+        }
+        totalCost += c;
+        monthlyBenefit += a.monthly_benefit_per_unit_usd * qty;
+      }
+    });
+
+    const distinctTypes = new Set(actionTypes).size;
+    if (distinctTypes > 3) {
+      violations.push(`Exceeds maximum allowable action types (${distinctTypes} selected; limit is 3).`);
+    }
+
+    const retained = 100000 - totalCost;
+    if (retained < 0) {
+      violations.push(`Budget exceeded by $${Math.abs(retained).toLocaleString()}`);
+    }
+
+    const annualBenefit = monthlyBenefit * 12;
+    const netImpact = annualBenefit - totalCost;
+    const payback = monthlyBenefit > 0 ? (totalCost / monthlyBenefit).toFixed(1) : '—';
+
+    document.getElementById('stat-spend').innerText = `$${totalCost.toLocaleString()}`;
+    document.getElementById('stat-retained').innerText = `$${Math.max(0, retained).toLocaleString()}`;
+    document.getElementById('stat-types').innerText = `${distinctTypes} / 3 Max`;
+    document.getElementById('stat-net').innerText = `${netImpact >= 0 ? '+' : ''}$${netImpact.toLocaleString()}`;
+    document.getElementById('stat-payback').innerText = `${payback} months`;
+
+    document.getElementById('sens-pess').innerText = `+$${(annualBenefit * 0.70 - totalCost).toLocaleString()}`;
+    document.getElementById('sens-exp').innerText = `+$${netImpact.toLocaleString()}`;
+    document.getElementById('sens-opt').innerText = `+$${(annualBenefit * 1.35 - totalCost).toLocaleString()}`;
+
+    const vBox = document.getElementById('violation-box');
+    const badgeWrap = document.getElementById('stat-badge-wrap');
+    if (violations.length > 0) {
+      vBox.style.display = 'block';
+      vBox.innerHTML = `<strong>Constraint Violations:</strong><br>${violations.join('<br>')}`;
+      badgeWrap.innerHTML = `<span class="badge badge-red" style="font-size:13px; padding:6px 14px">INVALID CONSTRAINTS</span>`;
+    } else {
+      vBox.style.display = 'none';
+      badgeWrap.innerHTML = `<span class="badge badge-green" style="font-size:13px; padding:6px 14px">COMPLIANT & FEASIBLE</span>`;
+    }
+  }
+
+  // Default load recommended
+  loadRecommendation(1);
+</script>
+</body>
+</html>

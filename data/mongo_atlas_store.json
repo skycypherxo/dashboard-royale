@@ -1,0 +1,29 @@
+{
+  "audit_cases": [
+    {
+      "case_id": "AUDIT-M1158-001",
+      "machine_id": "M-1158",
+      "analyst": "Vaishnavi (Guests & BI Lead)",
+      "status": "EXONERATED_RETAIN",
+      "verdict": "Luck deficit of -$36,165 verified as binomial variance (Z=-20.21). Recommend A-INSPECT ($1,200).",
+      "timestamp": "2026-11-08T10:02:42.877508"
+    }
+  ],
+  "simulation_scenarios": [
+    {
+      "scenario_id": "SCEN-REC-JULY",
+      "name": "Recommended Balanced Portfolio",
+      "total_spend": 29000,
+      "retained_cash": 71000,
+      "net_annual_impact": 153400,
+      "actions": [
+        "A-COMP-PILOT (1)",
+        "A-PREVENTIVE (1)",
+        "A-INSPECT (5)",
+        "A-HOLD (1)"
+      ],
+      "timestamp": "2026-11-08T10:02:42.877508"
+    }
+  ],
+  "chat_sessions": []
+}

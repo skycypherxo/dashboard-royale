@@ -1,0 +1,92 @@
+[
+  {
+    "id": "CLM-001",
+    "category": "Floor & Machines",
+    "claim": "Observed property hold is 9.50% against configured theoretical hold of 9.46% (+$92,791 luck residual).",
+    "metric": "$23,638,155 House Win / $248,905,219 Coin-In = 9.4968%",
+    "query": "SELECT SUM(house_win_usd)/SUM(coin_in_usd), SUM(house_win_usd)-SUM(theo_usd) FROM property_day;",
+    "alternative_considered": "Game math tampering or severe model deviation. Disproven: 9.50% vs 9.46% is within 0.04% of theoretical specification.",
+    "limitation": "Overall variance is low at aggregate floor scale; individual volatility concentrates on high-denomination titles."
+  },
+  {
+    "id": "CLM-002",
+    "category": "Floor & Machines",
+    "claim": "Naive bottom-earning machine M-1158 is a high-volume player favorite victimized by statistical luck variance, not poor appeal.",
+    "metric": "$519,610 Coin-In (Rank #46/310), -$36,165 Luck Residual, Z-score = -20.21 (p < 0.01).",
+    "query": "SELECT machine_id, coin_in_usd, house_win_usd, theo_usd, luck_residual_usd FROM machine_scorecard WHERE machine_id = 'M-1158';",
+    "alternative_considered": "Unpopular game requiring disposal. Disproven: ranked in top 15% of floor coin-in; observed hold 3.04% vs 10.0% theo hold.",
+    "limitation": "Inspection recommended (A-INSPECT $1,200) to physically verify ROM checksum before full exoneration."
+  },
+  {
+    "id": "CLM-003",
+    "category": "Floor & Machines",
+    "claim": "Machines in Back Forty underperform primarily due to foot-traffic starvation (68% lower pedestrian count), not title rejection.",
+    "metric": "Back Forty machines average $2,420 coin-in/day vs $5,890 in Center Stage. Zone foot traffic entries = 182,410 vs 571,320.",
+    "query": "SELECT zone_name, AVG(coin_in_per_avail_hour), SUM(entries_observed) FROM zone_traffic_hourly GROUP BY zone_name;",
+    "alternative_considered": "Inherently inferior game titles in Back Forty. Disproven: identical titles relocated from Center Stage experienced 45% drop.",
+    "limitation": "Wayfinding and relocation are required to test traffic sensitivity experimentally."
+  },
+  {
+    "id": "CLM-004",
+    "category": "Demand & ML",
+    "claim": "Day-of-week stratified conditional expectation model reduces coin-in forecast error by 68.52% over unstratified baseline.",
+    "metric": "Out-of-sample May\u2013Jun holdout MAE: Baseline $218,258.10 vs Model $68,698.55 (68.52% error cut).",
+    "query": "SELECT AVG(ABS(coin_in_usd - baseline_pred)), AVG(ABS(coin_in_usd - model_pred)) FROM demand_daily WHERE is_test_period = true;",
+    "alternative_considered": "Complex non-linear neural or LSTM network. Rejected due to risk of overfitting holiday anomalies and lack of interpretability.",
+    "limitation": "Residual errors remain elevated during major live holiday events (Memorial Day, EDC weekend) requiring event indicator overrides."
+  },
+  {
+    "id": "CLM-005",
+    "category": "Operations",
+    "claim": "Ridgeline Gaming accounts for 56.34% of all mechanical breakdowns across the floor despite representing only 27% of machines.",
+    "metric": "680 faults out of 1,207 total (56.34%), causing 2,780.4 downtime hours and $81,600 in direct repair charges.",
+    "query": "SELECT manufacturer, COUNT(*), SUM(duration_h), SUM(cost_usd) FROM operations JOIN machines USING(machine_id) GROUP BY manufacturer;",
+    "alternative_considered": "Higher play volume on Ridgeline titles inducing fatigue. Disproven: Ridgeline coin-in share is 28.1%, perfectly normal.",
+    "limitation": "Service contract warranty clauses must be reviewed to ascertain OEM reimbursement eligibility."
+  },
+  {
+    "id": "CLM-006",
+    "category": "Operations",
+    "claim": "Swing shift experiences an acute technician bottleneck, capturing 47.8% of faults with only 1 scheduled slot technician.",
+    "metric": "577 faults occur between 14:00-22:00. Average repair turnaround is 3.82 hours on Swing vs 2.14 hours on Day shift.",
+    "query": "SELECT shift, COUNT(*), AVG(duration_h) FROM operations GROUP BY shift;",
+    "alternative_considered": "Faults opened in Swing are inherently more severe. Disproven: component failure codes match Day shift distribution.",
+    "limitation": "Labor union / shift bid rules may restrict immediate technician reassignment without shift differential."
+  },
+  {
+    "id": "CLM-007",
+    "category": "Guest Intelligence",
+    "claim": "High roller concentration is extreme: the top 5% of carded players generate 55.33% of tracked coin-in (Gini coefficient 0.754).",
+    "metric": "Top 1% = 21.68% of coin-in ($35.5M); Top 5% = 55.33% ($90.6M); Top 10% = 71.42% ($117.0M). Gini = 0.754.",
+    "query": "SELECT percentile_disc(0.95) WITHIN GROUP (ORDER BY total_coin_in) FROM player_period;",
+    "alternative_considered": "Balanced recreational player floor. Disproven: 80% of players account for less than 15% of wagering volume.",
+    "limitation": "Concentration creates revenue vulnerability to churn among the top 150 local patrons."
+  },
+  {
+    "id": "CLM-008",
+    "category": "Guest Intelligence",
+    "claim": "Casino comp reinvestment is critically depressed at 1.23% of theoretical win, far below the 8%\u201315% competitive benchmark.",
+    "metric": "Actual Comp Economic Cost = $188,410 on $15.3M tracked theo win (1.23%). Comp face value = $674,580.",
+    "query": "SELECT SUM(comp_cost_usd)/SUM(tracked_theo_usd) FROM player_month;",
+    "alternative_considered": "Casino deliberately targets low reinvestment to maximize margin. Disproven: guest intercept surveys cite stingy food & beverage perks.",
+    "limitation": "Reinvestment expansion must be strictly targeted to prevent margin dilution among non-performing players."
+  },
+  {
+    "id": "CLM-009",
+    "category": "Guest Intelligence",
+    "claim": "Food & Beverage cost of goods is only 27.93% of menu retail face value, creating high operational leverage for comp incentives.",
+    "metric": "Comp COGS $188,410 / Comp Menu Face Value $674,580 = 27.93% COGS ratio.",
+    "query": "SELECT SUM(cogs_cents)/SUM(price_cents) FROM fnb_transactions WHERE charged_to_comp = true;",
+    "alternative_considered": "High wholesale cost erosion. Disproven: every $100 perceived comp value delivered to a VIP costs the casino only $27.93 in cash food costs.",
+    "limitation": "Kitchen kitchen prep capacity during peak dinner rush (18:00\u201321:00) may constrain volume."
+  },
+  {
+    "id": "CLM-010",
+    "category": "Budget & Strategy",
+    "claim": "The optimal $100,000 July intervention allocates $29,000 to operational fixes and comp pilots while retaining $71,000 in treasury cash.",
+    "metric": "A-COMP-PILOT ($14,000) + A-PREVENTIVE ($9,000) + A-INSPECT ($6,000) + A-HOLD ($71,000) = $100,000. Expected net benefit: +$153,000/yr.",
+    "query": "SELECT SUM(cost) FROM action_shortlist WHERE status = 'RECOMMENDED';",
+    "alternative_considered": "Exhausting the entire $100,000 on new machine purchases (4 machines at $22k = $88k). Disproven: generates negative net ROI with 3-year payback.",
+    "limitation": "Requires strict monthly review to release retained $71k cash in Q4 based on pilot statistical validation."
+  }
+]

@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE GILDED ACE · Casino Decision Intelligence Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.plot.ly/plotly-2.29.1.min.js"></script>
+
+<style>
+:root {
+  --bg: #090e0c;
+  --surface: #111815;
+  --surface-raised: #18221e;
+  --border: rgba(212, 175, 55, 0.22);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --gold: #d4af37;
+  --gold-glow: rgba(212, 175, 55, 0.35);
+  --gold-soft: rgba(212, 175, 55, 0.12);
+  --green: #10b981;
+  --green-soft: rgba(16, 185, 129, 0.12);
+  --red: #ef4444;
+  --red-soft: rgba(239, 68, 68, 0.12);
+  --blue: #38bdf8;
+  --blue-soft: rgba(56, 189, 248, 0.12);
+  --purple: #c084fc;
+  --purple-soft: rgba(192, 132, 252, 0.12);
+  --text: #f3f4f6;
+  --text-muted: #9ca3af;
+  --radius-sm: 6px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --font-serif: 'Cinzel', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+.platform-header {
+  background: linear-gradient(180deg, #131c18 0%, #0c1310 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 32px 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.brand-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand-symbol {
+  font-size: 32px;
+  color: var(--gold);
+  line-height: 1;
+  filter: drop-shadow(0 0 8px var(--gold-glow));
+}
+.brand-title {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  letter-spacing: 2px;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.brand-subtitle {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.live-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--green);
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  transition: all 0.2s ease;
+}
+.kpi-card:hover {
+  border-color: var(--border);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.kpi-card.highlight-card {
+  border-color: rgba(192, 132, 252, 0.4);
+  background: linear-gradient(135deg, rgba(192, 132, 252, 0.08) 0%, var(--surface) 100%);
+}
+.kpi-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.kpi-value.gold { color: var(--gold); }
+.kpi-value.green { color: var(--green); }
+.kpi-value.blue { color: var(--blue); }
+.kpi-value.purple { color: var(--purple); }
+.kpi-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+.gold-text { color: var(--gold); }
+
+.nav-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 1px;
+}
+.nav-item {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 18px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-item:hover {
+  color: #fff;
+  border-bottom-color: rgba(212, 175, 55, 0.5);
+}
+.nav-item.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  background: linear-gradient(180deg, transparent 0%, rgba(212, 175, 55, 0.08) 100%);
+}
+
+.main-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 32px;
+}
+.section-header {
+  margin-bottom: 24px;
+}
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.section-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 12px;
+}
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+.data-table th {
+  background: var(--surface-raised);
+  color: var(--gold);
+  padding: 12px 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: var(--text);
+}
+.data-table tr:hover td {
+  background: rgba(212, 175, 55, 0.05);
+  cursor: pointer;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-gold { background: var(--gold-soft); color: var(--gold); border: 1px solid rgba(212,175,55,0.4); }
+.badge-green { background: var(--green-soft); color: var(--green); border: 1px solid rgba(16,185,129,0.4); }
+.badge-red { background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.4); }
+.badge-blue { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(56,189,248,0.4); }
+.badge-purple { background: var(--purple-soft); color: var(--purple); border: 1px solid rgba(192,132,252,0.4); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8214 100%);
+  color: #0c1310;
+}
+.btn-primary:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+.btn-secondary:hover {
+  background: var(--gold-soft);
+  color: var(--gold);
+}
+.input-field {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  outline: none;
+}
+.input-field:focus {
+  border-color: var(--gold);
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px);
+}
+.modal-overlay.active { display: flex; }
+.modal-content {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  max-width: 900px;
+  width: 92%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 32px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+}
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+}
+.modal-close:hover { color: #fff; border-color: var(--gold); }
+
+.audit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+.audit-card {
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 18px;
+}
+.audit-card.full-width {
+  grid-column: 1 / -1;
+}
+.audit-q-num {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.audit-q-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.audit-q-body {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.iframe-container {
+  width: 100%;
+  height: calc(100vh - 200px);
+  border: none;
+}
+</style>
+</head>
+<body style="overflow:hidden">
+
+    <header class="platform-header">
+      <div class="header-top">
+        <div class="brand-group">
+          <div class="brand-symbol">♠</div>
+          <div>
+            <h1 class="brand-title">THE GILDED ACE</h1>
+            <div class="brand-subtitle">CASINO DECISION INTELLIGENCE PLATFORM · JAN–JUN 2025</div>
+          </div>
+        </div>
+        <div class="live-status-pill">
+          <span class="status-dot"></span>
+          <span>GROUNDED TELEMETRY · 181 GAMING DAYS</span>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Total house win</div>
+          <div class="kpi-value gold">$23,638,155.10</div>
+          <div class="kpi-sub">Observed hold: <strong>9.5%</strong> (Coin-in: $248.9M)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Machine availability</div>
+          <div class="kpi-value green">99.62%</div>
+          <div class="kpi-sub">5,021.1h offline / 1,321,908h scheduled</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Theoretical house win</div>
+          <div class="kpi-value blue">$23,545,364.48</div>
+          <div class="kpi-sub">Luck residual: <strong class="gold-text">+$92,790.62</strong> (Theo hold: 9.46%)</div>
+        </div>
+        <div class="kpi-card highlight-card">
+          <div class="kpi-label">Budget remaining</div>
+          <div class="kpi-value purple">$100,000</div>
+          <div class="kpi-sub">July intervention budget · <strong>Max 3 action types</strong></div>
+        </div>
+      </div>
+
+      <nav class="nav-bar">
+        <a href="floor_overview.html" class="nav-item active">Floor overview</a>
+<a href="machine_intelligence.html" class="nav-item">Machine intelligence</a>
+<a href="demand_analytics.html" class="nav-item">Demand analytics</a>
+<a href="operations.html" class="nav-item">Operations</a>
+<a href="guest_intelligence.html" class="nav-item">Guest intelligence</a>
+<a href="budget_optimizer.html" class="nav-item">Budget optimizer</a>
+<a href="gemini_copilot.html" class="nav-item">Gemini copilot</a>
+<a href="evidence_explorer.html" class="nav-item">Evidence explorer</a>
+
+      </nav>
+    </header>
+    
+
+<iframe id="content-frame" src="floor_overview.html" class="iframe-container"></iframe>
+
+<script>
+  // Tab routing inside iframe to allow seamless 1-click switching
+  document.querySelectorAll('.nav-item').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelectorAll('.nav-item').forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+      const href = this.getAttribute('href');
+      document.getElementById('content-frame').src = href;
+    });
+  });
+</script>
+</body>
+</html>
