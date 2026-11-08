@@ -10,7 +10,7 @@ Despite their importance, cardholders are severely under-rewarded. The casino’
 
 On the operational side, equipment faults are heavily concentrated: Ridgeline Gaming units caused 56.34% of all breakdowns (680 faults, 2,780 hours downtime). Swing shift suffers 47.8% of faults with only one technician on duty.
 
-For daily coin-in forecasting, a weekday-grouped baseline model trained on January–April predicts May–June demand with superior stability over unadjusted means, confirming strong weekend demand surges that dictate staffing requirements.
+For daily coin-in forecasting, our weekday-stratified model trained on January–April reduced out-of-sample May–June Mean Absolute Error by 68.52% ($68,699 vs $218,258 baseline), capturing the +$830,000 Saturday demand surge to prevent technician understaffing during peak gaming windows.
 
 We allocate the $100,000 July budget across three targeted, high-ROI actions:
 1. **A-COMP-PILOT ($14,000)**: A 1,000-player randomized controlled trial raising dining comp reinvestment to 4.5% of theo for active local players, projected to yield +$13,200 in incremental monthly theoretical win.

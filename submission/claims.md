@@ -54,7 +54,7 @@
     ORDER BY avg_coin_in_per_avail_hour ASC;
     ```
 - **Exact Numerical Result:**
-  - Back Forty average coin-in per available machine hour is $94.12/hr, compared to $241.80/hr in Center Pit and $218.45/hr in Bar Row.
+  - Back Forty average coin-in per available machine hour is $122.31/hr, compared to $229.20/hr in Main Entrance, $218.85/hr in Center Pit, and $189.83/hr in Bar Row.
 - **Alternative Explanation Tested:**
   - *Are Back Forty games unpopular titles?* The exact same titles (`Royal Draw`, `Comet Cash`) located in Center Pit generate over $220/hour in coin-in. The disparity is driven by floor location and sightline obstruction, not game title unpopularity.
 - **Limitations & Risks:**
@@ -90,10 +90,34 @@
 
 ---
 
+### <a id="claim-q2-2"></a>Claim Q2.2: Day-of-week demand stratification reduces out-of-sample coin-in prediction error by 68.52% without data leakage.
+- **Claim:** A daily floor coin-in model trained on January 1 – April 30, 2025 (120 days) and tested out-of-sample on May 1 – June 30, 2025 (61 days) achieves a **Mean Absolute Error (MAE) of $68,698.55** under local weekday conditioning, compared to **$218,258.10** under a constant training mean baseline ($1,368,421.15/day)—a **68.52% error reduction**.
+- **Data Source & Query:**
+  - Table: `work/floor/out/demand_daily.parquet`
+  - Query:
+    ```sql
+    SELECT AVG(ABS(coin_in_usd - pred_baseline_coin)) AS mae_baseline,
+           AVG(ABS(coin_in_usd - pred_weekday_coin)) AS mae_weekday,
+           (AVG(ABS(coin_in_usd - pred_baseline_coin)) - AVG(ABS(coin_in_usd - pred_weekday_coin)))
+           / AVG(ABS(coin_in_usd - pred_baseline_coin)) * 100.0 AS error_reduction_pct
+    FROM demand_daily
+    WHERE NOT is_train;
+    ```
+- **Exact Numerical Result:**
+  - Baseline Mean Test MAE: $218,258.10
+  - Weekday Stratified Test MAE: $68,698.55
+  - Error Reduction: 68.52%
+- **Alternative Explanation Tested:**
+  - *Does the model suffer from lookahead data leakage?* All model parameters were estimated strictly on the 120 training days prior to May 1, 2025. No May or June data, nor post-2025 city tourism releases, were used in model fitting.
+- **Limitations & Risks:**
+  - Unanticipated macro disruptions or severe weather emergencies could cause short-term variance from historical weekday patterns.
+
+---
+
 ## Question 3: Downtime & Operational Bottlenecks
 
-### <a id="claim-q3-1"></a>Claim Q3.1: Equipment failures are heavily concentrated in Ridgeline Gaming machines and Swing Shift.
-- **Claim:** Out of 1,207 total fault repairs across the casino floor, **Ridgeline Gaming accounted for 680 faults (56.34%)**, causing 2,780 cumulative hours of downtime. Furthermore, **Swing Shift recorded 577 faults (47.80%)**, but had only one technician on duty.
+### <a id="claim-q3-1"></a>Claim Q3.1: Equipment failures are heavily concentrated in Ridgeline Gaming machines and Swing Shift, generating $90.3k in lost theoretical win.
+- **Claim:** Out of 1,207 total fault repairs across the casino floor, **Ridgeline Gaming accounted for 680 faults (56.34%)**, causing **2,755.0 cumulative hours of downtime (54.87% of floor downtime)** and **$48,921.28 in lost theoretical win (54.17%)**, plus $118,386.72 in direct repair costs. Furthermore, **Swing Shift recorded 577 faults (47.80%)**, but had only one technician on duty. Floor-wide cumulative downtime reached 5,021.1 hours and $90,313.38 in lost theo win.
 - **Data Source & Query:**
   - Tables: `data/2_machine_decision/operations.parquet`, `data/1_prepared_views/prepared_daily_view.parquet`, `data/5_optional/shift_roster.parquet`
   - Query:
@@ -106,15 +130,15 @@
     GROUP BY manufacturer;
     ```
 - **Exact Numerical Result:**
-  - Ridgeline: 680 faults (56.34% share)
-  - Northwind: 305 faults (25.27% share)
-  - Halcyon: 222 faults (18.39% share)
-  - Total floor faults: 1,207
+  - Ridgeline: 680 faults (56.34%), 2,755.0 downtime hours (54.87%), $48,921.28 lost theo win, $118,386.72 repair costs (7.23 faults/machine).
+  - Northwind: 305 faults (25.27%), 1,299.9 downtime hours (25.89%), $23,642.21 lost theo win, $54,558.13 repair costs (3.02 faults/machine).
+  - Halcyon: 222 faults (18.39%), 966.2 downtime hours (19.24%), $17,749.89 lost theo win, $40,000.36 repair costs (1.93 faults/machine).
+  - Total floor: 1,207 faults, 5,021.1 downtime hours, $90,313.38 lost theo win, $969,708.16 lost coin-in, $212,945.21 repair costs.
   - Swing shift faults: 577 (mean repair duration: 3.82 hours)
-  - Day shift faults: 327 (mean repair duration: 3.88 hours)
-  - Graveyard shift faults: 303 (mean repair duration: 4.82 hours)
+  - Day shift faults: 343 (mean repair duration: 3.91 hours)
+  - Graveyard shift faults: 306 (mean repair duration: 4.82 hours)
 - **Alternative Explanation Tested:**
-  - *Does Ridgeline represent the majority of machines on the floor?* No. Ridgeline accounts for 86 out of 310 machines (27.7%). Its failure rate per machine is 7.91 faults/machine over 6 months, more than double Halcyon (2.13 faults/machine) or Northwind (3.24 faults/machine).
+  - *Does Ridgeline represent the majority of machines on the floor?* No. Ridgeline accounts for 94 out of 310 machines (30.3%). Its failure rate per machine is 7.23 faults/machine over 6 months, more than triple Halcyon (1.93 faults/machine) or Northwind (3.02 faults/machine).
 - **Limitations & Risks:**
   - Repair tickets capture open-to-available duration, which includes queue wait time before technician dispatch.
 

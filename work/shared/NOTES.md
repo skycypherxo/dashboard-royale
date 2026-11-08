@@ -58,3 +58,35 @@
   - Built `dashboard/actions.html` (interactive budget simulator, 9-point action profiles, evidence links).
   - Built `dashboard/index.html` (master executive portal integrating floor, guests, and actions).
 
+---
+
+## 2026-11-08 — Floor & ML Model Deliverables Finalized (Akshaya)
+- **Completion of Questions 1, 2, 3 & ML Model:**
+  - **Question 1 (Machine Performance):**
+    - Complete evaluation of all 310 active units across exposure, coin-in, theo win, and luck residual.
+    - Debunked management's naive "Bottom 10" house-win list:
+      - Unit `M-1158` earned only $15,796.25 in house win but generated **$519,610.00 in coin-in** and **$51,961.00 in theoretical win**, crippled solely by an extreme negative luck residual of **-$36,164.75** (observed hold 3.04% vs 10.0% theo hold).
+      - Unit `M-5076` was only active for 49 days (1,170 hours) after mid-May installation.
+      - Unit `M-1118` was active for only 55 days (1,313.5 hours) before removal on Feb 24.
+      - 8 of the 10 lowest-earning machines reside in **Back Forty**, where average coin-in per available hour is only **$122.31/hr** (vs $229.20/hr in Main Entrance and $218.85/hr in Center Pit), demonstrating location traffic starvation rather than bad game math.
+  - **Question 2 (Demand Analysis):**
+    - Proved that property-wide monthly coin-in remained highly stable between January and June ($39.6M to $43.6M/month).
+    - Demonstrated massive weekly demand surges: Saturdays average **$1,842,510** in coin-in vs Tuesdays at **$1,012,314** (an $830,000 / +82.0% swing).
+    - Regression analysis shows active events provide a transient +$138.4k/day lift ($p < 0.01$), whereas weather and monthly city visitation have negligible explanatory power once day-of-week and events are controlled for.
+  - **Question 3 (Downtime Analysis):**
+    - Floor-wide cumulative machine downtime reached **5,021.1 hours**, causing **$90,313.38 in lost theoretical win** and **$969,708.16 in lost coin-in**, plus **$212,945.21 in direct repair costs**.
+    - Downtime is overwhelmingly concentrated in **Ridgeline Gaming**: 680 of 1,207 faults (56.34% of faults), 2,755.0 downtime hours (54.87%), and $48,921.28 in lost theo win (54.17%), with 7.2 faults/machine (double the rate of competitors).
+    - Swing shift suffers 577 faults (47.8% of total) with 2,204.6 hours of downtime, severely bottlenecked by having only one technician on duty.
+  - **Required ML Model:**
+    - Trained strictly on Jan 1 – Apr 30, 2025 (120 days) and tested out-of-sample on May 1 – Jun 30, 2025 (61 days). Zero data leakage.
+    - Constant Training Mean Baseline ($1,368,421.15/day) Test MAE: **$218,258.10**.
+    - Day-of-Week Stratified Model Test MAE: **$68,698.55**.
+    - Achieved an exact **68.52% reduction in prediction error**.
+    - Model provides direct operational value for July: aligns technician and floor attendant rosters with the +$830k Saturday surge to prevent downtime bottlenecks.
+- **Deliverables Published:**
+  - Published `work/floor/out/machine_scorecard.parquet` (310 machine records with exposure, rates per available hour, ranks, and recommendations).
+  - Published `work/floor/out/demand_daily.parquet` (181 daily property records with train/test splits, predictions, and errors).
+  - Published `work/floor/out/model_card.md` (complete ML specification, leakage controls, residual diagnostics, and staffing impact).
+  - Built `dashboard/floor.html` (fully responsive, standalone interactive dashboard with 3-period filtering, zone-to-bank drill-down, SVG forecast charts, downtime diagnostics, and searchable/sortable scorecard).
+
+

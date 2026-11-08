@@ -12,7 +12,7 @@ DATA = ROOT / "data"
 def main():
     manifest = json.loads((DATA / "manifest.json").read_text())
     listed = {entry["path"] for entry in manifest["files"]}
-    actual = {str(path.relative_to(DATA)) for path in DATA.rglob("*")
+    actual = {path.relative_to(DATA).as_posix() for path in DATA.rglob("*")
               if path.suffix in {".gz", ".parquet"}}
     assert listed == actual, "Manifest and data file list differ"
     con = duckdb.connect()

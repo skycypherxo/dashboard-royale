@@ -37,11 +37,16 @@ All core analytical decisions, hypothesis formulations, accounting verifications
 - **Human Oversight:** Output values (e.g., Top 1% generating 22.85% of coin-in; Locals generating 58.60% of coin-in) were cross-validated directly against SQL aggregations on raw tables.
 
 ### C. Interactive Dashboard Development
-- **Application:** Creating standalone, zero-dependency HTML/CSS/JavaScript interactive dashboards (`dashboard/guests.html`, `dashboard/actions.html`, `dashboard/index.html`).
+- **Application:** Creating standalone, zero-dependency HTML/CSS/JavaScript interactive dashboards (`dashboard/floor.html`, `dashboard/guests.html`, `dashboard/actions.html`, `dashboard/index.html`).
 - **AI Role:** Accelerated front-end scaffolding, responsive CSS styling matching the casino color palette, interactive DOM manipulation, and dynamic SVG chart rendering (Lorenz curves, bar charts, Gantt schedules).
 - **Human Oversight:** All data inputs were precomputed deterministically and embedded as static JSON objects; no generative AI runs client-side in the browser. Interactive filters and theme toggles were manually tested for accessibility, responsiveness, and zero console errors.
 
-### D. Documentation & Appendix Assembly
+### D. Time-Series Forecasting & Machine Learning Modeling (Akshaya)
+- **Application:** Scripting the out-of-sample holdout split (Jan–Apr training vs May–Jun testing), computing Mean Absolute Error (MAE) benchmarks, and generating `model_card.md`.
+- **AI Role:** Assisted in drafting baseline mean and weekday-stratified time-series evaluation routines in DuckDB.
+- **Human Oversight:** Ensured strict isolation between training and holdout windows to eliminate data leakage; verified that no post-2025 external variables or test set values leaked into training parameters. Test MAEs ($68,698.55 vs $218,258.10) were deterministically calculated.
+
+### E. Documentation & Appendix Assembly
 - **Application:** Drafting the 400-word submission writeup (`submission/writeup.md`), claims appendix (`submission/claims.md`), and action shortlist (`work/guests/out/action_shortlist.md`).
 - **AI Role:** Assisted in synthesizing findings into concise prose, ensuring strict adherence to the 400-word limit and formatting claims in the required five-part structure (Claim → Data Source / Query → Result → Alternative Explanation → Limitations).
 - **Human Oversight:** Every claim and number was audited against the data contract. Word counts were verified programmatically (370 words).
