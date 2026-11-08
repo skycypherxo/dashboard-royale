@@ -1,7 +1,7 @@
 {
   "daily_series": [
     {
-      "date": "2025-01-01",
+      "date": "2025-01-01 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1033753.05,
       "house_win": 96348.7,
@@ -13,7 +13,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-02",
+      "date": "2025-01-02 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1232932.35,
       "house_win": 115486.45,
@@ -25,7 +25,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-03",
+      "date": "2025-01-03 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1574061.3,
       "house_win": 155333.4,
@@ -37,7 +37,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-04",
+      "date": "2025-01-04 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1789880.5,
       "house_win": 173431.0,
@@ -49,7 +49,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-05",
+      "date": "2025-01-05 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1395755.05,
       "house_win": 121580.15,
@@ -61,7 +61,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-06",
+      "date": "2025-01-06 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1183591.1,
       "house_win": 110786.25,
@@ -73,7 +73,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-07",
+      "date": "2025-01-07 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1134379.05,
       "house_win": 105967.0,
@@ -85,7 +85,7 @@
       "event_name": "CES"
     },
     {
-      "date": "2025-01-08",
+      "date": "2025-01-08 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1189128.2,
       "house_win": 112999.4,
@@ -97,7 +97,7 @@
       "event_name": "CES"
     },
     {
-      "date": "2025-01-09",
+      "date": "2025-01-09 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1276893.65,
       "house_win": 114703.2,
@@ -109,7 +109,7 @@
       "event_name": "CES"
     },
     {
-      "date": "2025-01-10",
+      "date": "2025-01-10 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1566483.5,
       "house_win": 170747.65,
@@ -121,7 +121,7 @@
       "event_name": "CES"
     },
     {
-      "date": "2025-01-11",
+      "date": "2025-01-11 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1740853.95,
       "house_win": 181824.9,
@@ -133,7 +133,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-12",
+      "date": "2025-01-12 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1389301.8,
       "house_win": 121305.3,
@@ -145,7 +145,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-13",
+      "date": "2025-01-13 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1221742.15,
       "house_win": 82606.15,
@@ -157,7 +157,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-14",
+      "date": "2025-01-14 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1151741.3,
       "house_win": 107939.85,
@@ -169,7 +169,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-15",
+      "date": "2025-01-15 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1123858.7,
       "house_win": 105847.05,
@@ -181,7 +181,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-16",
+      "date": "2025-01-16 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1335299.6,
       "house_win": 108480.4,
@@ -193,7 +193,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-17",
+      "date": "2025-01-17 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1583315.6,
       "house_win": 166309.9,
@@ -205,7 +205,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-18",
+      "date": "2025-01-18 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1794904.85,
       "house_win": 170769.25,
@@ -217,7 +217,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-19",
+      "date": "2025-01-19 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1435912.5,
       "house_win": 152215.35,
@@ -229,7 +229,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-20",
+      "date": "2025-01-20 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1236082.25,
       "house_win": 121801.45,
@@ -241,7 +241,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-21",
+      "date": "2025-01-21 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1099481.6,
       "house_win": 109137.95,
@@ -253,7 +253,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-22",
+      "date": "2025-01-22 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1149497.85,
       "house_win": 104211.6,
@@ -265,7 +265,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-23",
+      "date": "2025-01-23 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1241716.55,
       "house_win": 112671.35,
@@ -277,7 +277,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-24",
+      "date": "2025-01-24 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1598025.6,
       "house_win": 137234.9,
@@ -289,7 +289,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-25",
+      "date": "2025-01-25 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1622968.55,
       "house_win": 128244.8,
@@ -301,7 +301,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-26",
+      "date": "2025-01-26 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1348788.6,
       "house_win": 149693.1,
@@ -313,7 +313,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-27",
+      "date": "2025-01-27 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1177038.55,
       "house_win": 121911.85,
@@ -325,7 +325,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-28",
+      "date": "2025-01-28 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1066350.2,
       "house_win": 99595.0,
@@ -337,7 +337,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-29",
+      "date": "2025-01-29 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1148213.5,
       "house_win": 104357.2,
@@ -349,7 +349,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-30",
+      "date": "2025-01-30 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1282336.45,
       "house_win": 119410.4,
@@ -361,7 +361,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-01-31",
+      "date": "2025-01-31 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1552630.25,
       "house_win": 153242.8,
@@ -373,7 +373,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-01",
+      "date": "2025-02-01 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1740756.45,
       "house_win": 152813.0,
@@ -385,7 +385,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-02",
+      "date": "2025-02-02 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1408159.2,
       "house_win": 122465.55,
@@ -397,7 +397,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-03",
+      "date": "2025-02-03 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1177335.8,
       "house_win": 127300.45,
@@ -409,7 +409,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-04",
+      "date": "2025-02-04 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1100054.0,
       "house_win": 104883.3,
@@ -421,7 +421,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-05",
+      "date": "2025-02-05 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1103169.05,
       "house_win": 110555.75,
@@ -433,7 +433,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-06",
+      "date": "2025-02-06 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1306199.1,
       "house_win": 142085.05,
@@ -445,7 +445,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-07",
+      "date": "2025-02-07 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1906781.2,
       "house_win": 184451.15,
@@ -457,7 +457,7 @@
       "event_name": "Super Bowl LIX weekend"
     },
     {
-      "date": "2025-02-08",
+      "date": "2025-02-08 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 2170909.05,
       "house_win": 221204.65,
@@ -469,7 +469,7 @@
       "event_name": "Super Bowl LIX weekend"
     },
     {
-      "date": "2025-02-09",
+      "date": "2025-02-09 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1753638.8,
       "house_win": 171295.15,
@@ -481,7 +481,7 @@
       "event_name": "Super Bowl LIX weekend"
     },
     {
-      "date": "2025-02-10",
+      "date": "2025-02-10 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1183831.4,
       "house_win": 114371.9,
@@ -493,7 +493,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-11",
+      "date": "2025-02-11 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1077553.2,
       "house_win": 112873.8,
@@ -505,7 +505,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-12",
+      "date": "2025-02-12 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1135605.2,
       "house_win": 98422.25,
@@ -517,7 +517,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-13",
+      "date": "2025-02-13 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1111487.0,
       "house_win": 105500.15,
@@ -529,7 +529,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-14",
+      "date": "2025-02-14 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1654260.05,
       "house_win": 163447.15,
@@ -541,7 +541,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-15",
+      "date": "2025-02-15 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1776005.05,
       "house_win": 180449.75,
@@ -553,7 +553,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-16",
+      "date": "2025-02-16 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1349578.1,
       "house_win": 143094.1,
@@ -565,7 +565,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-17",
+      "date": "2025-02-17 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1191885.0,
       "house_win": 135444.6,
@@ -577,7 +577,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-18",
+      "date": "2025-02-18 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1095368.05,
       "house_win": 87897.1,
@@ -589,7 +589,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-19",
+      "date": "2025-02-19 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1139665.15,
       "house_win": 111692.9,
@@ -601,7 +601,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-20",
+      "date": "2025-02-20 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1315670.75,
       "house_win": 118773.6,
@@ -613,7 +613,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-21",
+      "date": "2025-02-21 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1862730.55,
       "house_win": 182919.15,
@@ -625,7 +625,7 @@
       "event_name": "Gilded Ace Winter Slot Tournament"
     },
     {
-      "date": "2025-02-22",
+      "date": "2025-02-22 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 2039692.0,
       "house_win": 194419.3,
@@ -637,7 +637,7 @@
       "event_name": "Gilded Ace Winter Slot Tournament"
     },
     {
-      "date": "2025-02-23",
+      "date": "2025-02-23 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1681518.6,
       "house_win": 169670.95,
@@ -649,7 +649,7 @@
       "event_name": "Gilded Ace Winter Slot Tournament"
     },
     {
-      "date": "2025-02-24",
+      "date": "2025-02-24 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1191937.1,
       "house_win": 119658.35,
@@ -661,7 +661,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-25",
+      "date": "2025-02-25 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1080929.8,
       "house_win": 108719.05,
@@ -673,7 +673,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-26",
+      "date": "2025-02-26 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1167598.2,
       "house_win": 129721.05,
@@ -685,7 +685,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-27",
+      "date": "2025-02-27 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1261825.75,
       "house_win": 122032.8,
@@ -697,7 +697,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-02-28",
+      "date": "2025-02-28 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1593228.35,
       "house_win": 153316.3,
@@ -709,7 +709,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-01",
+      "date": "2025-03-01 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1738048.3,
       "house_win": 164783.55,
@@ -721,7 +721,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-02",
+      "date": "2025-03-02 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1396682.9,
       "house_win": 122104.7,
@@ -733,7 +733,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-03",
+      "date": "2025-03-03 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1192509.6,
       "house_win": 108395.65,
@@ -745,7 +745,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-04",
+      "date": "2025-03-04 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1088090.9,
       "house_win": 108505.0,
@@ -757,7 +757,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-05",
+      "date": "2025-03-05 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1115719.15,
       "house_win": 102837.3,
@@ -769,7 +769,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-06",
+      "date": "2025-03-06 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1325910.75,
       "house_win": 104735.3,
@@ -781,7 +781,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-07",
+      "date": "2025-03-07 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1646376.0,
       "house_win": 159524.8,
@@ -793,7 +793,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-08",
+      "date": "2025-03-08 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1805102.85,
       "house_win": 195326.65,
@@ -805,7 +805,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-09",
+      "date": "2025-03-09 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1438699.1,
       "house_win": 133541.65,
@@ -817,7 +817,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-10",
+      "date": "2025-03-10 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1213382.75,
       "house_win": 137931.0,
@@ -829,7 +829,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-11",
+      "date": "2025-03-11 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1144756.95,
       "house_win": 115466.7,
@@ -841,7 +841,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-12",
+      "date": "2025-03-12 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1145213.3,
       "house_win": 102938.05,
@@ -853,7 +853,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-13",
+      "date": "2025-03-13 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1243200.45,
       "house_win": 113712.1,
@@ -865,7 +865,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-14",
+      "date": "2025-03-14 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1563341.2,
       "house_win": 144073.45,
@@ -877,7 +877,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-15",
+      "date": "2025-03-15 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1744572.6,
       "house_win": 161366.9,
@@ -889,7 +889,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-16",
+      "date": "2025-03-16 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1410704.5,
       "house_win": 142871.95,
@@ -901,7 +901,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-17",
+      "date": "2025-03-17 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1146211.3,
       "house_win": 116271.95,
@@ -913,7 +913,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-18",
+      "date": "2025-03-18 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1121164.4,
       "house_win": 94316.8,
@@ -925,7 +925,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-19",
+      "date": "2025-03-19 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1141554.55,
       "house_win": 91173.95,
@@ -937,7 +937,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-20",
+      "date": "2025-03-20 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1446508.0,
       "house_win": 122916.05,
@@ -949,7 +949,7 @@
       "event_name": "College basketball tournament opening rounds"
     },
     {
-      "date": "2025-03-21",
+      "date": "2025-03-21 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1857923.7,
       "house_win": 183074.8,
@@ -961,7 +961,7 @@
       "event_name": "College basketball tournament opening rounds"
     },
     {
-      "date": "2025-03-22",
+      "date": "2025-03-22 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 2134266.3,
       "house_win": 204560.2,
@@ -973,7 +973,7 @@
       "event_name": "College basketball tournament opening rounds"
     },
     {
-      "date": "2025-03-23",
+      "date": "2025-03-23 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1725010.05,
       "house_win": 166806.0,
@@ -985,7 +985,7 @@
       "event_name": "College basketball tournament opening rounds"
     },
     {
-      "date": "2025-03-24",
+      "date": "2025-03-24 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1305467.4,
       "house_win": 118587.85,
@@ -997,7 +997,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-25",
+      "date": "2025-03-25 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1104141.15,
       "house_win": 119174.35,
@@ -1009,7 +1009,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-26",
+      "date": "2025-03-26 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1217599.75,
       "house_win": 107370.65,
@@ -1021,7 +1021,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-27",
+      "date": "2025-03-27 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1340114.85,
       "house_win": 142979.5,
@@ -1033,7 +1033,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-28",
+      "date": "2025-03-28 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1607999.15,
       "house_win": 130585.0,
@@ -1045,7 +1045,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-29",
+      "date": "2025-03-29 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1697004.85,
       "house_win": 161369.3,
@@ -1057,7 +1057,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-30",
+      "date": "2025-03-30 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1389364.1,
       "house_win": 145854.2,
@@ -1069,7 +1069,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-03-31",
+      "date": "2025-03-31 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1200784.6,
       "house_win": 85058.9,
@@ -1081,7 +1081,7 @@
       "event_name": "CinemaCon"
     },
     {
-      "date": "2025-04-01",
+      "date": "2025-04-01 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1160509.75,
       "house_win": 118630.6,
@@ -1093,7 +1093,7 @@
       "event_name": "CinemaCon"
     },
     {
-      "date": "2025-04-02",
+      "date": "2025-04-02 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1136139.3,
       "house_win": 107585.35,
@@ -1105,7 +1105,7 @@
       "event_name": "CinemaCon"
     },
     {
-      "date": "2025-04-03",
+      "date": "2025-04-03 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1320097.35,
       "house_win": 115813.85,
@@ -1117,7 +1117,7 @@
       "event_name": "CinemaCon"
     },
     {
-      "date": "2025-04-04",
+      "date": "2025-04-04 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1587631.35,
       "house_win": 140189.95,
@@ -1129,7 +1129,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-05",
+      "date": "2025-04-05 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1733053.7,
       "house_win": 169474.35,
@@ -1141,7 +1141,7 @@
       "event_name": "NAB Show"
     },
     {
-      "date": "2025-04-06",
+      "date": "2025-04-06 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1433429.8,
       "house_win": 151868.65,
@@ -1153,7 +1153,7 @@
       "event_name": "NAB Show"
     },
     {
-      "date": "2025-04-07",
+      "date": "2025-04-07 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1268814.45,
       "house_win": 95054.7,
@@ -1165,7 +1165,7 @@
       "event_name": "NAB Show"
     },
     {
-      "date": "2025-04-08",
+      "date": "2025-04-08 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1172244.85,
       "house_win": 109933.85,
@@ -1177,7 +1177,7 @@
       "event_name": "NAB Show"
     },
     {
-      "date": "2025-04-09",
+      "date": "2025-04-09 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1321453.2,
       "house_win": 121104.55,
@@ -1189,7 +1189,7 @@
       "event_name": "NAB Show"
     },
     {
-      "date": "2025-04-10",
+      "date": "2025-04-10 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1325022.75,
       "house_win": 121488.6,
@@ -1201,7 +1201,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-11",
+      "date": "2025-04-11 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1627189.5,
       "house_win": 151879.15,
@@ -1213,7 +1213,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-12",
+      "date": "2025-04-12 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1783104.6,
       "house_win": 153677.75,
@@ -1225,7 +1225,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-13",
+      "date": "2025-04-13 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1406837.55,
       "house_win": 140962.1,
@@ -1237,7 +1237,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-14",
+      "date": "2025-04-14 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1275084.55,
       "house_win": 118332.25,
@@ -1249,7 +1249,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-15",
+      "date": "2025-04-15 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1177339.0,
       "house_win": 113011.85,
@@ -1261,7 +1261,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-16",
+      "date": "2025-04-16 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1141682.5,
       "house_win": 113496.5,
@@ -1273,7 +1273,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-17",
+      "date": "2025-04-17 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1298764.95,
       "house_win": 136788.05,
@@ -1285,7 +1285,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-18",
+      "date": "2025-04-18 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1670039.5,
       "house_win": 157915.2,
@@ -1297,7 +1297,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-19",
+      "date": "2025-04-19 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1849828.5,
       "house_win": 156724.3,
@@ -1309,7 +1309,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-20",
+      "date": "2025-04-20 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1473519.75,
       "house_win": 152374.6,
@@ -1321,7 +1321,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-21",
+      "date": "2025-04-21 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1231227.2,
       "house_win": 118511.2,
@@ -1333,7 +1333,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-22",
+      "date": "2025-04-22 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1028273.7,
       "house_win": 100144.4,
@@ -1345,7 +1345,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-23",
+      "date": "2025-04-23 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1148859.25,
       "house_win": 96137.9,
@@ -1357,7 +1357,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-24",
+      "date": "2025-04-24 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1282687.4,
       "house_win": 114373.65,
@@ -1369,7 +1369,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-25",
+      "date": "2025-04-25 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1695515.65,
       "house_win": 147583.0,
@@ -1381,7 +1381,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-26",
+      "date": "2025-04-26 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1789166.05,
       "house_win": 173238.5,
@@ -1393,7 +1393,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-27",
+      "date": "2025-04-27 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1483044.0,
       "house_win": 143314.5,
@@ -1405,7 +1405,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-28",
+      "date": "2025-04-28 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1209426.25,
       "house_win": 112183.2,
@@ -1417,7 +1417,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-29",
+      "date": "2025-04-29 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1117635.25,
       "house_win": 106103.3,
@@ -1429,7 +1429,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-04-30",
+      "date": "2025-04-30 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1140948.9,
       "house_win": 106640.8,
@@ -1441,7 +1441,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-01",
+      "date": "2025-05-01 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1291815.85,
       "house_win": 137417.65,
@@ -1453,7 +1453,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-02",
+      "date": "2025-05-02 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1631269.55,
       "house_win": 172780.6,
@@ -1465,7 +1465,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-03",
+      "date": "2025-05-03 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1743901.5,
       "house_win": 172452.6,
@@ -1477,7 +1477,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-04",
+      "date": "2025-05-04 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1343811.5,
       "house_win": 140639.55,
@@ -1489,7 +1489,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-05",
+      "date": "2025-05-05 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1070007.9,
       "house_win": 101605.9,
@@ -1501,7 +1501,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-06",
+      "date": "2025-05-06 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 991699.2,
       "house_win": 92217.95,
@@ -1513,7 +1513,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-07",
+      "date": "2025-05-07 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1106454.35,
       "house_win": 109539.55,
@@ -1525,7 +1525,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-08",
+      "date": "2025-05-08 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1203856.6,
       "house_win": 106812.2,
@@ -1537,7 +1537,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-09",
+      "date": "2025-05-09 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1567783.0,
       "house_win": 147112.45,
@@ -1549,7 +1549,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-10",
+      "date": "2025-05-10 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1755586.95,
       "house_win": 171658.5,
@@ -1561,7 +1561,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-11",
+      "date": "2025-05-11 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1431857.75,
       "house_win": 126302.0,
@@ -1573,7 +1573,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-12",
+      "date": "2025-05-12 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1221449.3,
       "house_win": 120493.5,
@@ -1585,7 +1585,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-13",
+      "date": "2025-05-13 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1069979.25,
       "house_win": 112680.7,
@@ -1597,7 +1597,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-14",
+      "date": "2025-05-14 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1140824.55,
       "house_win": 107229.25,
@@ -1609,7 +1609,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-15",
+      "date": "2025-05-15 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1290797.8,
       "house_win": 111263.35,
@@ -1621,7 +1621,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-16",
+      "date": "2025-05-16 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1744575.8,
       "house_win": 162947.6,
@@ -1633,7 +1633,7 @@
       "event_name": "EDC Las Vegas festival weekend"
     },
     {
-      "date": "2025-05-17",
+      "date": "2025-05-17 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 2073091.55,
       "house_win": 184663.8,
@@ -1645,7 +1645,7 @@
       "event_name": "EDC Las Vegas festival weekend"
     },
     {
-      "date": "2025-05-18",
+      "date": "2025-05-18 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1661795.4,
       "house_win": 156035.5,
@@ -1657,7 +1657,7 @@
       "event_name": "EDC Las Vegas festival weekend"
     },
     {
-      "date": "2025-05-19",
+      "date": "2025-05-19 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1228961.75,
       "house_win": 108483.45,
@@ -1669,7 +1669,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-20",
+      "date": "2025-05-20 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1116186.25,
       "house_win": 89012.3,
@@ -1681,7 +1681,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-21",
+      "date": "2025-05-21 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1183952.15,
       "house_win": 100848.0,
@@ -1693,7 +1693,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-22",
+      "date": "2025-05-22 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1305669.45,
       "house_win": 122384.5,
@@ -1705,7 +1705,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-23",
+      "date": "2025-05-23 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1582260.85,
       "house_win": 144396.6,
@@ -1717,7 +1717,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-24",
+      "date": "2025-05-24 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1808468.0,
       "house_win": 165331.6,
@@ -1729,7 +1729,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-25",
+      "date": "2025-05-25 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1387073.1,
       "house_win": 133243.85,
@@ -1741,7 +1741,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-26",
+      "date": "2025-05-26 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1196838.2,
       "house_win": 113922.8,
@@ -1753,7 +1753,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-27",
+      "date": "2025-05-27 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1108861.95,
       "house_win": 93601.6,
@@ -1765,7 +1765,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-28",
+      "date": "2025-05-28 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1176974.6,
       "house_win": 99623.05,
@@ -1777,7 +1777,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-29",
+      "date": "2025-05-29 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1279443.2,
       "house_win": 122672.5,
@@ -1789,7 +1789,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-30",
+      "date": "2025-05-30 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1560965.95,
       "house_win": 140540.45,
@@ -1801,7 +1801,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-05-31",
+      "date": "2025-05-31 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1708170.05,
       "house_win": 155622.5,
@@ -1813,7 +1813,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-01",
+      "date": "2025-06-01 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1394639.55,
       "house_win": 130261.2,
@@ -1825,7 +1825,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-02",
+      "date": "2025-06-02 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1187695.7,
       "house_win": 115327.65,
@@ -1837,7 +1837,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-03",
+      "date": "2025-06-03 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1064891.45,
       "house_win": 97798.05,
@@ -1849,7 +1849,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-04",
+      "date": "2025-06-04 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1111422.4,
       "house_win": 109043.65,
@@ -1861,7 +1861,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-05",
+      "date": "2025-06-05 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1227154.6,
       "house_win": 116573.65,
@@ -1873,7 +1873,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-06",
+      "date": "2025-06-06 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1571962.25,
       "house_win": 151746.7,
@@ -1885,7 +1885,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-07",
+      "date": "2025-06-07 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1722647.25,
       "house_win": 164195.1,
@@ -1897,7 +1897,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-08",
+      "date": "2025-06-08 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1300608.3,
       "house_win": 96367.8,
@@ -1909,7 +1909,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-09",
+      "date": "2025-06-09 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1240886.05,
       "house_win": 108232.45,
@@ -1921,7 +1921,7 @@
       "event_name": "Gilded Ace Locals Appreciation Week"
     },
     {
-      "date": "2025-06-10",
+      "date": "2025-06-10 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1187963.45,
       "house_win": 127976.3,
@@ -1933,7 +1933,7 @@
       "event_name": "Gilded Ace Locals Appreciation Week"
     },
     {
-      "date": "2025-06-11",
+      "date": "2025-06-11 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1244896.95,
       "house_win": 119733.05,
@@ -1945,7 +1945,7 @@
       "event_name": "Gilded Ace Locals Appreciation Week"
     },
     {
-      "date": "2025-06-12",
+      "date": "2025-06-12 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1346270.6,
       "house_win": 108663.9,
@@ -1957,7 +1957,7 @@
       "event_name": "Gilded Ace Locals Appreciation Week"
     },
     {
-      "date": "2025-06-13",
+      "date": "2025-06-13 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1586472.9,
       "house_win": 159807.55,
@@ -1969,7 +1969,7 @@
       "event_name": "Gilded Ace Locals Appreciation Week"
     },
     {
-      "date": "2025-06-14",
+      "date": "2025-06-14 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1799689.3,
       "house_win": 165959.5,
@@ -1981,7 +1981,7 @@
       "event_name": "Gilded Ace Locals Appreciation Week"
     },
     {
-      "date": "2025-06-15",
+      "date": "2025-06-15 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1414084.85,
       "house_win": 146868.55,
@@ -1993,7 +1993,7 @@
       "event_name": "Gilded Ace Locals Appreciation Week"
     },
     {
-      "date": "2025-06-16",
+      "date": "2025-06-16 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1135901.05,
       "house_win": 103962.25,
@@ -2005,7 +2005,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-17",
+      "date": "2025-06-17 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1004140.85,
       "house_win": 99884.6,
@@ -2017,7 +2017,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-18",
+      "date": "2025-06-18 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1076348.25,
       "house_win": 105045.6,
@@ -2029,7 +2029,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-19",
+      "date": "2025-06-19 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1183952.0,
       "house_win": 128514.6,
@@ -2041,7 +2041,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-20",
+      "date": "2025-06-20 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1599667.0,
       "house_win": 170724.5,
@@ -2053,7 +2053,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-21",
+      "date": "2025-06-21 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1729846.7,
       "house_win": 166780.8,
@@ -2065,7 +2065,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-22",
+      "date": "2025-06-22 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1375155.3,
       "house_win": 125227.15,
@@ -2077,7 +2077,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-23",
+      "date": "2025-06-23 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1162013.95,
       "house_win": 104540.9,
@@ -2089,7 +2089,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-24",
+      "date": "2025-06-24 00:00:00",
       "local_weekday": "Tue",
       "coin_in": 1055434.8,
       "house_win": 102998.15,
@@ -2101,7 +2101,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-25",
+      "date": "2025-06-25 00:00:00",
       "local_weekday": "Wed",
       "coin_in": 1105788.65,
       "house_win": 124045.85,
@@ -2113,7 +2113,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-26",
+      "date": "2025-06-26 00:00:00",
       "local_weekday": "Thu",
       "coin_in": 1276182.15,
       "house_win": 134748.3,
@@ -2125,7 +2125,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-27",
+      "date": "2025-06-27 00:00:00",
       "local_weekday": "Fri",
       "coin_in": 1549921.4,
       "house_win": 145192.75,
@@ -2137,7 +2137,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-28",
+      "date": "2025-06-28 00:00:00",
       "local_weekday": "Sat",
       "coin_in": 1601715.0,
       "house_win": 145991.2,
@@ -2149,7 +2149,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-29",
+      "date": "2025-06-29 00:00:00",
       "local_weekday": "Sun",
       "coin_in": 1328909.25,
       "house_win": 119453.15,
@@ -2161,7 +2161,7 @@
       "event_name": ""
     },
     {
-      "date": "2025-06-30",
+      "date": "2025-06-30 00:00:00",
       "local_weekday": "Mon",
       "coin_in": 1144287.9,
       "house_win": 120531.4,

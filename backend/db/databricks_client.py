@@ -7,8 +7,15 @@ import os
 from typing import Dict, List, Any, Optional
 from pathlib import Path
 import pandas as pd
+import duckdb
 
 ROOT = Path(__file__).resolve().parents[2]
+
+def safe_read_parquet(path):
+    try:
+        return duckdb.read_parquet(str(path)).df()
+    except Exception:
+        return pd.read_parquet(path)
 
 class DatabricksClient:
     def __init__(self):
@@ -42,16 +49,16 @@ class DatabricksClient:
         # Local Delta Lake / Parquet execution
         query_lower = query.lower()
         if "machine_scorecard" in query_lower or "machines" in query_lower:
-            df = pd.read_parquet(ROOT / "work/floor/out/machine_scorecard.parquet")
+            df = safe_read_parquet(ROOT / "work/floor/out/machine_scorecard.parquet")
             return df.head(50).to_dict(orient="records")
         elif "demand_daily" in query_lower:
-            df = pd.read_parquet(ROOT / "work/floor/out/demand_daily.parquet")
+            df = safe_read_parquet(ROOT / "work/floor/out/demand_daily.parquet")
             return df.head(60).to_dict(orient="records")
         elif "player_month" in query_lower:
-            df = pd.read_parquet(ROOT / "work/guests/out/player_month.parquet")
+            df = safe_read_parquet(ROOT / "work/guests/out/player_month.parquet")
             return df.to_dict(orient="records")
         else:
-            df = pd.read_parquet(ROOT / "data/1_prepared_views/property_day.parquet")
+            df = safe_read_parquet(ROOT / "data/1_prepared_views/property_day.parquet")
             return df.head(30).to_dict(orient="records")
 
     def get_cluster_status(self) -> Dict[str, Any]:

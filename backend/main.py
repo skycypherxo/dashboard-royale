@@ -70,8 +70,18 @@ def get_metrics_summary(period: str = Query("all", description="all, last_3m, or
 
 @app.get("/api/floor/zones")
 def get_zone_metrics(period: str = Query("all", description="all, last_3m, or june_only")):
-    """Dynamically calculates zone metrics, occupancy, and win velocity."""
+    """Dynamically calculates zone metrics, occupancy, and win velocity with bank drill-downs."""
     return engine.get_zone_breakdown(period=period)
+
+@app.get("/api/operations/summary")
+def get_operations_metrics(period: str = Query("all", description="all, last_3m, or june_only")):
+    """Dynamically computes operational fault and downtime metrics by manufacturer and shift."""
+    return engine.get_operations_breakdown(period=period)
+
+@app.get("/api/demand/summary")
+def get_demand_metrics(period: str = Query("all", description="all, last_3m, or june_only")):
+    """Dynamically computes daily coin-in demand metrics, out-of-sample ML forecasts, and weekday profiles."""
+    return engine.get_demand_breakdown(period=period)
 
 @app.get("/api/machines/{machine_id}/audit")
 def get_machine_audit(machine_id: str):

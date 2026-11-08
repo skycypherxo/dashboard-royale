@@ -5,14 +5,21 @@ import json
 from pathlib import Path
 import numpy as np
 import pandas as pd
+import duckdb
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "dashboard" / "data"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
+def safe_read_parquet(path):
+    try:
+        return duckdb.read_parquet(str(path)).df()
+    except Exception:
+        return pd.read_parquet(path)
+
 # 1. METRICS SUMMARY
-prop_day = pd.read_parquet(ROOT / "data/1_prepared_views/property_day.parquet")
-m_day = pd.read_parquet(ROOT / "data/2_machine_decision/machine_day.parquet")
+prop_day = safe_read_parquet(ROOT / "data/1_prepared_views/property_day.parquet")
+m_day = safe_read_parquet(ROOT / "data/2_machine_decision/machine_day.parquet")
 active_m = m_day[m_day['location_id'].notnull()]
 
 sched_hours = float(active_m['scheduled_seconds'].sum() / 3600.0)
@@ -55,7 +62,7 @@ with open(DATA_DIR / "metrics_summary.json", "w", encoding="utf-8") as f:
     json.dump(metrics_summary, f, indent=2)
 
 # 2. ZONE METRICS
-prep = pd.read_parquet(ROOT / "data/1_prepared_views/prepared_daily_view.parquet")
+prep = safe_read_parquet(ROOT / "data/1_prepared_views/prepared_daily_view.parquet")
 prep_active = prep[prep['location_id'].notnull()].copy()
 for col in ['coin_in_usd', 'house_win_usd', 'theo_usd', 'available_hours', 'occupied_hours', 'paid_spins']:
     prep_active[col] = prep_active[col].astype(float)
@@ -79,7 +86,7 @@ zone_map = {
     'Z-PIT': 'Center Pit'
 }
 
-zone_traffic = pd.read_parquet(ROOT / "data/4_context/zone_traffic_hourly.parquet")
+zone_traffic = safe_read_parquet(ROOT / "data/4_context/zone_traffic_hourly.parquet")
 zone_traffic['zone_name'] = zone_traffic['zone_id'].map(zone_map)
 zone_traffic['entries'] = zone_traffic['entries_count'].fillna(0).astype(float)
 traffic_by_zone = zone_traffic.groupby('zone_name')['entries'].sum().reset_index()
@@ -108,7 +115,7 @@ with open(DATA_DIR / "zone_metrics.json", "w", encoding="utf-8") as f:
     json.dump(zones_list, f, indent=2)
 
 # 3. DEMAND DATA
-demand_df = pd.read_parquet(ROOT / "work/floor/out/demand_daily.parquet")
+demand_df = safe_read_parquet(ROOT / "work/floor/out/demand_daily.parquet")
 # daily timeseries
 daily_series = []
 for _, r in demand_df.iterrows():
@@ -152,8 +159,8 @@ with open(DATA_DIR / "demand_data.json", "w", encoding="utf-8") as f:
     json.dump(demand_json, f, indent=2)
 
 # 4. OPERATIONS DATA
-ops = pd.read_parquet(ROOT / "data/2_machine_decision/operations.parquet")
-mach = pd.read_parquet(ROOT / "data/2_machine_decision/machines.parquet")
+ops = safe_read_parquet(ROOT / "data/2_machine_decision/operations.parquet")
+mach = safe_read_parquet(ROOT / "data/2_machine_decision/machines.parquet")
 faults = ops[ops['event_type'] == 'fault_repair'].copy()
 faults['duration_h'] = (pd.to_datetime(faults['available_at_utc']) - pd.to_datetime(faults['opened_at_utc'])).dt.total_seconds() / 3600.0
 faults['hour'] = pd.to_datetime(faults['opened_at_local']).dt.hour
@@ -199,10 +206,10 @@ with open(DATA_DIR / "operations_data.json", "w", encoding="utf-8") as f:
     json.dump(operations_json, f, indent=2)
 
 # 5. GUEST DATA
-player_month = pd.read_parquet(ROOT / "work/guests/out/player_month.parquet")
-players = pd.read_parquet(ROOT / "data/3_guests/players.parquet")
-sessions = pd.read_parquet(ROOT / "data/3_guests/sessions.parquet")
-fnb = pd.read_parquet(ROOT / "data/3_guests/fnb_transactions.parquet")
+player_month = safe_read_parquet(ROOT / "work/guests/out/player_month.parquet")
+players = safe_read_parquet(ROOT / "data/3_guests/players.parquet")
+sessions = safe_read_parquet(ROOT / "data/3_guests/sessions.parquet")
+fnb = safe_read_parquet(ROOT / "data/3_guests/fnb_transactions.parquet")
 
 fnb_comp = fnb[fnb['comp_id'].notnull()].copy()
 comp_face_tot = float(fnb_comp['face_value_cents'].sum() / 100.0)
@@ -356,4 +363,36 @@ evidence_items = [
 with open(DATA_DIR / "evidence_data.json", "w", encoding="utf-8") as f:
     json.dump(evidence_items, f, indent=2)
 
-print("All dashboard data JSON files generated successfully!")
+# 8. MULTI-PERIOD DYNAMIC DATA STORE (Jan–Jun, Apr–Jun, Jun-only)
+from backend.analytics.engine import engine
+
+multi_period_data = {
+    "all": {
+        "label": "All 6 Months (Jan–Jun 2025)",
+        "days": 181,
+        "summary": engine.get_summary_metrics("all"),
+        "zones": engine.get_zone_breakdown("all"),
+        "operations": engine.get_operations_breakdown("all"),
+        "demand": engine.get_demand_breakdown("all")
+    },
+    "last_3m": {
+        "label": "Last 3 Months (Apr–Jun 2025)",
+        "days": 91,
+        "summary": engine.get_summary_metrics("last_3m"),
+        "zones": engine.get_zone_breakdown("last_3m"),
+        "operations": engine.get_operations_breakdown("last_3m"),
+        "demand": engine.get_demand_breakdown("last_3m")
+    },
+    "june_only": {
+        "label": "June Only (Jun 2025)",
+        "days": 30,
+        "summary": engine.get_summary_metrics("june_only"),
+        "zones": engine.get_zone_breakdown("june_only"),
+        "operations": engine.get_operations_breakdown("june_only"),
+        "demand": engine.get_demand_breakdown("june_only")
+    }
+}
+with open(DATA_DIR / "multi_period_data.json", "w", encoding="utf-8") as f:
+    json.dump(multi_period_data, f, indent=2)
+
+print("All dashboard data JSON files generated successfully (including multi_period_data.json)!")

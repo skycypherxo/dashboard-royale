@@ -54,12 +54,20 @@
    - File: `work/floor/out/demand_daily.parquet`
    - File: `work/floor/out/model_card.md`
    - Usage: Vaishnavi references machine-level downtime, exposure, and luck residuals to price and substantiate machine-related operational actions.
-2. **Guests to Shared Integration (Vaishnavi to Team):**
+2. **Floor to Shared Platform (Akshaya to Team):**
+   - File: `dashboard/floor_overview.html` — 7-zone matrix, 51-bank drill-down, daily revenue velocity
+   - File: `dashboard/floor.html` — Synchronized mirror of `floor_overview.html`
+   - File: `dashboard/machine_intelligence.html` — 310-machine scorecard, 6-Question Decision Audit, MongoDB audit logging
+   - File: `dashboard/demand_analytics.html` — ML forward evaluation (68.52% error cut), weekday seasonality, TigerData simulator
+   - File: `dashboard/operations.html` — 1,207 faults, Ridgeline 56.34%, Swing shift 47.8% bottleneck
+3. **Guests to Shared Integration (Vaishnavi to Team):**
    - File: `work/guests/out/player_month.parquet`
    - File: `work/guests/out/action_shortlist.md`
-   - File: `dashboard/guests.html`
-   - File: `dashboard/actions.html`
-   - File: `dashboard/index.html`
+   - File: `dashboard/guest_intelligence.html` — Top 5% Pareto, Gini 0.754, comp reinvestment
+   - File: `dashboard/budget_optimizer.html` — Manual simulator + recommendation engine
+   - File: `dashboard/gemini_copilot.html` — Dual-AI Gemini + Grok copilot
+   - File: `dashboard/evidence_explorer.html` — Filterable claims ledger with source queries
+   - File: `dashboard/index.html` — Platform landing page
    - File: `submission/writeup.md`
    - File: `submission/claims.md`
    - File: `submission/ai.md`

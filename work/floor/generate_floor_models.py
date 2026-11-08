@@ -6,6 +6,8 @@ Outputs:
 2. work/floor/out/demand_daily.parquet
 3. work/floor/out/model_card.md
 """
+import sys
+import subprocess
 import duckdb
 from pathlib import Path
 
@@ -256,3 +258,7 @@ To mirror realistic casino operations and prevent data leakage:
 
 (OUT_DIR / "model_card.md").write_text(model_card, encoding="utf-8")
 print(f"PASS: Wrote {(OUT_DIR / 'model_card.md').as_posix()}")
+
+print("4. Updating 6-Question Decision Audits for all 310 machines (work/floor/out/machine_audits.json)...")
+subprocess.run([sys.executable, str(ROOT / "scripts" / "generate_machine_audits.py")], check=True)
+print("PASS: Floor & ML deliverables completed successfully!")

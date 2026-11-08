@@ -2,8 +2,24 @@
 # Tracks demand forecasting experiments comparing Constant Mean Baseline vs Day-of-Week Stratified Model
 # Logs parameters, metrics (MAE, RMSE, R2), and model artifacts to MLflow
 
-import mlflow
-import mlflow.sklearn
+try:
+    import mlflow
+    import mlflow.sklearn
+    HAS_MLFLOW = True
+except ImportError:
+    HAS_MLFLOW = False
+    print("Notice: MLflow not installed in local environment. Running in local simulation mode.")
+    class MockMLflowRun:
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+    class MockMLflow:
+        def set_experiment(self, name): pass
+        def start_run(self, run_name=None): return MockMLflowRun()
+        def log_param(self, k, v): pass
+        def log_metric(self, k, v): pass
+        def set_tag(self, k, v): pass
+    mlflow = MockMLflow()
+
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
@@ -17,10 +33,10 @@ try:
     df = spark.read.format("delta").load(gold_path).toPandas()
 except Exception:
     # Local fallback for execution verification
-    import os
+    import duckdb
     from pathlib import Path
-    root = Path.cwd()
-    df = pd.read_parquet("work/floor/out/demand_daily.parquet")
+    root = Path(__file__).resolve().parents[2]
+    df = duckdb.read_parquet(str(root / "work/floor/out/demand_daily.parquet")).df()
 
 df['gaming_date'] = pd.to_datetime(df['gaming_date'])
 df = df.sort_values('gaming_date').reset_index(drop=True)

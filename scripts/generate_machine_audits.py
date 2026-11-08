@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import numpy as np
 import pandas as pd
+import duckdb
 
 ROOT = Path(__file__).resolve().parents[1]
 SCORECARD_PATH = ROOT / "work" / "floor" / "out" / "machine_scorecard.parquet"
@@ -17,10 +18,16 @@ OPS_PATH = ROOT / "data" / "2_machine_decision" / "operations.parquet"
 MACHINES_PATH = ROOT / "data" / "2_machine_decision" / "machines.parquet"
 LOCS_PATH = ROOT / "data" / "2_machine_decision" / "floor_locations.parquet"
 
-scorecard = pd.read_parquet(SCORECARD_PATH)
-ops = pd.read_parquet(OPS_PATH)
-machines = pd.read_parquet(MACHINES_PATH)
-locations = pd.read_parquet(LOCS_PATH)
+def safe_read_parquet(path):
+    try:
+        return duckdb.read_parquet(str(path)).df()
+    except Exception:
+        return pd.read_parquet(path)
+
+scorecard = safe_read_parquet(SCORECARD_PATH)
+ops = safe_read_parquet(OPS_PATH)
+machines = safe_read_parquet(MACHINES_PATH)
+locations = safe_read_parquet(LOCS_PATH)
 
 # Operations downtime per machine
 faults = ops[ops['event_type'] == 'fault_repair'].copy()

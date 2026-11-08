@@ -7,8 +7,15 @@ import os
 from typing import Dict, List, Any, Optional
 from pathlib import Path
 import pandas as pd
+import duckdb
 
 ROOT = Path(__file__).resolve().parents[2]
+
+def safe_read_parquet(path):
+    try:
+        return duckdb.read_parquet(str(path)).df()
+    except Exception:
+        return pd.read_parquet(path)
 
 class TigerDBClient:
     def __init__(self):
@@ -28,8 +35,8 @@ class TigerDBClient:
         FROM zone_traffic_hourly
         GROUP BY 1, 2 ORDER BY 1;
         """
-        traffic_path = ROOT / "data/4_context/zone_traffic_hourly.parquet"
-        df = pd.read_parquet(traffic_path)
+        traffic_path = ROOT / "data/4_context" / "zone_traffic_hourly.parquet"
+        df = safe_read_parquet(traffic_path)
         df['hour_start_utc'] = pd.to_datetime(df['hour_start_utc'])
         
         if zone_id:
@@ -50,7 +57,7 @@ class TigerDBClient:
         if not m_hour_path.exists():
             return []
             
-        df = pd.read_parquet(m_hour_path)
+        df = safe_read_parquet(m_hour_path)
         m_df = df[df['machine_id'] == machine_id].copy()
         if m_df.empty:
             return []
