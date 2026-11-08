@@ -642,12 +642,17 @@ body {
 <main class="main-container">
   <div class="section-header" style="display:flex; justify-content:space-between; align-items:center">
     <div>
-      <h2 class="section-title">Gemini Decision Copilot</h2>
-      <p class="section-desc">Grounded in analytical tables. Gemini explains statistical models, calculates payback periods, and justifies investments.</p>
+      <h2 class="section-title">♠ Dual AI Casino Intelligence Suite</h2>
+      <p class="section-desc">Toggle between <strong>Gemini 1.5 Flash</strong> (Executive Decision Copilot) and <strong>xAI Grok</strong> (Adversarial Floor Auditor).</p>
     </div>
-    <div style="display:flex; align-items:center; gap:8px">
-      <input type="password" id="gemini-key-input" placeholder="Optional: Google Gemini API Key" class="input-field" style="width:260px; font-size:11px">
-      <span class="badge badge-gold">Auto-Grounding Active</span>
+    <div style="display:flex; align-items:center; gap:12px">
+      <!-- AI Engine Toggle -->
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:24px; padding:3px; display:flex; gap:4px">
+        <button id="btn-engine-gemini" onclick="switchAIEngine('gemini')" class="btn" style="padding:6px 14px; font-size:12px; border-radius:20px; background:var(--gold); color:#000; font-weight:700">Gemini Copilot</button>
+        <button id="btn-engine-grok" onclick="switchAIEngine('grok')" class="btn" style="padding:6px 14px; font-size:12px; border-radius:20px; background:transparent; color:var(--text-muted); font-weight:600">Grok Adversarial</button>
+      </div>
+      <input type="password" id="gemini-key-input" placeholder="Optional API Key Override" class="input-field" style="width:220px; font-size:11px">
+      <span id="engine-status-badge" class="badge badge-gold">Databricks Connected</span>
     </div>
   </div>
 
@@ -656,7 +661,7 @@ body {
     <button class="prompt-chip" onclick="askQuestion('Which manufacturer has the worst downtime and how should we fix it?')">Where is the downtime bottleneck?</button>
     <button class="prompt-chip" onclick="askQuestion('How should the $100K July intervention budget be allocated?')">Optimal $100K budget portfolio?</button>
     <button class="prompt-chip" onclick="askQuestion('Explain why our comp reinvestment rate is suboptimal.')">Why is comp reinvestment too low?</button>
-    <button class="prompt-chip" onclick="askQuestion('Compare the Back Forty zone to Center Stage.')">Compare Back Forty vs Center Stage</button>
+    <button class="prompt-chip" onclick="askQuestion('Could M-1158 losses be an exploit or fraud rather than luck?')">Exploit / Fraud Audit on M-1158</button>
   </div>
 
   <div class="chat-container">
@@ -675,6 +680,34 @@ body {
 </main>
 
 <script>
+  let selectedAIModel = 'gemini';
+
+  function switchAIEngine(model) {
+    selectedAIModel = model;
+    const btnGemini = document.getElementById('btn-engine-gemini');
+    const btnGrok = document.getElementById('btn-engine-grok');
+    const badge = document.getElementById('engine-status-badge');
+    const keyInput = document.getElementById('gemini-key-input');
+
+    if (model === 'gemini') {
+      btnGemini.style.background = 'var(--gold)';
+      btnGemini.style.color = '#000';
+      btnGrok.style.background = 'transparent';
+      btnGrok.style.color = 'var(--text-muted)';
+      badge.className = 'badge badge-gold';
+      badge.innerText = 'Gemini 1.5 Flash';
+      keyInput.placeholder = 'Optional: Gemini API Key';
+    } else {
+      btnGrok.style.background = 'var(--purple)';
+      btnGrok.style.color = '#000';
+      btnGemini.style.background = 'transparent';
+      btnGemini.style.color = 'var(--text-muted)';
+      badge.className = 'badge badge-purple';
+      badge.innerText = 'xAI Grok Adversarial';
+      keyInput.placeholder = 'Optional: xAI API Key';
+    }
+  }
+
   function askQuestion(q) {
     document.getElementById('user-input').value = q;
     submitQuery();
@@ -700,10 +733,14 @@ body {
     const apiKey = document.getElementById('gemini-key-input').value.trim();
 
     try {
-      const resp = await fetch('/api/copilot/query', {
+      const resp = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: text, gemini_api_key: apiKey })
+        body: JSON.stringify({ 
+          model: selectedAIModel || 'gemini',
+          prompt: text,
+          user_api_key: apiKey 
+        })
       });
 
       if (!resp.ok) throw new Error('API request failed');
@@ -712,8 +749,8 @@ body {
       document.getElementById(loadingId).remove();
       chatBox.innerHTML += `
         <div class="chat-msg assistant">
-          <div style="font-size:11px; color:var(--gold); margin-bottom:6px">Source: ${data.source} · Tool: <code>${data.tool_called}</code></div>
-          ${data.response.replace(/\n/g, '<br>')}
+          <div style="font-size:11px; color:var(--gold); margin-bottom:6px">Engine: <strong>${data.ai_model || 'AI Engine'}</strong> · Source: <code>${data.grounding_source || 'Telemetry'}</code></div>
+          ${(data.response || '').replace(/\n/g, '<br>')}
         </div>
       `;
     } catch (e) {

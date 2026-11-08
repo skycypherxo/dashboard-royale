@@ -8,6 +8,9 @@ import sqlite3
 from typing import Dict, List, Any, Optional
 from pathlib import Path
 import pandas as pd
+from dotenv import load_dotenv
+
+load_dotenv()
 
 ROOT = Path(__file__).resolve().parents[2]
 SQLITE_DB = ROOT / "data" / "the_gilded_ace.db"

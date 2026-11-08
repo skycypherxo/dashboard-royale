@@ -14,6 +14,8 @@ LOCAL_STORE = ROOT / "data" / "mongo_atlas_store.json"
 
 class MongoAtlasClient:
     def __init__(self):
+        from dotenv import load_dotenv
+        load_dotenv()
         self.uri = os.environ.get("MONGODB_URI")
         self.db_name = os.environ.get("MONGODB_DB", "gilded_ace_intelligence")
         self.is_connected = False
@@ -23,13 +25,19 @@ class MongoAtlasClient:
         if self.uri:
             try:
                 from pymongo import MongoClient
-                self.client = MongoClient(self.uri, serverSelectionTimeoutMS=2000)
+                import certifi
+                self.client = MongoClient(
+                    self.uri,
+                    tlsCAFile=certifi.where(),
+                    tlsAllowInvalidCertificates=True,
+                    serverSelectionTimeoutMS=2000
+                )
                 self.client.server_info()
                 self.db = self.client[self.db_name]
                 self.is_connected = True
                 print("[MongoDB Atlas] Successfully connected to remote cluster.")
             except Exception as e:
-                print(f"[MongoDB Atlas] Connection timeout, using persistent local document store: {e}")
+                print(f"[MongoDB Atlas] Remote connection note: {e}")
                 
         if not self.is_connected:
             self._init_local_store()
